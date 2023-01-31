@@ -7,7 +7,7 @@ This is the GitHub repository for Georgia Tech Spring 2023 junior design team 23
 
 ### Features
 * User/Admin Login Page
-* User/Admin Registeration Page
+* User/Admin Registration Page
 
 ### Known Issues
 * Requires routing to dashboard
