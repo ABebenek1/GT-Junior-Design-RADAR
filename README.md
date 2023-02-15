@@ -3,11 +3,11 @@ This is the GitHub repository for Georgia Tech Spring 2023 junior design team 23
 
 # Release Notes
 
-# Requirements to run the application:
+### Requirements to run the application:
 * Node.js version: 18.14.0
 * npm version: 9.3.1
 
-#To start the application:
+### To start this application:
 * npm install
 * npm start
 
