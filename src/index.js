@@ -4,15 +4,36 @@ import ReactDOM from 'react-dom';
 
 // Connect this file to the CSS styling
 import './index.css';
-
+import { BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 // import login page 
 import Login from './components/login.js';
+import Admin_Dashboard from './components/dashboard/admin_dashboard'
+import SignUp from './components/signup_component'
+
 
 function App(){
-    console.log(Login)
+    const isLoggedIn = "false"
     return (
         <>
-            <Login />
+            <Router>
+            <div className="App">
+                <div className="auth-wrapper">
+                <div className="auth-inner">
+                    <Routes>
+                        <Route
+                            exact
+                            path="/"
+                            element={isLoggedIn == "true" ? <Admin_Dashboard/> : <Login />}
+                        />
+                        <Route path="/sign-in" element={<Login />} />
+                        <Route path="/sign-up" element={<SignUp />} />
+                        <Route path="/admin_dashboard" element={<Admin_Dashboard/>}/>
+                    </Routes>
+                </div>
+                </div>
+            </div>
+            </Router>
         </>
 
 
