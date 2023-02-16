@@ -25,10 +25,9 @@ export default function Login() {
 
                         </table>
                     </form>
+                    <a href="/admin_dashboard"><button>Log in</button></a>
 
-                    <button>Log in</button>
-
-                    <p>New User? Register Here: <a href="url">Sign Up</a></p>
+                    <p>New User? Register Here: <a href="/sign-up">Sign Up</a></p>
                     <p><a href="url">Forget Password?</a></p>
 
                 </div>
