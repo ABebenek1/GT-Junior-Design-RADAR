@@ -2,7 +2,6 @@ import React, { Component, useState } from "react";
 import { state, storedData } from "../storeData";
 
 export default function SignUp() {
-    
   const [userType, setUserType] = useState("");
 
   //  set username field for state object
@@ -41,14 +40,16 @@ export default function SignUp() {
   
   // event handle when clicking submit button
   function handleSubmit (event) {
+    
     event.preventDefault();
 
     console.log("un:", state.usernanme);
 
     storedData[state.username] = state;
+    
+    sessionStorage.setItem(state.username, JSON.stringify(state))
 
-    console.log(storedData);
-
+    console.log(storedData);    
   }
 
 
@@ -145,3 +146,4 @@ export default function SignUp() {
     </form>
   );
 }
+
