@@ -5,8 +5,8 @@ import ReactDOM from 'react-dom';
 // Connect this file to the CSS styling
 import './index.css';
 import { BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
-import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-// import login page 
+// import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+
 import Login from './components/login.js';
 import Admin_Dashboard from './components/dashboard/admin_dashboard'
 import SignUp from './components/signup_component'

@@ -1,69 +1,82 @@
 import React, { Component, useState } from "react";
+import { state, storedData } from "../storeData";
 
 export default function SignUp() {
-  const [fname, setFname] = useState("");
-  const [lname, setLname] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+    
   const [userType, setUserType] = useState("");
-  const [secretKey, setSecretKey] = useState("");
 
-  const handleSubmit = (e) => {
-    if (userType == "Admin" && secretKey != "AdarshT") {
-      e.preventDefault();
-      alert("Invalid Admin");
-    } else {
-      e.preventDefault();
+  //  set username field for state object
+  const getUsername = (event) => {
 
-      console.log(fname, lname, email, password);
-      fetch("http://localhost:5000/register", {
-        method: "POST",
-        crossDomain: true,
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({
-          fname,
-          email,
-          lname,
-          password,
-          userType,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data, "userRegister");
-          if (data.status == "ok") {
-            alert("Registration Successful");
-          } else {
-            alert("Something went wrong");
-          }
-        });
-    }
-  };
+    state.username = event.target.value;
+
+    console.log("Username:", state.username)
+  }
+
+  //  set passowrd field for state object
+  const getPassword = (event) => {
+
+    state.password = event.target.value;
+
+    console.log("Password:", state.password)
+  }
+
+  //  set first name field for state object
+
+  const getFirstName = (event) => {
+
+    state.firstName = event.target.value;
+
+    console.log("First Name:", state.firstName)
+  }
+
+  //  set last name field for state object
+
+  const getLastName = (event) => {
+
+    state.lastName = event.target.value;
+
+    console.log("Last Name:", state.lastName)
+  }
+  
+  // event handle when clicking submit button
+  function handleSubmit (event) {
+    event.preventDefault();
+
+    console.log("un:", state.usernanme);
+
+    storedData[state.username] = state;
+
+    console.log(storedData);
+
+  }
+
+
 
   return (
     <form onSubmit={handleSubmit}>
+
       <h3>Sign Up</h3>
+
+      {/* below is code for the radio buttons */}
+{/* 
       <div>
         Register As
         <input
           type="radio"
           name="UserType"
           value="User"
-          onChange={(e) => setUserType(e.target.value)}
         />
+
         User
         <input
           type="radio"
           name="UserType"
           value="Admin"
-          onChange={(e) => setUserType(e.target.value)}
         />
         Admin
-      </div>
+      </div> */}
+
       {userType == "Admin" ? (
         <div className="mb-3">
           <label>Secret Key</label>
@@ -71,7 +84,8 @@ export default function SignUp() {
             type="text"
             className="form-control"
             placeholder="Secret Key"
-            onChange={(e) => setSecretKey(e.target.value)}
+            name="key"
+            // onChange={ getValue }
           />
         </div>
       ) : null}
@@ -82,7 +96,8 @@ export default function SignUp() {
           type="text"
           className="form-control"
           placeholder="First name"
-          onChange={(e) => setFname(e.target.value)}
+          name="firstName"
+          onChange={getFirstName}
         />
       </div>
 
@@ -92,17 +107,19 @@ export default function SignUp() {
           type="text"
           className="form-control"
           placeholder="Last name"
-          onChange={(e) => setLname(e.target.value)}
+          name="lastName"
+          onChange={getLastName}
         />
       </div>
 
       <div className="mb-3">
-        <label>Email address</label>
+        <label>Username</label>
         <input
-          type="email"
+          type="username"
           className="form-control"
-          placeholder="Enter email"
-          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter username"
+          name="username"
+          onChange={getUsername}
         />
       </div>
 
@@ -112,12 +129,13 @@ export default function SignUp() {
           type="password"
           className="form-control"
           placeholder="Enter password"
-          onChange={(e) => setPassword(e.target.value)}
+          name="password"
+          onChange={getPassword}
         />
       </div>
 
       <div className="d-grid">
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary" onClick={handleSubmit}>
           Sign Up
         </button>
       </div>
