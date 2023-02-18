@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createBrowserHistory } from 'history';
+
 // App.js is where we will render our application
 
 // Connect this file to the CSS styling
@@ -11,12 +13,13 @@ import Login from './components/login.js';
 import Admin_Dashboard from './components/dashboard/admin_dashboard'
 import SignUp from './components/signup_component'
 
+export const history = createBrowserHistory({forceRefresh:true});
 
 function App(){
     const isLoggedIn = "false"
     return (
         <>
-            <Router>
+            <Router history={history}>
             <div className="App">
                 <div className="auth-wrapper">
                 <div className="auth-inner">
@@ -39,6 +42,5 @@ function App(){
 
     )
 }
-
 
 ReactDOM.render(<App />, document.getElementById('root'));
