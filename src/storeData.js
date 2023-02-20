@@ -3,6 +3,7 @@ const storedData = {};
 
 // used in sign in component ot get user input
 let state = {
+    userType: "",
     username: "",
     password: "",
     firstName: "",
