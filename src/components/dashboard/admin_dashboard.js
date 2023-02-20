@@ -66,6 +66,10 @@ const Admin_dashboard = () => {
                 
       </div>
 
+    <div className='titlecontainer'>
+      <h1>Welcome Admin!</h1>
+    </div>
+
     </>
 
   )
