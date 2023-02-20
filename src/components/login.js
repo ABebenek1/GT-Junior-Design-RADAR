@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import EmoryLogo from "../images/emory.png";
 import { state } from "../storeData";
 import { history } from "../index";
@@ -22,48 +22,55 @@ const contentStyle = {
 
 export default function Login() {
   // event handle when clicking submit button
-  function handleSubmit(event) {
-    for (var i = 0; i < sessionStorage.length; i++) {
-      var key = sessionStorage.key(i);
-      var value = sessionStorage.getItem(key);
-      const password = value.split(",")[2].split(":")[1];
-      const usertype = value.split(",")[0].split(":")[1];
-      if (
-        JSON.stringify("resident") == usertype &&
-        state.username === key &&
-        JSON.stringify(state.password) === password
-      ) {
-        history.push("/resident_dashboard");
-      } else if (
-        JSON.stringify("admin") == usertype &&
-        state.username === key &&
-        JSON.stringify(state.password) === password
-      ) {
-        history.push("/admin_dashboard");
-      }
-    }
-  }
+  //   function handleSubmit(event) {
+  //     for (var i = 0; i < sessionStorage.length; i++) {
+  //       var key = sessionStorage.key(i);
+  //       var value = sessionStorage.getItem(key);
+  //       const password = value.split(",")[2].split(":")[1];
+  //       const usertype = value.split(",")[0].split(":")[1];
+  //       if (
+  //         JSON.stringify("resident") == usertype &&
+  //         state.username === key &&
+  //         JSON.stringify(state.password) === password
+  //       ) {
+  //         history.push("/resident_dashboard");
+  //       } else if (
+  //         JSON.stringify("admin") == usertype &&
+  //         state.username === key &&
+  //         JSON.stringify(state.password) === password
+  //       ) {
+  //         history.push("/admin_dashboard");
+  //       }
+  //     }
+  //   }
 
-  //  set username field for state object
-  const getUsername = (event) => {
-    state.username = event.target.value;
+  //   //  set username field for state object
+  //   const getUsername = (event) => {
+  //     state.username = event.target.value;
 
-    console.log("Username:", state.username);
-  };
+  //     console.log("Username:", state.username);
+  //   };
 
-  //  set passowrd field for state object
-  const getPassword = (event) => {
-    state.password = event.target.value;
+  //   //  set passowrd field for state object
+  //   const getPassword = (event) => {
+  //     state.password = event.target.value;
 
-    console.log("Password:", state.password);
-  };
-
+  //     console.log("Password:", state.password);
+  //   };
+  const navigate = useNavigate();
   const onFinish = (values) => {
     console.log("Success:", values);
+    sessionStorage.setItem(values.username, JSON.stringify(values));
+
+    // redirect to sign-in
+    if (values) {
+      navigate("/resident_dashboard");
+    }
   };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
+
+  //   const onFinishFailed = (errorInfo) => {
+  //     console.log("Failed:", errorInfo);
+  //   };
 
   return (
     <div>
@@ -88,7 +95,7 @@ export default function Login() {
                   remember: true,
                 }}
                 onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
+                // onFinishFailed={onFinishFailed}
                 autoComplete="off"
               >
                 <Form.Item

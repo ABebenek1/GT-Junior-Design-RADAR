@@ -7,6 +7,7 @@ import { createBrowserHistory } from "history";
 import "antd/dist/reset.css";
 // import "./index.css";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 // import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 import Login from "./components/login.js";
@@ -16,8 +17,21 @@ import Admin_Dashboard from "./components/dashboard/admin_dashboard";
 
 export const history = createBrowserHistory({ forceRefresh: true });
 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <div>Hello world!</div>,
+  },
+]);
+
 function App() {
   const isLoggedIn = "false";
+  // return (
+  //   <React.StrictMode>
+  //     <RouterProvider router={router} />
+  //   </React.StrictMode>
+  // );
+
   return (
     <>
       <Router history={history}>
