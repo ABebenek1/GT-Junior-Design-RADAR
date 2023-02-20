@@ -154,6 +154,16 @@ export default function SignUp() {
               <Link to="/sign-in"> Sign-in</Link>
             </Col>
           </Row>
+          <Row>
+            <Col span={24}>
+              <img
+                src={EmoryLogo}
+                alt="logo"
+                className="logo"
+                style={{ height: "260px" }}
+              />
+            </Col>
+          </Row>
         </Content>
       </Layout>
     </div>
