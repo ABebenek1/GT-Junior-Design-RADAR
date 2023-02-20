@@ -3,6 +3,22 @@ import { Link } from "react-router-dom";
 import EmoryLogo from "../images/emory.png";
 import { state } from "../storeData";
 import { history } from "../index";
+import { Layout, Space } from "antd";
+import { Button, Form, Input, Checkbox } from "antd";
+import { Typography } from "antd";
+import { Col, Row } from "antd";
+const { Content } = Layout;
+const { Title } = Typography;
+
+const contentStyle = {
+  textAlign: "center",
+  minHeight: 120,
+  lineHeight: "120px",
+  width: "100%",
+  // color: "#fff",
+  color: "white",
+  backgroundColor: "#108ee9",
+};
 
 export default function Login() {
   // event handle when clicking submit button
@@ -42,63 +58,108 @@ export default function Login() {
     console.log("Password:", state.password);
   };
 
+  const onFinish = (values) => {
+    console.log("Success:", values);
+  };
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
+
   return (
-    <>
-      <div className="login-container">
-        <div className="form-container">
-          <h1>Resident Dashboard</h1>
+    <div>
+      <Layout>
+        <Content style={contentStyle}>
+          <Title>Sign In</Title>
+          <Row>
+            <Col flex={2}></Col>
+            <Col flex={3}>
+              <Form
+                name="basic"
+                labelCol={{
+                  span: 8,
+                }}
+                wrapperCol={{
+                  span: 16,
+                }}
+                style={{
+                  maxWidth: 600,
+                }}
+                initialValues={{
+                  remember: true,
+                }}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                autoComplete="off"
+              >
+                <Form.Item
+                  label="Username"
+                  name="username"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your username!",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
 
-          <form action="">
-            <table>
-              <tr>
-                <td>
-                  <label htmlFor="">Username:</label>
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    placeholder="Username"
-                    size="30"
-                    onChange={getUsername}
-                  />
-                </td>
-              </tr>
+                <Form.Item
+                  label="Password"
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your password!",
+                    },
+                  ]}
+                >
+                  <Input.Password />
+                </Form.Item>
 
-              <tr>
-                <td>
-                  <label htmlFor="">Password:</label>
-                </td>
-                <td>
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    size="30"
-                    onChange={getPassword}
-                  />
-                </td>
-              </tr>
-            </table>
-          </form>
-          <button
-            type="submit"
-            className="btn btn-primary"
-            onClick={handleSubmit}
-          >
-            Log in
-          </button>
+                <Form.Item
+                  name="remember"
+                  valuePropName="checked"
+                  wrapperCol={{
+                    offset: 8,
+                    span: 16,
+                  }}
+                >
+                  <Checkbox>Remember me</Checkbox>
+                </Form.Item>
 
-          <p>
-            New User? Register Here: <a href="/sign-up">Sign Up</a>
-          </p>
-          <p>
-            <a href="url">Forget Password?</a>
-          </p>
-        </div>
-
-        <div className="image-container">
-          <img src={EmoryLogo} alt="logo" className="logo" />
-        </div>
-      </div>
-    </>
+                <Form.Item
+                  wrapperCol={{
+                    offset: 8,
+                    span: 16,
+                  }}
+                >
+                  <Button type="primary" htmlType="submit">
+                    Log in
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Col>
+            <Col flex={2}></Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              New User?
+              <Link to="/sign-up"> Register</Link>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <Link to="/sign-up"> Forget Password</Link>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <img src={EmoryLogo} alt="logo" className="logo" />
+            </Col>
+          </Row>
+        </Content>
+      </Layout>
+    </div>
   );
 }

@@ -1,5 +1,5 @@
 import React, { Component, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 import { state, storedData } from "../storeData";
 import { Layout, Space } from "antd";
 import { Button, Checkbox, Form, Input } from "antd";
@@ -21,9 +21,16 @@ const contentStyle = {
 };
 
 export default function SignUp() {
+  // const navigate = useNavigate();
+
   const onFinish = (values) => {
     console.log("Success:", values);
     sessionStorage.setItem(values.username, JSON.stringify(values));
+
+    // // redirect to sign-in
+    // if (values) {
+    //   navigate("/sign-in");
+    // }
   };
 
   return (
@@ -52,31 +59,39 @@ export default function SignUp() {
                 // onFinishFailed={onFinishFailed}
                 autoComplete="off"
               >
-                <Form.Item label="User Type" name="usertype">
+                <Form.Item
+                  label="User Type"
+                  name="usertype"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
                   <Radio.Group value={"resident"}>
                     <Radio value={"resident"}>resident</Radio>
                     <Radio value={"admin"}>admin</Radio>
                   </Radio.Group>
                 </Form.Item>
                 <Form.Item
-                  label="FirstName"
+                  label="First Name"
                   name="firstname"
                   rules={[
                     {
                       required: true,
-                      message: "Please input your firstname!",
+                      message: "Please input your first name!",
                     },
                   ]}
                 >
                   <Input />
                 </Form.Item>
                 <Form.Item
-                  label="LastName"
+                  label="Last Name"
                   name="lastname"
                   rules={[
                     {
                       required: true,
-                      message: "Please input your lastName!",
+                      message: "Please input your last name!",
                     },
                   ]}
                 >
@@ -133,11 +148,10 @@ export default function SignUp() {
             </Col>
             <Col flex={2}></Col>
           </Row>
-
           <Row>
             <Col span={24}>
               Already registered?
-              <Link to="/sign-in">Sign-in</Link>
+              <Link to="/sign-in"> Sign-in</Link>
             </Col>
           </Row>
         </Content>
