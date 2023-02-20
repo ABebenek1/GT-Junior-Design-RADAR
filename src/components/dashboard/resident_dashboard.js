@@ -66,6 +66,10 @@ const Resident_dashboard = () => {
                 
       </div>
 
+    <div className='titlecontainer'>
+      <h1>Welcome Resident!</h1>
+    </div>
+
     </>
 
   )
