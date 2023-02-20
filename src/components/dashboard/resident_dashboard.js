@@ -45,6 +45,12 @@ const Resident_dashboard = () => {
             <option value="3">Scatter plot</option>
           </select>
 
+          <select className='dropdown' name="variables" id="variables">
+            <option value="v1">Variable 1</option>
+            <option value="v2">Variable 2</option>
+            <option value="v3">Variable 3</option>
+          </select>
+
           <button onClick={handleClick}>Display graph</button>
 
         </div>
