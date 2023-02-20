@@ -11,9 +11,12 @@ export default function Login() {
         for (var i = 0; i < sessionStorage.length; i++) {
             var key = sessionStorage.key(i)
             var value = sessionStorage.getItem(key)
-            const password = value.split(",")[1].split(":")[1]
-            if (state.username === key && JSON.stringify(state.password) === password) {
+            const password = value.split(",")[2].split(":")[1]
+            const usertype = value.split(",")[0].split(":")[1]
+            if (JSON.stringify("resident") == usertype && state.username === key && JSON.stringify(state.password) === password) {
                 history.push("/resident_dashboard")
+            } else if (JSON.stringify("admin") == usertype && state.username === key && JSON.stringify(state.password) === password) {
+                history.push("/admin_dashboard")
             }
         }
 
