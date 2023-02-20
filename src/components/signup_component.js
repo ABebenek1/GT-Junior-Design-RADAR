@@ -1,4 +1,5 @@
 import React, { Component, useState } from "react";
+import { Link } from "react-router-dom";
 import { state, storedData } from "../storeData";
 import { Layout, Space } from "antd";
 import { Button, Checkbox, Form, Input } from "antd";
@@ -6,7 +7,7 @@ import { Typography } from "antd";
 import { Radio } from "antd";
 import { withTheme } from "@emotion/react";
 import { Col, Row } from "antd";
-const { Header, Footer, Sider, Content } = Layout;
+const { Content } = Layout;
 const { Title } = Typography;
 
 const contentStyle = {
@@ -30,7 +31,6 @@ export default function SignUp() {
       <Layout>
         <Content style={contentStyle}>
           <Title>Sign Up</Title>
-
           <Row>
             <Col flex={2}></Col>
             <Col flex={3}>
@@ -135,7 +135,10 @@ export default function SignUp() {
           </Row>
 
           <Row>
-            <Col span={24}>Already registered? Sign-in</Col>
+            <Col span={24}>
+              Already registered?
+              <Link to="/sign-in">Sign-in</Link>
+            </Col>
           </Row>
         </Content>
       </Layout>
