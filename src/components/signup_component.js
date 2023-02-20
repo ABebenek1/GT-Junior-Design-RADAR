@@ -1,5 +1,5 @@
 import React, { Component, useState } from "react";
-import { Link, redirect } from "react-router-dom";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import { state, storedData } from "../storeData";
 import { Layout, Space } from "antd";
 import { Button, Checkbox, Form, Input } from "antd";
@@ -15,22 +15,21 @@ const contentStyle = {
   minHeight: 120,
   lineHeight: "120px",
   width: "100%",
-  // color: "#fff",
   color: "white",
   backgroundColor: "#108ee9",
 };
 
 export default function SignUp() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const onFinish = (values) => {
     console.log("Success:", values);
     sessionStorage.setItem(values.username, JSON.stringify(values));
 
-    // // redirect to sign-in
-    // if (values) {
-    //   navigate("/sign-in");
-    // }
+    // redirect to sign-in
+    if (values) {
+      navigate("/sign-in");
+    }
   };
 
   return (
