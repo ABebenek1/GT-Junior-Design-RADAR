@@ -6,6 +6,7 @@ import { Button, Checkbox, Form, Input } from "antd";
 import { Typography } from "antd";
 import { Radio } from "antd";
 import { withTheme } from "@emotion/react";
+import EmoryLogo from "../images/emory.png";
 import { Col, Row } from "antd";
 const { Content } = Layout;
 const { Title } = Typography;

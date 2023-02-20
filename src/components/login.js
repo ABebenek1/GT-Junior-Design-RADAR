@@ -15,48 +15,12 @@ const contentStyle = {
   minHeight: 120,
   lineHeight: "120px",
   width: "100%",
-  // color: "#fff",
   color: "white",
   backgroundColor: "#108ee9",
 };
 
 export default function Login() {
   // event handle when clicking submit button
-  //   function handleSubmit(event) {
-  //     for (var i = 0; i < sessionStorage.length; i++) {
-  //       var key = sessionStorage.key(i);
-  //       var value = sessionStorage.getItem(key);
-  //       const password = value.split(",")[2].split(":")[1];
-  //       const usertype = value.split(",")[0].split(":")[1];
-  //       if (
-  //         JSON.stringify("resident") == usertype &&
-  //         state.username === key &&
-  //         JSON.stringify(state.password) === password
-  //       ) {
-  //         history.push("/resident_dashboard");
-  //       } else if (
-  //         JSON.stringify("admin") == usertype &&
-  //         state.username === key &&
-  //         JSON.stringify(state.password) === password
-  //       ) {
-  //         history.push("/admin_dashboard");
-  //       }
-  //     }
-  //   }
-
-  //   //  set username field for state object
-  //   const getUsername = (event) => {
-  //     state.username = event.target.value;
-
-  //     console.log("Username:", state.username);
-  //   };
-
-  //   //  set passowrd field for state object
-  //   const getPassword = (event) => {
-  //     state.password = event.target.value;
-
-  //     console.log("Password:", state.password);
-  //   };
   const navigate = useNavigate();
   const onFinish = (values) => {
     console.log("Success:", values);
@@ -152,17 +116,28 @@ export default function Login() {
           <Row>
             <Col span={24}>
               New User?
-              <Link to="/sign-up"> Register</Link>
+              <Link to="/sign-up" style={{ color: "yellow" }}>
+                {" "}
+                Register{" "}
+              </Link>
             </Col>
           </Row>
           <Row>
             <Col span={24}>
-              <Link to="/sign-up"> Forget Password</Link>
+              <Link to="/sign-up" style={{ color: "yellow" }}>
+                {" "}
+                Forget Password
+              </Link>
             </Col>
           </Row>
           <Row>
             <Col span={24}>
-              <img src={EmoryLogo} alt="logo" className="logo" />
+              <img
+                src={EmoryLogo}
+                alt="logo"
+                className="logo"
+                style={{ height: "260px" }}
+              />
             </Col>
           </Row>
         </Content>

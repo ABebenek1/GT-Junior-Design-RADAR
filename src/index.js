@@ -26,6 +26,7 @@ const router = createBrowserRouter([
 
 function App() {
   const isLoggedIn = "false";
+
   // return (
   //   <React.StrictMode>
   //     <RouterProvider router={router} />
@@ -33,7 +34,7 @@ function App() {
   // );
 
   return (
-    <>
+    <React.StrictMode>
       <Router history={history}>
         <div className="App">
           {/* <div className="auth-wrapper"> */}
@@ -58,7 +59,7 @@ function App() {
           {/* </div> */}
         </div>
       </Router>
-    </>
+    </React.StrictMode>
   );
 }
 
