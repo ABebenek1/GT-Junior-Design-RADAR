@@ -1,10 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import "./resident_dashboard.css";
 
 // dummy graph image files to be removed
-import BarImage from "../../images/bar.png";
-import Pie from "../../images/pie.svg";
-import Scatter from "../../images/scatter.jpeg";
+import EmoryLogo from "../../images/emory.png";
 
 // Rechart UI
 import {
@@ -16,6 +15,10 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  ScatterChart,
+  Scatter,
+  PieChart,
+  Pie,
 } from "recharts";
 
 // ANTD UI
@@ -23,6 +26,9 @@ import { Col, Row } from "antd";
 import { Layout } from "antd";
 import { Button } from "antd";
 import { DatePicker, message } from "antd";
+import { Typography } from "antd";
+
+const { Title } = Typography;
 
 const { RangePicker } = DatePicker;
 
@@ -46,7 +52,7 @@ const contentStyle = {
 
 // rechart dummy data to be removed
 
-const data = [
+const barData = [
   {
     name: "Page A",
     uv: 4000,
@@ -91,6 +97,27 @@ const data = [
   },
 ];
 
+const scatterData = [
+  { x: 100, y: 90, z: 90 },
+  { x: 45, y: 70, z: 20 },
+  { x: 80, y: 50, z: 20 },
+  { x: 120, y: 20, z: 20 },
+  { x: 170, y: 40, z: 30 },
+  { x: 140, y: 60, z: 60 },
+  { x: 150, y: 80, z: 70 },
+  { x: 65, y: 40, z: 20 },
+  { x: 110, y: 50, z: 50 },
+];
+
+const pieData = [
+  { name: "Group A", value: 400 },
+  { name: "Group B", value: 300 },
+  { name: "Group C", value: 300 },
+  { name: "Group D", value: 200 },
+  { name: "Group E", value: 278 },
+  { name: "Group F", value: 189 },
+];
+
 const Resident_dashboard = () => {
   const [image, setImage] = useState("BarImage");
   const [date, setDate] = useState(null);
@@ -110,18 +137,27 @@ const Resident_dashboard = () => {
     }
 
     if (valueSelectedByUser === 2) {
-      setImage("Pie");
+      setImage("PieImage");
     }
 
     if (valueSelectedByUser === 3) {
-      setImage("Scatter");
+      setImage("ScatterImage");
     }
   };
 
   return (
     <>
       <Layout>
-        <Header style={headerStyle}>Header Bar</Header>
+        <Header style={headerStyle}>
+          <Row>
+            <Link to="/sign-in">
+              <img src={EmoryLogo} width="60px" />
+            </Link>
+            {/* Need to figure out a way to not hard code this span portion */}
+            <Col span={8}></Col>
+            <Title style={{ color: "white" }}>Resident Dashboard</Title>
+          </Row>
+        </Header>
         <Content style={contentStyle}>
           <Row>
             <Col flex={3}>
@@ -150,17 +186,13 @@ const Resident_dashboard = () => {
           </Row>
         </Content>
       </Layout>
-      {/* <div className="navcontainer"> */}
-      {/* <div className="navbar"> */}
-      {/* <label>pick a display</label> */}
-      {/* </div> */}
 
       {image === "BarImage" && (
         <div className="content">
           <BarChart
             width={1000}
             height={600}
-            data={data}
+            data={barData}
             margin={{
               top: 20,
               right: 30,
@@ -182,15 +214,51 @@ const Resident_dashboard = () => {
         </div>
       )}
 
-      {image === "Pie" && (
+      {image === "PieImage" && (
         <div className="content">
-          <img className="graph" src={Pie} alt="picture" />
+          <PieChart width={400} height={400}>
+            <Pie
+              dataKey="value"
+              isAnimationActive={false}
+              data={pieData}
+              cx="50%"
+              cy="50%"
+              outerRadius={80}
+              fill="#8884d8"
+              label
+            />
+            {/* <Pie
+              dataKey="value"
+              data={data02}
+              cx={500}
+              cy={200}
+              innerRadius={40}
+              outerRadius={80}
+              fill="#82ca9d"
+            /> */}
+            <Tooltip />
+          </PieChart>
         </div>
       )}
-
-      {image === "Scatter" && (
+      {image === "ScatterImage" && (
         <div className="content">
-          <img className="graph" src={Scatter} alt="picture" />
+          <ScatterChart
+            width={1000}
+            height={600}
+            data={scatterData}
+            margin={{
+              top: 20,
+              right: 20,
+              bottom: 20,
+              left: 20,
+            }}
+          >
+            <CartesianGrid />
+            <XAxis type="number" dataKey="x" name="count" />
+            <YAxis type="number" dataKey="y" name="accuracy" unit="%" />
+            <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+            <Scatter name="A school" data={scatterData} fill="#8884d8" />
+          </ScatterChart>
         </div>
       )}
       {/* </div> */}
