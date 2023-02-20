@@ -8,6 +8,7 @@ import Scatter from '../../images/scatter.jpeg'
 const Resident_dashboard = () => {
 
   const [image, setImage] = useState("");
+  const [temp, setTfvalue] = useState("");
 
   const displayOnChange = (event) => {
     const valueSelectedByUser = parseInt(event.target.value);
@@ -22,8 +23,14 @@ const Resident_dashboard = () => {
       if (valueSelectedByUser === 3) {
         setImage("Scatter");
       }
+      setTfvalue('false')
 
-      console.log(setImage);
+  }
+
+  function handleClick(event) {
+    // event.preventDefault();
+    setTfvalue("true")
+
   }
 
   return (
@@ -38,17 +45,17 @@ const Resident_dashboard = () => {
             <option value="3">Scatter plot</option>
           </select>
 
-          <button >Display graph</button>
+          <button onClick={handleClick}>Display graph</button>
 
         </div>
 
-        {image === "Bar" && 
+        {temp === "true" && image === "Bar" && 
         <div className='content'><img className="graph" src={Bar} alt="picture" /></div>}
         
-        {image === "Pie" && 
+        {temp === "true" && image === "Pie" && 
         <div className='content'><img className="graph" src={Pie} alt="picture" /></div>}
 
-        {image === "Scatter" && 
+        {temp === "true" && image === "Scatter" && 
         <div className='content'><img className="graph" src={Scatter} alt="picture" /></div>}
                 
       </div>
