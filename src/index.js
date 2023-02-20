@@ -10,7 +10,7 @@ import { BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
 // import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 import Login from './components/login.js';
-import Admin_Dashboard from './components/dashboard/admin_dashboard'
+import Resident_Dashboard from './components/dashboard/resident_dashboard'
 import SignUp from './components/signup_component'
 
 export const history = createBrowserHistory({forceRefresh:true});
@@ -21,20 +21,20 @@ function App(){
         <>
             <Router history={history}>
             <div className="App">
-                <div className="auth-wrapper">
-                <div className="auth-inner">
+                {/* <div className="auth-wrapper"> */}
+                {/* <div className="auth-inner"> */}
                     <Routes>
                         <Route
                             exact
                             path="/"
-                            element={isLoggedIn == "true" ? <Admin_Dashboard/> : <Login />}
+                            element={isLoggedIn == "true" ? <Resident_Dashboard/> : <Login />}
                         />
                         <Route path="/sign-in" element={<Login />} />
                         <Route path="/sign-up" element={<SignUp />} />
-                        <Route path="/admin_dashboard" element={<Admin_Dashboard/>}/>
+                        <Route path="/resident_dashboard" element={<Resident_Dashboard/>}/>
                     </Routes>
-                </div>
-                </div>
+                {/* </div> */}
+                {/* </div> */}
             </div>
             </Router>
         </>

@@ -13,7 +13,7 @@ export default function Login() {
             var value = sessionStorage.getItem(key)
             const password = value.split(",")[1].split(":")[1]
             if (state.username === key && JSON.stringify(state.password) === password) {
-                history.push("/admin_dashboard")
+                history.push("/resident_dashboard")
             }
         }
 
