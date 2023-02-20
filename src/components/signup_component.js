@@ -42,6 +42,16 @@ export default function SignUp() {
   function handleSubmit (event) {
     
     event.preventDefault();
+    
+    var radios = document.getElementsByName("UserType")
+
+    for (var i = 0; i < radios.length; i++) {
+      if (radios[i].checked && i == 0) {
+        state.userType = "resident"
+      } else if (radios[i].checked && i == 1) {
+        state.userType = "admin"
+      }
+    }
 
     console.log("un:", state.usernanme);
 
@@ -59,24 +69,22 @@ export default function SignUp() {
 
       <h3>Sign Up</h3>
 
-      {/* below is code for the radio buttons */}
-{/* 
       <div>
         Register As
         <input
           type="radio"
           name="UserType"
-          value="User"
+          value="Resident"
+          checked="checked"
         />
-
-        User
+        Resident
         <input
           type="radio"
           name="UserType"
           value="Admin"
         />
         Admin
-      </div> */}
+      </div> 
 
       {userType == "Admin" ? (
         <div className="mb-3">
