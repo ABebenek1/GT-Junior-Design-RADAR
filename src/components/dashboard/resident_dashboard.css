@@ -42,3 +42,14 @@ button {
     height: 75%;
     border-radius: 0;
 }
+
+.titlecontainer {
+    position: absolute;
+    top: 70px;
+    text-align: center;
+    width: 100vw;
+    height: 100vh;
+    box-sizing: border-box;
+    font-size: 2em;
+    color: black;
+}

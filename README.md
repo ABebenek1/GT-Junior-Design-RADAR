@@ -11,7 +11,24 @@ This is the GitHub repository for Georgia Tech Spring 2023 junior design team 23
 * npm install
 * npm start
 
+
 ## Version 0.2.0
+
+### Features
+* Resident Dashboard
+* Admin Dashboard
+* Display graph
+* added graph types
+
+### Bug Fixes
+* Fixed: requires routing to dashboard
+
+### Known Issues
+* Database not integrated
+* Lack of required data from client
+* Nodejs network issues
+
+## Version 0.1.0
 
 ### Features
 * User/Admin Login Page
