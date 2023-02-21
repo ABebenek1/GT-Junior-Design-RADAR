@@ -1,5 +1,5 @@
 # GT-Junior-Design-RADAR
-This is the GitHub repository for Georgia Tech Spring 2023 junior design team 2313, working on the RADAR project with Emory University Radiology Residency program.
+This is the GitHub repository for Georgia Tech Spring 2023 junior design team 2313, working on the RADAR project with Emory University Radiology Residency program. The vision and goal of this project is to help the resident users keep track of their historical and current performance in the residency program, and to help the administrators and advisors gain a holistic view of the performance of the residency cohort.
 
 # Release Notes
 
