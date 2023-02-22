@@ -1,157 +1,171 @@
 import React, { Component, useState } from "react";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import { state, storedData } from "../storeData";
+import { Layout, Space } from "antd";
+import { Button, Checkbox, Form, Input } from "antd";
+import { Typography } from "antd";
+import { Radio } from "antd";
+import { withTheme } from "@emotion/react";
+import EmoryLogo from "../images/emory.png";
+import { Col, Row } from "antd";
+const { Content } = Layout;
+const { Title } = Typography;
+
+const contentStyle = {
+  textAlign: "center",
+  minHeight: 120,
+  lineHeight: "120px",
+  width: "100%",
+  color: "white",
+  backgroundColor: "#108ee9",
+};
 
 export default function SignUp() {
-  const [userType, setUserType] = useState("");
+  const navigate = useNavigate();
 
-  //  set username field for state object
-  const getUsername = (event) => {
+  const onFinish = (values) => {
+    console.log("Success:", values);
+    sessionStorage.setItem(values.username, JSON.stringify(values));
 
-    state.username = event.target.value;
-
-    console.log("Username:", state.username)
-  }
-
-  //  set passowrd field for state object
-  const getPassword = (event) => {
-
-    state.password = event.target.value;
-
-    console.log("Password:", state.password)
-  }
-
-  //  set first name field for state object
-
-  const getFirstName = (event) => {
-
-    state.firstName = event.target.value;
-
-    console.log("First Name:", state.firstName)
-  }
-
-  //  set last name field for state object
-
-  const getLastName = (event) => {
-
-    state.lastName = event.target.value;
-
-    console.log("Last Name:", state.lastName)
-  }
-  
-  // event handle when clicking submit button
-  function handleSubmit (event) {
-    
-    event.preventDefault();
-    
-    var radios = document.getElementsByName("UserType")
-
-    for (var i = 0; i < radios.length; i++) {
-      if (radios[i].checked && i == 0) {
-        state.userType = "resident"
-      } else if (radios[i].checked && i == 1) {
-        state.userType = "admin"
-      }
+    // redirect to sign-in
+    if (values) {
+      navigate("/sign-in");
     }
-
-    console.log("un:", state.usernanme);
-
-    storedData[state.username] = state;
-    
-    sessionStorage.setItem(state.username, JSON.stringify(state))
-
-    console.log(storedData);    
-  }
-
-
+  };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div>
+      <Layout>
+        <Content style={contentStyle}>
+          <Title>Sign Up</Title>
+          <Row>
+            <Col flex={2}></Col>
+            <Col flex={3}>
+              <Form
+                name="basic"
+                labelCol={{
+                  span: 8,
+                }}
+                wrapperCol={{
+                  span: 16,
+                }}
+                style={{
+                  maxWidth: 600,
+                }}
+                initialValues={{
+                  remember: true,
+                }}
+                onFinish={onFinish}
+                // onFinishFailed={onFinishFailed}
+                autoComplete="off"
+              >
+                <Form.Item
+                  label="User Type"
+                  name="usertype"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Radio.Group value={"resident"}>
+                    <Radio value={"resident"}>resident</Radio>
+                    <Radio value={"admin"}>admin</Radio>
+                  </Radio.Group>
+                </Form.Item>
+                <Form.Item
+                  label="First Name"
+                  name="firstname"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your first name!",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  label="Last Name"
+                  name="lastname"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your last name!",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  label="Username"
+                  name="username"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your username!",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
 
-      <h3>Sign Up</h3>
+                <Form.Item
+                  label="Password"
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your password!",
+                    },
+                  ]}
+                >
+                  <Input.Password />
+                </Form.Item>
 
-      <div>
-        Register As
-        <input
-          type="radio"
-          name="UserType"
-          value="Resident"
-          checked="checked"
-        />
-        Resident
-        <input
-          type="radio"
-          name="UserType"
-          value="Admin"
-        />
-        Admin
-      </div> 
+                <Form.Item
+                  name="remember"
+                  valuePropName="checked"
+                  wrapperCol={{
+                    offset: 8,
+                    span: 16,
+                  }}
+                >
+                  <Checkbox>Remember me</Checkbox>
+                </Form.Item>
 
-      {userType == "Admin" ? (
-        <div className="mb-3">
-          <label>Secret Key</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Secret Key"
-            name="key"
-            // onChange={ getValue }
-          />
-        </div>
-      ) : null}
-
-      <div className="mb-3">
-        <label>First name</label>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="First name"
-          name="firstName"
-          onChange={getFirstName}
-        />
-      </div>
-
-      <div className="mb-3">
-        <label>Last name</label>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Last name"
-          name="lastName"
-          onChange={getLastName}
-        />
-      </div>
-
-      <div className="mb-3">
-        <label>Username</label>
-        <input
-          type="username"
-          className="form-control"
-          placeholder="Enter username"
-          name="username"
-          onChange={getUsername}
-        />
-      </div>
-
-      <div className="mb-3">
-        <label>Password</label>
-        <input
-          type="password"
-          className="form-control"
-          placeholder="Enter password"
-          name="password"
-          onChange={getPassword}
-        />
-      </div>
-
-      <div className="d-grid">
-        <button type="submit" className="btn btn-primary" onClick={handleSubmit}>
-          Sign Up
-        </button>
-      </div>
-      <p className="forgot-password text-right">
-        Already registered <a href="/sign-in">sign in?</a>
-      </p>
-    </form>
+                <Form.Item
+                  wrapperCol={{
+                    offset: 8,
+                    span: 16,
+                  }}
+                >
+                  <Button type="primary" htmlType="submit">
+                    Submit
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Col>
+            <Col flex={2}></Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              Already registered?
+              <Link to="/sign-in"> Sign-in</Link>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <img
+                src={EmoryLogo}
+                alt="logo"
+                className="logo"
+                style={{ height: "260px" }}
+              />
+            </Col>
+          </Row>
+        </Content>
+      </Layout>
+    </div>
   );
 }
-
