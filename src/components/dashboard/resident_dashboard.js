@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./resident_dashboard.css";
 
@@ -14,6 +14,7 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  ResponsiveContainer,
   ScatterChart,
   Scatter,
   PieChart,
@@ -120,26 +121,6 @@ const pieData = [
 const Resident_dashboard = () => {
   const [image, setImage] = useState("BarImage");
   const [date, setDate] = useState(null);
-  const [data, setData] = useState(null);
-
-  // https://jontkoh2424.medium.com/connecting-react-to-express-server-48948b74d091
-  useEffect(() => {
-    // hard-coded username to be apple
-    // TODO: not hard code the username
-    const url = "http://localhost:8000/user/apple";
-
-    async function fetchData() {
-      try {
-        const response = await fetch(url); // resp is a blob, binary data
-        const json = await response.json(); // parse response as json
-        setData(json);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    fetchData(url);
-  }, []);
 
   const handleDateChange = (value) => {
     message.info(
@@ -164,7 +145,47 @@ const Resident_dashboard = () => {
     }
   };
 
-  console.log(`data fetched:\n`, data);
+  const [file, setFile] = useState();
+  const [array, setArray] = useState([]);
+
+  const fileReader = new FileReader();
+
+  const handleOnChange = (e) => {
+      setFile(e.target.files[0]);
+  };
+
+  const csvFileToArray = string => {
+    const csvHeader = string.slice(0, string.indexOf("\n")).split(",");
+    const csvRows = string.slice(string.indexOf("\n") + 1).split("\n");
+
+    const array = csvRows.map(i => {
+      const values = i.split(",");
+      const obj = csvHeader.reduce((object, header, index) => {
+        object[header] = values[index];
+        return object;
+      }, {});
+      return obj;
+    });
+
+    setArray(array);
+    const mappedArray = array.map(d => Array.from(Object.values(d)))
+    console.log(mappedArray[0][0])
+  };
+
+  const handleOnSubmit = (e) => {
+    e.preventDefault();
+
+    if (file) {
+      fileReader.onload = function (event) {
+        const text = event.target.result;
+        csvFileToArray(text)
+      };
+
+      fileReader.readAsText(file);
+    }
+  };
+
+  const headerKeys = Object.keys(Object.assign({}, ...array));
 
   return (
     <>
@@ -202,10 +223,45 @@ const Resident_dashboard = () => {
           </Row>
         </Content>
       </Layout>
-      <form>
-          <input type={"file"} accept={".csv"} />
-          <button>Generate Data</button>
-      </form>
+      <div style={{ textAlign: "center" }}>
+            <form>
+                <input
+                    type={"file"}
+                    id={"csvFileInput"}
+                    accept={".csv"}
+                    onChange={handleOnChange}
+                />
+                <button
+                    onClick={(e) => {
+                        handleOnSubmit(e);
+                    }}
+                >
+                    Generate Data
+                </button>
+            </form>
+        </div>
+
+      <br />
+
+      <table>
+        <thead>
+          <tr key={"header"}>
+            {headerKeys.map((key) => (
+              <th>{key}</th>
+            ))}
+          </tr>
+        </thead>
+
+        <tbody>
+          {array.map((item) => (
+            <tr key={item.id}>
+              {Object.values(item).map((val) => (
+                <td>{val}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
       {image === "BarImage" && (
         <div className="content">
