@@ -92,22 +92,22 @@ export default function Login() {
 
           <div style ={divStyle}>
 
-          <div style={titleStyle}> <Title>Sign In for Resident Dashboard</Title> </div>
+          <div style={titleStyle}> <Title>Welcome to RADAR</Title> </div>
 
           <Row>
             <Col flex={2}></Col>
             <Col flex={3}>
               <Form
                 name="basic"
-                labelCol={{
-                  span: 8,
-                }}
-                wrapperCol={{
-                  span: 16,
-                }}
-                style={{
-                  maxWidth: 600,
-                }}
+                // labelCol={{
+                //   span: 8,
+                // }}
+                // wrapperCol={{
+                //   span: 16,
+                // }}
+                // style={{
+                //   maxWidth: 600,
+                // }}
                 initialValues={{
                   remember: true,
                 }}
