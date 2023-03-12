@@ -33,8 +33,13 @@
     margin-left: 0%;
 }
 
-button {
+.logout {
     margin-right: 5%;
+    width: 100px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .graph {

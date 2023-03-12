@@ -34,6 +34,7 @@ const { RangePicker } = DatePicker;
 
 // ANTD CSS - TO be migrated to a seperate CSS file
 const { Header, Content } = Layout;
+
 const headerStyle = {
   textAlign: "center",
   color: "#fff",
@@ -42,6 +43,7 @@ const headerStyle = {
   lineHeight: "64px",
   backgroundColor: "#7dbcea",
 };
+
 const contentStyle = {
   textAlign: "center",
   minHeight: 120,
@@ -49,6 +51,22 @@ const contentStyle = {
   color: "black",
   backgroundColor: "#108ee9",
 };
+
+const layoutStyle = {
+  width:"100vw",
+  height:"100vh"
+}
+
+const graphContainer = {
+  width:"100%",
+  height:"100%",
+  backgroundColor:"red"
+}
+
+const titleStyle = {
+  color:"white",
+}
+
 
 // rechart dummy data to be removed
 
@@ -217,17 +235,19 @@ const Resident_dashboard = () => {
 
   return (
     <>
-      <Layout>
+      <Layout style={layoutStyle}>
+
         <Header style={headerStyle}>
           <Row>
             <Link to="/sign-in">
-              <img src={EmoryLogo} width="60px" />
+              <button className="logout">Logout</button>
             </Link>
             {/* Need to figure out a way to not hard code this span portion */}
             <Col span={8}></Col>
-            <Title style={{ color: "white" }}>Resident Dashboard</Title>
+            <Title style={titleStyle}>Resident Dashboard</Title>
           </Row>
         </Header>
+        
         <Content style={contentStyle}>
           <Row>
             <Col flex={3}>
@@ -250,7 +270,7 @@ const Resident_dashboard = () => {
             </Col>
           </Row>
         </Content>
-      </Layout>
+
       <div style={{ textAlign: "center" }}>
             <form>
                 <input
@@ -272,7 +292,8 @@ const Resident_dashboard = () => {
       <br />
 
       <div id="result"></div>
-
+      
+      <div style={graphContainer}>
       {image === "BarImage" && (
         <div className="content">
           <BarChart
@@ -348,6 +369,8 @@ const Resident_dashboard = () => {
         </div>
       )}
       {/* </div> */}
+      </div>
+        </Layout>
     </>
   );
 };
