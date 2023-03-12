@@ -17,6 +17,8 @@ async function main() {
              }, "Administrator");
         */
         
+        
+        await findResidentsByName(client, "Test Resident1")
 
     } catch (e) {
         console.error(e);
@@ -30,4 +32,20 @@ main().catch(console.error)
 async function createUser(client, newUser, userType){
     const result = await client.db("RADAR_Project").collection(userType + "s").insertOne(newUser);
     console.log(`New listing created with the following id: ${result.insertedID}`);
+}
+
+async function findResidentsByName(client, nameOfResident) {
+    firstLast = nameOfResident.split(" ")
+    firstName = firstLast[0]
+    lastName = firstLast[1]
+    
+    const results  = await client.db("RADAR_Project").collection("Residents").find({FirstName: firstName, LastName: lastName});
+    const resultsArray = await results.toArray()
+
+    if (resultsArray.length > 0) {
+        console.log(`Found resident(s) with the name '${nameOfResident}':`);
+        console.log(resultsArray)
+    } else {
+        console.log(`No residents found with the name '${nameOfResident}'`);
+    }
 }
