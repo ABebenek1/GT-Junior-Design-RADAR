@@ -11,13 +11,60 @@ const { Content } = Layout;
 const { Title } = Typography;
 
 const contentStyle = {
+  width: "100vw",
+  height: "100vh",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  overflow: "hidden",
   textAlign: "center",
   minHeight: 120,
-  lineHeight: "120px",
-  width: "100%",
-  color: "white",
+  color: "black",
   backgroundColor: "#108ee9",
+
 };
+
+const parentDiv = {
+  width:"600px",
+  height:"500px",
+  backgroundColor:"lightgrey",
+  display:"flex",
+  alignItems:"center",
+  justifyContent:"center",
+  borderRadius:"50px",
+}
+
+const divStyle = {
+  width:"95%",
+  height:"400px",
+  // backgroundColor:"red"
+
+}
+
+const titleStyle = {
+  width:"100%",
+  height:"100px",
+  display:"flex",
+  justifyContent:"center",
+  alignItems:"center"
+}
+
+const containerStyle = {
+  width:"100%",
+  display:"flex",
+  alignItems:"center",
+  justifyContent:"center",
+
+} 
+
+const checkboxStyle = {
+  width:"200px",
+}
+
+const pad_down = {
+  paddingBottom:"10px"
+  
+}
 
 export default function Login() {
   // event handle when clicking submit button
@@ -40,7 +87,13 @@ export default function Login() {
     <div>
       <Layout>
         <Content style={contentStyle}>
-          <Title>Sign In</Title>
+
+          <div style={parentDiv}>
+
+          <div style ={divStyle}>
+
+          <div style={titleStyle}> <Title>Sign In for Resident Dashboard</Title> </div>
+
           <Row>
             <Col flex={2}></Col>
             <Col flex={3}>
@@ -62,6 +115,7 @@ export default function Login() {
                 // onFinishFailed={onFinishFailed}
                 autoComplete="off"
               >
+                <div>
                 <Form.Item
                   label="Username"
                   name="username"
@@ -74,6 +128,8 @@ export default function Login() {
                 >
                   <Input />
                 </Form.Item>
+                </div>
+
 
                 <Form.Item
                   label="Password"
@@ -91,29 +147,35 @@ export default function Login() {
                 <Form.Item
                   name="remember"
                   valuePropName="checked"
-                  wrapperCol={{
-                    offset: 8,
-                    span: 16,
-                  }}
+                  style={containerStyle}
+                  // wrapperCol={{
+                  //   offset: 8,
+                  //   span: 16,
+                  // }}
                 >
-                  <Checkbox>Remember me</Checkbox>
+                <div style={checkboxStyle}><Checkbox>Remember me</Checkbox></div>
+                
                 </Form.Item>
 
                 <Form.Item
-                  wrapperCol={{
-                    offset: 8,
-                    span: 16,
-                  }}
+                  // wrapperCol={{
+                  //   offset: 8,
+                  //   span: 16,
+                  // }}
+
+                  style={containerStyle}
                 >
                   <Button type="primary" htmlType="submit">
                     Log in
                   </Button>
                 </Form.Item>
+
               </Form>
             </Col>
             <Col flex={2}></Col>
           </Row>
-          <Row>
+
+          <Row style={pad_down}>
             <Col span={24}>
               New User?
               <Link to="/sign-up" style={{ color: "yellow" }}>
@@ -130,7 +192,7 @@ export default function Login() {
               </Link>
             </Col>
           </Row>
-          <Row>
+          {/* <Row>
             <Col span={24}>
               <img
                 src={EmoryLogo}
@@ -139,7 +201,11 @@ export default function Login() {
                 style={{ height: "260px" }}
               />
             </Col>
-          </Row>
+          </Row> */}
+
+          </div>
+          </div>
+
         </Content>
       </Layout>
     </div>
