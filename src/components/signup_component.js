@@ -8,17 +8,37 @@ import { Radio } from "antd";
 import { withTheme } from "@emotion/react";
 import EmoryLogo from "../images/emory.png";
 import { Col, Row } from "antd";
+import { borderRadius, style } from "@mui/system";
 const { Content } = Layout;
 const { Title } = Typography;
 
 const contentStyle = {
   textAlign: "center",
   minHeight: 120,
-  lineHeight: "120px",
-  width: "100%",
+  // lineHeight: "120px",
+  // width: "100%",
   color: "white",
   backgroundColor: "#108ee9",
+
+  width:"100vw",
+  height:"100vh",
+  display:"flex",
+  justifyContent:"center",
+  alignItems:"center"
 };
+
+const containerStyle = {
+  width:"900px",
+  height:"600px",
+  backgroundColor:"lightgray",
+  borderRadius:"50px"
+}
+
+const titleStyle = {
+  width:"100%",
+  marginBottom:"30px",
+  marginTop:"50px"
+}
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -37,28 +57,35 @@ export default function SignUp() {
     <div>
       <Layout>
         <Content style={contentStyle}>
-          <Title>Sign Up</Title>
+          <div style={containerStyle}>
+          
+          <div style={titleStyle}><Title>Sign up to use RADAR</Title></div>
+
           <Row>
             <Col flex={2}></Col>
             <Col flex={3}>
+              
               <Form
                 name="basic"
-                labelCol={{
-                  span: 8,
-                }}
-                wrapperCol={{
-                  span: 16,
-                }}
-                style={{
-                  maxWidth: 600,
-                }}
+                // labelCol={{
+                //   span: 8,
+                // }}
+                // wrapperCol={{
+                //   span: 16,
+                // }}
+                // style={{
+                //   maxWidth: 600,
+                // }}
                 initialValues={{
                   remember: true,
                 }}
+
+                labelAlign="right"
                 onFinish={onFinish}
                 // onFinishFailed={onFinishFailed}
                 autoComplete="off"
               >
+                
                 <Form.Item
                   label="User Type"
                   name="usertype"
@@ -73,6 +100,8 @@ export default function SignUp() {
                     <Radio value={"admin"}>admin</Radio>
                   </Radio.Group>
                 </Form.Item>
+
+
                 <Form.Item
                   label="First Name"
                   name="firstname"
@@ -85,6 +114,8 @@ export default function SignUp() {
                 >
                   <Input />
                 </Form.Item>
+
+
                 <Form.Item
                   label="Last Name"
                   name="lastname"
@@ -126,19 +157,16 @@ export default function SignUp() {
                 <Form.Item
                   name="remember"
                   valuePropName="checked"
-                  wrapperCol={{
-                    offset: 8,
-                    span: 16,
-                  }}
+                  // wrapperCol={{
+                  //   offset: 8,
+                  //   span: 16,
+                  // }}
                 >
                   <Checkbox>Remember me</Checkbox>
                 </Form.Item>
 
                 <Form.Item
-                  wrapperCol={{
-                    offset: 8,
-                    span: 16,
-                  }}
+w
                 >
                   <Button type="primary" htmlType="submit">
                     Submit
@@ -148,13 +176,15 @@ export default function SignUp() {
             </Col>
             <Col flex={2}></Col>
           </Row>
+          
           <Row>
             <Col span={24}>
               Already registered?
               <Link to="/sign-in"> Sign-in</Link>
             </Col>
           </Row>
-          <Row>
+
+          {/* <Row>
             <Col span={24}>
               <img
                 src={EmoryLogo}
@@ -163,7 +193,8 @@ export default function SignUp() {
                 style={{ height: "260px" }}
               />
             </Col>
-          </Row>
+          </Row> */}
+          </div>
         </Content>
       </Layout>
     </div>
