@@ -1,21 +1,21 @@
 const express = require("express");
 const cors = require("cors");
-const mongoose = require("mongoose");
-
-require("dotenv").config();
-
+const database = require("./database");
 const app = express();
-const port = process.env.PORT || 3301;
+const port = 8000;
 
 app.use(cors());
 
-const uri = process.env.ATLAS_URI;
-mongoose.connect(uri, { useNewUrlParer: true, useCreateIndex: true });
+app.listen(port, function () {
+  console.log(`Example app listening on port ${port}!`);
+});
 
-const connection = mongoose.connection;
+app.get("/user/:username", function (req, res) {
+  // req is an object and params is an object and username is a string
+  // req['params']['username']; which is the same thing as:
+  const username = req.params.username;
 
-connection.once("open", () => {});
-
-app.listen(port, () => {
-  console.log(`Server is running on port: ${port}`);
+  // database is an object. 'getUserInfo' is the key that returns value getUserInfo fxn w/ param username
+  // res.send(database["getUserInfo"](username)); which is the same thing as:
+  res.send(database.getUserInfo(username));
 });
