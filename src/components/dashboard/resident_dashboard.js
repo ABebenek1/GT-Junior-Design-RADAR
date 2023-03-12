@@ -115,17 +115,7 @@ const barData = [
   },
 ];
 
-const scatterData = [
-  { x: 100, y: 90, z: 90 },
-  { x: 45, y: 70, z: 20 },
-  { x: 80, y: 50, z: 20 },
-  { x: 120, y: 20, z: 20 },
-  { x: 170, y: 40, z: 30 },
-  { x: 140, y: 60, z: 60 },
-  { x: 150, y: 80, z: 70 },
-  { x: 65, y: 40, z: 20 },
-  { x: 110, y: 50, z: 50 },
-];
+var scatterData = new Array();
 
 const pieData = [
   { name: "Group A", value: 400 },
@@ -187,12 +177,18 @@ const Resident_dashboard = () => {
 
     setArray(array);
     const mapped_array = array.map(d => Array.from(Object.values(d)))
+
+    for (let i = 0; i < mapped_array.length; i++) {
+      if (!(typeof mapped_array[i][1] == 'undefined')) {
+        scatterData.push({x:parseInt(mapped_array[i][0]), y:parseInt(mapped_array[i][1])})
+      }
+    }
+    console.log(scatterData)
     let statistics_values = []
     for (let i = 0; i < mapped_array.length; i++) {
       if (!(typeof mapped_array[i][1] == 'undefined')) {
         statistics_values.push(parseInt(mapped_array[i][1]))
       }
-  
     }
     return generateStatistics(statistics_values)
   };
@@ -361,8 +357,8 @@ const Resident_dashboard = () => {
             }}
           >
             <CartesianGrid />
-            <XAxis type="number" dataKey="x" name="count" />
-            <YAxis type="number" dataKey="y" name="accuracy" unit="%" />
+            <XAxis type="number" dataKey="x" name="Day" />
+            <YAxis type="number" dataKey="y" name="Score" unit="%" />
             <Tooltip cursor={{ strokeDasharray: "3 3" }} />
             <Scatter name="A school" data={scatterData} fill="#8884d8" />
           </ScatterChart>
