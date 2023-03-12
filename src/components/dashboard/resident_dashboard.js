@@ -126,12 +126,16 @@ const Resident_dashboard = () => {
   useEffect(() => {
     // hard-coded username to be apple
     // TODO: not hard code the username
-    const url = "localhost:8000/user/apple";
+    const url = "http://localhost:8000/user/apple";
 
     async function fetchData() {
-      const response = await fetch(url); // resp is a blob, binary data
-      const json = await response.json(); // parse response as json
-      setData(json);
+      try {
+        const response = await fetch(url); // resp is a blob, binary data
+        const json = await response.json(); // parse response as json
+        setData(json);
+      } catch (e) {
+        console.error(e);
+      }
     }
 
     fetchData(url);
@@ -159,6 +163,8 @@ const Resident_dashboard = () => {
       setImage("ScatterImage");
     }
   };
+
+  console.log(`data fetched:\n`, data);
 
   return (
     <>
