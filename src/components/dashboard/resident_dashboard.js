@@ -168,8 +168,35 @@ const Resident_dashboard = () => {
     });
 
     setArray(array);
-    const mappedArray = array.map(d => Array.from(Object.values(d)))
-    console.log(mappedArray[0][0])
+    const mapped_array = array.map(d => Array.from(Object.values(d)))
+    let statistics_values = []
+    for (let i = 0; i < mapped_array.length; i++) {
+      if (!(typeof mapped_array[i][1] == 'undefined')) {
+        statistics_values.push(parseInt(mapped_array[i][1]))
+      }
+  
+    }
+    return generateStatistics(statistics_values)
+  };
+
+  function generateStatistics(data) {
+    const count = data.length
+    const min = Math.min.apply(Math, data)
+    const max = Math.max.apply(Math, data)
+    
+    var sum = data.reduce(function(a, b){
+      return a + b;
+  }, 0);
+
+    const avg = sum / count;
+
+    let stats_array = []
+    stats_array.push(min)
+    stats_array.push(max)
+    stats_array.push(avg)
+
+    return stats_array
+
   };
 
   const handleOnSubmit = (e) => {
@@ -178,14 +205,15 @@ const Resident_dashboard = () => {
     if (file) {
       fileReader.onload = function (event) {
         const text = event.target.result;
-        csvFileToArray(text)
+        let stats_array = csvFileToArray(text)
+        document.getElementById('result').innerHTML += `<div>Min: ${stats_array[0]}</div><br />`;
+        document.getElementById('result').innerHTML += `<div>Max: ${stats_array[1]}</div><br />`;
+        document.getElementById('result').innerHTML += `<div>Average: ${stats_array[2]}</div><br />`;
       };
 
       fileReader.readAsText(file);
     }
   };
-
-  const headerKeys = Object.keys(Object.assign({}, ...array));
 
   return (
     <>
@@ -243,25 +271,7 @@ const Resident_dashboard = () => {
 
       <br />
 
-      <table>
-        <thead>
-          <tr key={"header"}>
-            {headerKeys.map((key) => (
-              <th>{key}</th>
-            ))}
-          </tr>
-        </thead>
-
-        <tbody>
-          {array.map((item) => (
-            <tr key={item.id}>
-              {Object.values(item).map((val) => (
-                <td>{val}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div id="result"></div>
 
       {image === "BarImage" && (
         <div className="content">
