@@ -7,6 +7,7 @@ app.listen(port, function () {
   console.log(`Example app listening on port ${port}!`);
 });
 
-app.get("/user", function (req, res) {
-  res.send(database("apple"));
+app.get("/user/:username", function (req, res) {
+  const username = req.params.username;
+  res.send(database(username));
 });
