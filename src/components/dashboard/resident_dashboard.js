@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./resident_dashboard.css";
 
@@ -14,7 +14,6 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer,
   ScatterChart,
   Scatter,
   PieChart,
@@ -121,6 +120,22 @@ const pieData = [
 const Resident_dashboard = () => {
   const [image, setImage] = useState("BarImage");
   const [date, setDate] = useState(null);
+  const [data, setData] = useState(null);
+
+  // https://jontkoh2424.medium.com/connecting-react-to-express-server-48948b74d091
+  useEffect(() => {
+    // hard-coded username to be apple
+    // TODO: not hard code the username
+    const url = "localhost:8000/user/apple";
+
+    async function fetchData() {
+      const response = await fetch(url); // resp is a blob, binary data
+      const json = await response.json(); // parse response as json
+      setData(json);
+    }
+
+    fetchData(url);
+  }, []);
 
   const handleDateChange = (value) => {
     message.info(
