@@ -8,6 +8,11 @@ app.listen(port, function () {
 });
 
 app.get("/user/:username", function (req, res) {
+  // req is an object and params is an object and username is a string
+  // req['params']['username']; which is the same thing as:
   const username = req.params.username;
-  res.send(database(username));
+
+  // database is an object. 'getUserInfo' is the key that returns value getUserInfo fxn w/ param username
+  // res.send(database["getUserInfo"](username)); which is the same thing as:
+  res.send(database.getUserInfo(username));
 });
