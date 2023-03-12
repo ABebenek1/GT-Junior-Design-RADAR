@@ -236,4 +236,8 @@ function getUserInfo(username) {
   return info.get(username);
 }
 
-module.exports = getUserInfo;
+// exporting the function getUserInfo
+// module.exports = getUserInfo
+
+// now exporting an object getUserInfo with key getUserInfo (str) and value the val of getUserInfo (fxn)
+module.exports = { getUserInfo };
