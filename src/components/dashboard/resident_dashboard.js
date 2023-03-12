@@ -176,16 +176,15 @@ const Resident_dashboard = () => {
               </select>
             </Col>
             <Col flex={2}>
-              <select className="dropdown" name="variables" id="variables">
-                <option value="v1">Variable 1</option>
-                <option value="v2">Variable 2</option>
-                <option value="v3">Variable 3</option>
-              </select>
+            
             </Col>
-            <Col flex={2}></Col>
           </Row>
         </Content>
       </Layout>
+      <form>
+          <input type={"file"} accept={".csv"} />
+          <button>Generate Data</button>
+      </form>
 
       {image === "BarImage" && (
         <div className="content">
