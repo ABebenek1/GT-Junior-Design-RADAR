@@ -6,7 +6,7 @@ async function main() {
     try {
         await client.connect();
 
-        /* This user has already been created, but I'm leaving them as an example
+        /* Examples of each function
         await createUser(client, 
              {
                  email: "test.admin3@emory.edu",
@@ -16,7 +16,7 @@ async function main() {
                  LastName: "Admin3"
              }, "Administrator");
         */
-        
+        /*
         await findResidentsByName(client, "Test Resident1");
 
         await updateResidentInfo(client, "TestResident1", {Year: "R2"});
@@ -24,6 +24,7 @@ async function main() {
         await deleteResident(client, "TestResident3");
         await createUser(client, {Username: "TestResident3"}, "Resident");
         await deleteResident(client, "TestResident3");
+        */
 
     } catch (e) {
         console.error(e);
