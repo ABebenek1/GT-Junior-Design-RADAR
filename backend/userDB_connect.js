@@ -17,8 +17,13 @@ async function main() {
              }, "Administrator");
         */
         
-        
-        await findResidentsByName(client, "Test Resident1")
+        await findResidentsByName(client, "Test Resident1");
+
+        await updateResidentInfo(client, "TestResident1", {Year: "R2"});
+
+        await deleteResident(client, "TestResident3");
+        await createUser(client, {Username: "TestResident3"}, "Resident");
+        await deleteResident(client, "TestResident3");
 
     } catch (e) {
         console.error(e);
@@ -38,8 +43,8 @@ async function findResidentsByName(client, nameOfResident) {
     firstLast = nameOfResident.split(" ")
     firstName = firstLast[0]
     lastName = firstLast[1]
-    
     const results  = await client.db("RADAR_Project").collection("Residents").find({FirstName: firstName, LastName: lastName});
+
     const resultsArray = await results.toArray()
 
     if (resultsArray.length > 0) {
@@ -47,5 +52,24 @@ async function findResidentsByName(client, nameOfResident) {
         console.log(resultsArray)
     } else {
         console.log(`No residents found with the name '${nameOfResident}'`);
+    }
+}
+
+async function updateResidentInfo(client, residentUsername, update) {
+    const result = await client.db("RADAR_Project").collection("Residents").updateOne({Username: residentUsername},{$set: update});
+
+    if (result.matchedCount > 0){
+        console.log("Updated the user information for " + residentUsername);
+    } else {
+        console.log("Unable to find user " + residentUsername);
+    }
+}
+
+async function deleteResident(client, residentUsername) {
+    const result = await client.db("RADAR_Project").collection("Residents").deleteOne({Username: residentUsername});
+    if (result.deletedCount > 0) {
+        console.log("Database entry for " + residentUsername + " was deleted")
+    } else {
+        console.log("Could not find user " + residentUsername)
     }
 }
