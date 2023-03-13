@@ -28,7 +28,8 @@ import { Layout } from "antd";
 import { Button } from "antd";
 import { DatePicker, message } from "antd";
 import { Typography } from "antd";
-import { Dropdown } from "antd";
+import { Dropdown, Space } from "antd";
+import { DownOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
 
@@ -144,6 +145,10 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 const Resident_dashboard = () => {
   const [image, setImage] = useState("BarImage");
   const [date, setDate] = useState(null);
+  const [file, setFile] = useState();
+  const [array, setArray] = useState(null);
+  const [data, setData] = useState(null);
+  const [metricsOption, setMetricsOption] = useState(null);
 
   const handleDateChange = (value) => {
     message.info(
@@ -168,8 +173,38 @@ const Resident_dashboard = () => {
     }
   };
 
-  const [file, setFile] = useState();
-  const [array, setArray] = useState([]);
+  // Load in data from backend server
+  // https://jontkoh2424.medium.com/connecting-react-to-express-server-48948b74d091
+  useEffect(() => {
+    // hard-coded username to be apple
+    // TODO: not hard code the username
+    const url = "http://localhost:8000/user/apple";
+
+    async function fetchData() {
+      try {
+        const response = await fetch(url); // resp is a blob, binary data
+        const json = await response.json(); // parse response as json
+        setData(json);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    console.log(data);
+    fetchData(url);
+  }, []);
+
+  const extractDropDownOptions = (data) => {
+    if (data === null) {
+      return [];
+    }
+    // extract the metrics name from resp obj's data object
+    // Object.keys returns an array of string
+    const metricsNames = Object.keys(data.data);
+    console.log(metricsNames);
+    // metricsNames.map((entry) => {return {label: entry, key: entry }});
+    return metricsNames.map((entry) => ({ label: entry, key: entry }));
+  };
+  // console.log(processData(data));
 
   const fileReader = new FileReader();
 
@@ -271,6 +306,23 @@ const Resident_dashboard = () => {
             <Col flex={3}>
               <RangePicker onChange={handleDateChange} />
             </Col>
+            <Col>
+              <Dropdown
+                menu={{
+                  items: extractDropDownOptions(data),
+                  onClick: ({ key }) => {
+                    setMetricsOption(key);
+                  },
+                }}
+              >
+                <Button>
+                  <Space>
+                    {metricsOption ?? "select metrics"}
+                    <DownOutlined />
+                  </Space>
+                </Button>
+              </Dropdown>
+            </Col>
             <Col flex={2}>
               <select
                 onChange={displayOnChange}
@@ -350,15 +402,6 @@ const Resident_dashboard = () => {
                   fill="#8884d8"
                   label
                 />
-                {/* <Pie
-              dataKey="value"
-              data={data02}
-              cx={500}
-              cy={200}
-              innerRadius={40}
-              outerRadius={80}
-              fill="#82ca9d"
-            /> */}
                 <Tooltip />
               </PieChart>
             </div>
