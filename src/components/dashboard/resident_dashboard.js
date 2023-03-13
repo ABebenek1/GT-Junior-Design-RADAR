@@ -173,6 +173,23 @@ const Resident_dashboard = () => {
     }
   };
 
+  const displayCategories = (event) => {
+    const valueSelectedByUser = parseInt(event.target.value);
+
+    if (valueSelectedByUser === 1) {
+      
+    }
+
+    if (valueSelectedByUser === 2) {
+      
+    }
+
+    if (valueSelectedByUser === 3) {
+      
+    }
+  };
+
+
   // Load in data from backend server
   // https://jontkoh2424.medium.com/connecting-react-to-express-server-48948b74d091
   useEffect(() => {
@@ -429,11 +446,18 @@ const Resident_dashboard = () => {
           )}
           {/* </div> */}
         </div>
-      )}
-      {/* </div> */}
-      </div>
       <div style={agreeDisagreeRate}
       align = "center">
+        <select
+        onChange={displayCategories}
+        className="dropdown"
+        name="agreeDisagreeGraphs"
+        id="agreeDisagreeGraphs"
+        >
+          <option value="1">Category 1</option>
+          <option value="2">Category 2</option>
+          <option value="3">Category 3</option>
+        </select>
         <PieChart width={800} height={400}>
           <Pie
             dataKey="value"
