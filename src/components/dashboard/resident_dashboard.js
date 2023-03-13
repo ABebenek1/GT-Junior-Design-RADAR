@@ -9,6 +9,7 @@ import EmoryLogo from "../../images/emory.png";
 import {
   BarChart,
   Bar,
+  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -63,6 +64,11 @@ const graphContainer = {
   height: "100%",
   backgroundColor: "red",
 };
+
+const agreeDisagreeRate = {
+  width:"100%",
+  height:"100%",
+}
 
 const titleStyle = {
   color: "white",
@@ -125,6 +131,15 @@ const pieData = [
   { name: "Group E", value: 278 },
   { name: "Group F", value: 189 },
 ];
+
+const agreeDisagreeData = [
+  {name: "Agree", value: 200},
+  {name: "Agree with Incidental Finding", value: 50},
+  {name: "Disagree", value: 20},
+  {name: "Disagree with Preliminary Report", value: 40}
+]
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 const Resident_dashboard = () => {
   const [image, setImage] = useState("BarImage");
@@ -371,7 +386,31 @@ const Resident_dashboard = () => {
           )}
           {/* </div> */}
         </div>
-      </Layout>
+      )}
+      {/* </div> */}
+      </div>
+      <div style={agreeDisagreeRate}
+      align = "center">
+        <PieChart width={800} height={400}>
+          <Pie
+            dataKey="value"
+            isAnimationActive={false}
+            data={agreeDisagreeData}
+            cx={120}
+            cy={200}
+            innerRadius={60}
+            outerRadius={80}
+            fill="#8884d8"
+            paddingAngle={5}
+          >
+          {agreeDisagreeData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+          <Tooltip />
+        </PieChart>
+      </div>
+        </Layout>
     </>
   );
 };
