@@ -21,7 +21,7 @@ This is the GitHub repository for Georgia Tech Spring 2023 junior design team 23
 *Admin Dashbaord Backend started
 
 ###Bug Fixes
-
+*Several pages updated to make them more responsive to changes
 
 ###Known Issues
 *Data received very recently from client; need to parse it and make sense of it
