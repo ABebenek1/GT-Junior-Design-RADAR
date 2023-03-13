@@ -12,6 +12,21 @@ This is the GitHub repository for Georgia Tech Spring 2023 junior design team 23
 * npm start
 
 
+## Version 0.3.0
+
+###Features
+*Resident Dashbaord Backend mostly finished
+*Resident Dashboard Frontend mostly finished
+*User Database linked to dashbaord backend
+*Admin Dashbaord Backend started
+
+###Bug Fixes
+
+
+###Known Issues
+*Data received very recently from client; need to parse it and make sense of it
+*Need to link finished backend elements to unfinished frontend elements
+
 ## Version 0.2.0
 
 ### Features
