@@ -130,6 +130,10 @@ const pieData = [
 const Resident_dashboard = () => {
   const [image, setImage] = useState("BarImage");
   const [date, setDate] = useState(null);
+  const [file, setFile] = useState();
+  const [array, setArray] = useState(null);
+  const [data, setData] = useState(null);
+  const [metricsOption, setMetricsOption] = useState(null);
 
   const handleDateChange = (value) => {
     message.info(
@@ -154,10 +158,7 @@ const Resident_dashboard = () => {
     }
   };
 
-  const [file, setFile] = useState();
-  const [array, setArray] = useState(null);
-  const [data, setData] = useState(null);
-
+  // Load in data from backend server
   // https://jontkoh2424.medium.com/connecting-react-to-express-server-48948b74d091
   useEffect(() => {
     // hard-coded username to be apple
@@ -177,9 +178,17 @@ const Resident_dashboard = () => {
     fetchData(url);
   }, []);
 
-  // const processData = (data) => {
-  //   console.log(data);
-  // };
+  const extractDropDownOptions = (data) => {
+    if (data === null) {
+      return [];
+    }
+    // extract the metrics name from resp obj's data object
+    // Object.keys returns an array of string
+    const metricsNames = Object.keys(data.data);
+    console.log(metricsNames);
+    // metricsNames.map((entry) => {return {label: entry, key: entry }});
+    return metricsNames.map((entry) => ({ label: entry, key: entry }));
+  };
   // console.log(processData(data));
 
   const fileReader = new FileReader();
@@ -285,32 +294,15 @@ const Resident_dashboard = () => {
             <Col>
               <Dropdown
                 menu={{
-                  items: [
-                    {
-                      label: "1st menu item",
-                      key: "1",
-                    },
-                    {
-                      label: "2nd menu item",
-                      key: "2",
-                    },
-                    {
-                      label: "3rd menu item",
-                      key: "3",
-                    },
-                    {
-                      label: "4rd menu item",
-                      key: "4",
-                    },
-                  ],
+                  items: extractDropDownOptions(data),
                   onClick: ({ key }) => {
-                    message.info(`Click on button ${key}`);
+                    setMetricsOption(key);
                   },
                 }}
               >
                 <Button>
                   <Space>
-                    Button
+                    {metricsOption ?? "select metrics"}
                     <DownOutlined />
                   </Space>
                 </Button>
