@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./resident_dashboard.css";
 
@@ -28,6 +28,7 @@ import { Layout } from "antd";
 import { Button } from "antd";
 import { DatePicker, message } from "antd";
 import { Typography } from "antd";
+import { Dropdown } from "antd";
 
 const { Title } = Typography;
 
@@ -54,15 +55,15 @@ const contentStyle = {
 };
 
 const layoutStyle = {
-  width:"100vw",
-  height:"100vh"
-}
+  width: "100vw",
+  height: "100vh",
+};
 
 const graphContainer = {
-  width:"100%",
-  height:"100%",
-  backgroundColor:"red"
-}
+  width: "100%",
+  height: "100%",
+  backgroundColor: "red",
+};
 
 const agreeDisagreeRate = {
   width:"100%",
@@ -70,9 +71,8 @@ const agreeDisagreeRate = {
 }
 
 const titleStyle = {
-  color:"white",
-}
-
+  color: "white",
+};
 
 // rechart dummy data to be removed
 
@@ -174,14 +174,14 @@ const Resident_dashboard = () => {
   const fileReader = new FileReader();
 
   const handleOnChange = (e) => {
-      setFile(e.target.files[0]);
+    setFile(e.target.files[0]);
   };
 
-  const csvFileToArray = string => {
+  const csvFileToArray = (string) => {
     const csvHeader = string.slice(0, string.indexOf("\n")).split(",");
     const csvRows = string.slice(string.indexOf("\n") + 1).split("\n");
 
-    const array = csvRows.map(i => {
+    const array = csvRows.map((i) => {
       const values = i.split(",");
       const obj = csvHeader.reduce((object, header, index) => {
         object[header] = values[index];
@@ -191,42 +191,44 @@ const Resident_dashboard = () => {
     });
 
     setArray(array);
-    const mapped_array = array.map(d => Array.from(Object.values(d)))
+    const mapped_array = array.map((d) => Array.from(Object.values(d)));
 
     for (let i = 0; i < mapped_array.length; i++) {
-      if (!(typeof mapped_array[i][1] == 'undefined')) {
-        scatterData.push({x:parseInt(mapped_array[i][0]), y:parseInt(mapped_array[i][1])})
+      if (!(typeof mapped_array[i][1] == "undefined")) {
+        scatterData.push({
+          x: parseInt(mapped_array[i][0]),
+          y: parseInt(mapped_array[i][1]),
+        });
       }
     }
-    console.log(scatterData)
-    let statistics_values = []
+    console.log(scatterData);
+    let statistics_values = [];
     for (let i = 0; i < mapped_array.length; i++) {
-      if (!(typeof mapped_array[i][1] == 'undefined')) {
-        statistics_values.push(parseInt(mapped_array[i][1]))
+      if (!(typeof mapped_array[i][1] == "undefined")) {
+        statistics_values.push(parseInt(mapped_array[i][1]));
       }
     }
-    return generateStatistics(statistics_values)
+    return generateStatistics(statistics_values);
   };
 
   function generateStatistics(data) {
-    const count = data.length
-    const min = Math.min.apply(Math, data)
-    const max = Math.max.apply(Math, data)
-    
-    var sum = data.reduce(function(a, b){
+    const count = data.length;
+    const min = Math.min.apply(Math, data);
+    const max = Math.max.apply(Math, data);
+
+    var sum = data.reduce(function (a, b) {
       return a + b;
-  }, 0);
+    }, 0);
 
     const avg = sum / count;
 
-    let stats_array = []
-    stats_array.push(min)
-    stats_array.push(max)
-    stats_array.push(avg)
+    let stats_array = [];
+    stats_array.push(min);
+    stats_array.push(max);
+    stats_array.push(avg);
 
-    return stats_array
-
-  };
+    return stats_array;
+  }
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
@@ -234,10 +236,16 @@ const Resident_dashboard = () => {
     if (file) {
       fileReader.onload = function (event) {
         const text = event.target.result;
-        let stats_array = csvFileToArray(text)
-        document.getElementById('result').innerHTML += `<div>Min: ${stats_array[0]}</div><br />`;
-        document.getElementById('result').innerHTML += `<div>Max: ${stats_array[1]}</div><br />`;
-        document.getElementById('result').innerHTML += `<div>Average: ${stats_array[2]}</div><br />`;
+        let stats_array = csvFileToArray(text);
+        document.getElementById(
+          "result"
+        ).innerHTML += `<div>Min: ${stats_array[0]}</div><br />`;
+        document.getElementById(
+          "result"
+        ).innerHTML += `<div>Max: ${stats_array[1]}</div><br />`;
+        document.getElementById(
+          "result"
+        ).innerHTML += `<div>Average: ${stats_array[2]}</div><br />`;
       };
 
       fileReader.readAsText(file);
@@ -247,7 +255,6 @@ const Resident_dashboard = () => {
   return (
     <>
       <Layout style={layoutStyle}>
-
         <Header style={headerStyle}>
           <Row>
             <Link to="/sign-in">
@@ -258,7 +265,7 @@ const Resident_dashboard = () => {
             <Title style={titleStyle}>Resident Dashboard</Title>
           </Row>
         </Header>
-        
+
         <Content style={contentStyle}>
           <Row>
             <Col flex={3}>
@@ -276,76 +283,74 @@ const Resident_dashboard = () => {
                 <option value="3">Scatter plot</option>
               </select>
             </Col>
-            <Col flex={2}>
-            
-            </Col>
+            <Col flex={2}></Col>
           </Row>
         </Content>
 
-      <div style={{ textAlign: "center" }}>
-            <form>
-                <input
-                    type={"file"}
-                    id={"csvFileInput"}
-                    accept={".csv"}
-                    onChange={handleOnChange}
-                />
-                <button
-                    onClick={(e) => {
-                        handleOnSubmit(e);
-                    }}
-                >
-                    Generate Data
-                </button>
-            </form>
-        </div>
-
-      <br />
-
-      <div id="result"></div>
-      
-      <div style={graphContainer}>
-      {image === "BarImage" && (
-        <div className="content">
-          <BarChart
-            width={1000}
-            height={600}
-            data={barData}
-            margin={{
-              top: 20,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="pv" stackId="a" fill="#8884d8" />
-            <Bar dataKey="amt" stackId="a" fill="#82ca9d" />
-            <Bar dataKey="uv" fill="#ffc658" />
-          </BarChart>
-
-          {/* <img className="graph" src={BarImage} alt="picture" /> */}
-        </div>
-      )}
-
-      {image === "PieImage" && (
-        <div className="content">
-          <PieChart width={400} height={400}>
-            <Pie
-              dataKey="value"
-              isAnimationActive={false}
-              data={pieData}
-              cx="50%"
-              cy="50%"
-              outerRadius={80}
-              fill="#8884d8"
-              label
+        <div style={{ textAlign: "center" }}>
+          <form>
+            <input
+              type={"file"}
+              id={"csvFileInput"}
+              accept={".csv"}
+              onChange={handleOnChange}
             />
-            {/* <Pie
+            <button
+              onClick={(e) => {
+                handleOnSubmit(e);
+              }}
+            >
+              Generate Data
+            </button>
+          </form>
+        </div>
+
+        <br />
+
+        <div id="result"></div>
+
+        <div style={graphContainer}>
+          {image === "BarImage" && (
+            <div className="content">
+              <BarChart
+                width={1000}
+                height={600}
+                data={barData}
+                margin={{
+                  top: 20,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="pv" stackId="a" fill="#8884d8" />
+                <Bar dataKey="amt" stackId="a" fill="#82ca9d" />
+                <Bar dataKey="uv" fill="#ffc658" />
+              </BarChart>
+
+              {/* <img className="graph" src={BarImage} alt="picture" /> */}
+            </div>
+          )}
+
+          {image === "PieImage" && (
+            <div className="content">
+              <PieChart width={400} height={400}>
+                <Pie
+                  dataKey="value"
+                  isAnimationActive={false}
+                  data={pieData}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  fill="#8884d8"
+                  label
+                />
+                {/* <Pie
               dataKey="value"
               data={data02}
               cx={500}
@@ -354,29 +359,32 @@ const Resident_dashboard = () => {
               outerRadius={80}
               fill="#82ca9d"
             /> */}
-            <Tooltip />
-          </PieChart>
-        </div>
-      )}
-      {image === "ScatterImage" && (
-        <div className="content">
-          <ScatterChart
-            width={1000}
-            height={600}
-            data={scatterData}
-            margin={{
-              top: 20,
-              right: 20,
-              bottom: 20,
-              left: 20,
-            }}
-          >
-            <CartesianGrid />
-            <XAxis type="number" dataKey="x" name="Day" />
-            <YAxis type="number" dataKey="y" name="Score" unit="%" />
-            <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-            <Scatter name="A school" data={scatterData} fill="#8884d8" />
-          </ScatterChart>
+                <Tooltip />
+              </PieChart>
+            </div>
+          )}
+          {image === "ScatterImage" && (
+            <div className="content">
+              <ScatterChart
+                width={1000}
+                height={600}
+                data={scatterData}
+                margin={{
+                  top: 20,
+                  right: 20,
+                  bottom: 20,
+                  left: 20,
+                }}
+              >
+                <CartesianGrid />
+                <XAxis type="number" dataKey="x" name="Day" />
+                <YAxis type="number" dataKey="y" name="Score" unit="%" />
+                <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+                <Scatter name="A school" data={scatterData} fill="#8884d8" />
+              </ScatterChart>
+            </div>
+          )}
+          {/* </div> */}
         </div>
       )}
       {/* </div> */}
