@@ -27,7 +27,8 @@ import { Layout } from "antd";
 import { Button } from "antd";
 import { DatePicker, message } from "antd";
 import { Typography } from "antd";
-import { Dropdown } from "antd";
+import { Dropdown, Space } from "antd";
+import { DownOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
 
@@ -154,7 +155,32 @@ const Resident_dashboard = () => {
   };
 
   const [file, setFile] = useState();
-  const [array, setArray] = useState([]);
+  const [array, setArray] = useState(null);
+  const [data, setData] = useState(null);
+
+  // https://jontkoh2424.medium.com/connecting-react-to-express-server-48948b74d091
+  useEffect(() => {
+    // hard-coded username to be apple
+    // TODO: not hard code the username
+    const url = "http://localhost:8000/user/apple";
+
+    async function fetchData() {
+      try {
+        const response = await fetch(url); // resp is a blob, binary data
+        const json = await response.json(); // parse response as json
+        setData(json);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    console.log(data);
+    fetchData(url);
+  }, []);
+
+  // const processData = (data) => {
+  //   console.log(data);
+  // };
+  // console.log(processData(data));
 
   const fileReader = new FileReader();
 
@@ -256,6 +282,40 @@ const Resident_dashboard = () => {
             <Col flex={3}>
               <RangePicker onChange={handleDateChange} />
             </Col>
+            <Col>
+              <Dropdown
+                menu={{
+                  items: [
+                    {
+                      label: "1st menu item",
+                      key: "1",
+                    },
+                    {
+                      label: "2nd menu item",
+                      key: "2",
+                    },
+                    {
+                      label: "3rd menu item",
+                      key: "3",
+                    },
+                    {
+                      label: "4rd menu item",
+                      key: "4",
+                    },
+                  ],
+                  onClick: ({ key }) => {
+                    message.info(`Click on button ${key}`);
+                  },
+                }}
+              >
+                <Button>
+                  <Space>
+                    Button
+                    <DownOutlined />
+                  </Space>
+                </Button>
+              </Dropdown>
+            </Col>
             <Col flex={2}>
               <select
                 onChange={displayOnChange}
@@ -335,15 +395,6 @@ const Resident_dashboard = () => {
                   fill="#8884d8"
                   label
                 />
-                {/* <Pie
-              dataKey="value"
-              data={data02}
-              cx={500}
-              cy={200}
-              innerRadius={40}
-              outerRadius={80}
-              fill="#82ca9d"
-            /> */}
                 <Tooltip />
               </PieChart>
             </div>
