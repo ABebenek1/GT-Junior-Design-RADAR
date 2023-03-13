@@ -74,3 +74,4 @@ async function deleteResident(client, residentUsername) {
         console.log("Could not find user " + residentUsername)
     }
 }
+module.exports = {client, createUser, findResidentsByName, updateResidentInfo, deleteResident};
