@@ -15,17 +15,17 @@ This is the GitHub repository for Georgia Tech Spring 2023 junior design team 23
 ## Version 0.3.0
 
 ### Features
-*Resident Dashboard Backend mostly finished
-*Resident Dashboard Frontend mostly finished
-*User Database linked to dashboard backend
-*Admin Dashboard Backend started
+* Resident Dashboard Backend mostly finished
+* Resident Dashboard Frontend mostly finished
+* User Database linked to dashboard backend
+* Admin Dashboard Backend started
 
 ### Bug Fixes
-*Several pages updated to make them more responsive to changes
+* Several pages updated to make them more responsive to changes
 
 ### Known Issues
-*Data received very recently from client; need to parse it and make sense of it
-*Need to link finished backend elements to unfinished frontend elements
+* Data received very recently from client; need to parse it and make sense of it
+* Need to link finished backend elements to unfinished frontend elements
 
 ## Version 0.2.0
 
