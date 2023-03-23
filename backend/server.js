@@ -23,15 +23,22 @@ app.listen(port, function () {
 
 app.use(bodyParser.json());
 app.post("/sign-up", async function (req, res) {
+  console.log(req.body);
   if (
-    req.body.firstname == null ||
-    req.body.lastname == null ||
+    req.body.firstName == null ||
+    req.body.lastName == null ||
     req.body.isAdmin == null ||
     req.body.username == null ||
     req.body.password == null
   ) {
     res.status(400).send("one of the required fields is empty");
   } else {
-    res.send(database.postUser(req.body));
+    try {
+      await database.postUser(req.body);
+      res.status(200).send("success");
+    } catch (err) {
+      console.error(err);
+      res.status(400).send(err.message);
+    }
   }
 });

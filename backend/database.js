@@ -30,7 +30,7 @@ const postUser = async ({
     const collection = client.db("EmoryHospital").collection("users_data");
     // hash the password
     const hashedPassword = hashPassword(password);
-    collection.insertOne({
+    await collection.insertOne({
       username,
       password: hashedPassword,
       isAdmin,
