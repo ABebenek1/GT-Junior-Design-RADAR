@@ -39,6 +39,7 @@ const postUser = async ({
     });
   } catch (err) {
   } finally {
+    await client.close();
   }
 };
 
@@ -67,4 +68,4 @@ const getEntry = async () => {
 };
 
 // now exporting objects with key getUserInfo (str) and value the val of getUserInfo (fxn)
-module.exports = { postEntry };
+module.exports = { postUser, postEntry };
