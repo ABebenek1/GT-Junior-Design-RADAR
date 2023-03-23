@@ -9,8 +9,34 @@ const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
 });
 
-// check if the username is already in the database
-const authenticateUser = async () => {};
+const getUser = async (username) => {
+  try {
+    await client.connect();
+    const collection = client.db("EmoryHospital").collection("users_data");
+    return await collection.findOne({ username }); // returns null if no entry found
+  } catch (err) {
+    console.error(err);
+  } finally {
+    await client.close();
+  }
+};
+
+const authenticateUser = async (username, password) => {
+  try {
+    await client.connect();
+    const collection = client.db("EmoryHospital").collection("users_data");
+    const user = await collection.findOne({ username });
+    if (user == null) throw new Error("User not found");
+    const db_pw = user.password;
+    const match = await bcrypt.compare(password, db_pw);
+    if (!match) throw new Error("Password incorrect");
+  } catch (err) {
+    console.error(err);
+    throw err;
+  } finally {
+    await client.close();
+  }
+};
 
 const hashPassword = async (password) => {
   const saltRounds = 10;
@@ -29,7 +55,7 @@ const postUser = async ({
     await client.connect();
     const collection = client.db("EmoryHospital").collection("users_data");
     // hash the password
-    const hashedPassword = hashPassword(password);
+    const hashedPassword = await hashPassword(password);
     await collection.insertOne({
       username,
       password: hashedPassword,
@@ -38,6 +64,7 @@ const postUser = async ({
       lastName,
     });
   } catch (err) {
+    console.error(err);
   } finally {
     await client.close();
   }
@@ -68,4 +95,4 @@ const getEntry = async () => {
 };
 
 // now exporting objects with key getUserInfo (str) and value the val of getUserInfo (fxn)
-module.exports = { postUser, postEntry };
+module.exports = { postUser, authenticateUser, postEntry };
