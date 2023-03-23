@@ -42,3 +42,22 @@ app.post("/sign-up", async function (req, res) {
     }
   }
 });
+
+app.post("/sign-in", async function (req, res) {
+  console.log(req.body);
+  if (req.body.username == null || req.body.password == null) {
+    res.status(400).send("one of the required fields is empty");
+  } else {
+    try {
+      await database.authenticateUser(req.body.username, req.body.password);
+      res.status(200).send("success");
+    } catch (err) {
+      console.error(err);
+      if (err.message === "Password incorrect") {
+        res.status(401).send(err.message);
+      } else {
+        res.status(400).send(err.message);
+      }
+    }
+  }
+});
