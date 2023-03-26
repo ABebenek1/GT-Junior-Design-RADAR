@@ -1,243 +1,71 @@
-const info = new Map();
+const { MongoClient, ServerApiVersion } = require("mongodb");
+const bcrypt = require("bcrypt");
 
-info.set("apple", {
-  data: {
-    accuracy: {
-      "2020-1-1": 0.54,
-      "2020-2-1": 0.55,
-      "2020-3-1": 0.66,
-      "2020-4-1": 0.69,
-    },
-    speed: {
-      "2020-1-1": 2.4,
-      "2020-2-1": 2.65,
-      "2020-3-1": 3.39,
-      "2020-4-1": 4.53,
-    },
-    quantity: {
-      "2020-1-1": 1,
-      "2020-2-1": 2,
-      "2020-3-1": 4,
-      "2020-4-1": 5,
-    },
-    performance: {
-      "2020-1-1": 0.77,
-      "2020-2-1": 0.74,
-      "2020-3-1": 0.8,
-      "2020-4-1": 0.89,
-    },
-  },
+const uri =
+  "mongodb+srv://winniewjeng:apple@cluster0.bpf4vis.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverApi: ServerApiVersion.v1,
 });
 
-info.set("banana", {
-  data: {
-    accuracy: {
-      "2020-1-1": 0.54,
-      "2020-2-1": 0.55,
-      "2020-3-1": 0.66,
-      "2020-4-1": 0.69,
-    },
-    speed: {
-      "2020-1-1": 2.4,
-      "2020-2-1": 2.65,
-      "2020-3-1": 3.39,
-      "2020-4-1": 4.53,
-    },
-    quantity: {
-      "2020-1-1": 1,
-      "2020-2-1": 2,
-      "2020-3-1": 4,
-      "2020-4-1": 5,
-    },
-    performance: {
-      "2020-1-1": 0.77,
-      "2020-2-1": 0.74,
-      "2020-3-1": 0.8,
-      "2020-4-1": 0.89,
-    },
-  },
-});
+// check if the username is already in the database
+const authenticateUser = async () => {};
 
-info.set("hanssen", {
-  data: {
-    accuracy: {
-      "2020-1-1": 0.54,
-      "2020-2-1": 0.55,
-      "2020-3-1": 0.66,
-      "2020-4-1": 0.69,
-    },
-    speed: {
-      "2020-1-1": 2.4,
-      "2020-2-1": 2.65,
-      "2020-3-1": 3.39,
-      "2020-4-1": 4.53,
-    },
-    quantity: {
-      "2020-1-1": 1,
-      "2020-2-1": 2,
-      "2020-3-1": 4,
-      "2020-4-1": 5,
-    },
-    performance: {
-      "2020-1-1": 0.77,
-      "2020-2-1": 0.74,
-      "2020-3-1": 0.8,
-      "2020-4-1": 0.89,
-    },
-  },
-});
+const hashPassword = async (password) => {
+  const saltRounds = 10;
+  return await bcrypt.hash(password, saltRounds);
+};
 
-info.set("benson", {
-  data: {
-    accuracy: {
-      "2020-1-1": 0.54,
-      "2020-2-1": 0.55,
-      "2020-3-1": 0.66,
-      "2020-4-1": 0.69,
-    },
-    speed: {
-      "2020-1-1": 2.4,
-      "2020-2-1": 2.65,
-      "2020-3-1": 3.39,
-      "2020-4-1": 4.53,
-    },
-    quantity: {
-      "2020-1-1": 1,
-      "2020-2-1": 2,
-      "2020-3-1": 4,
-      "2020-4-1": 5,
-    },
-    performance: {
-      "2020-1-1": 0.77,
-      "2020-2-1": 0.74,
-      "2020-3-1": 0.8,
-      "2020-4-1": 0.89,
-    },
-  },
-});
+// post user to the database
+const postUser = async ({
+  firstName,
+  lastName,
+  username,
+  password,
+  isAdmin,
+}) => {
+  try {
+    await client.connect();
+    const collection = client.db("EmoryHospital").collection("users_data");
+    // hash the password
+    const hashedPassword = hashPassword(password);
+    collection.insertOne({
+      username,
+      password: hashedPassword,
+      isAdmin,
+      firstName,
+      lastName,
+    });
+  } catch (err) {
+  } finally {
+    await client.close();
+  }
+};
 
-info.set("alex", {
-  data: {
-    accuracy: {
-      "2020-1-1": 0.54,
-      "2020-2-1": 0.55,
-      "2020-3-1": 0.66,
-      "2020-4-1": 0.69,
-    },
-    speed: {
-      "2020-1-1": 2.4,
-      "2020-2-1": 2.65,
-      "2020-3-1": 3.39,
-      "2020-4-1": 4.53,
-    },
-    quantity: {
-      "2020-1-1": 1,
-      "2020-2-1": 2,
-      "2020-3-1": 4,
-      "2020-4-1": 5,
-    },
-    performance: {
-      "2020-1-1": 0.77,
-      "2020-2-1": 0.74,
-      "2020-3-1": 0.8,
-      "2020-4-1": 0.89,
-    },
-  },
-});
+const postEntry = async (obj) => {
+  try {
+    await client.connect();
+    const collection = client.db("EmoryHospital").collection("prelim_data");
+    await collection.insertMany(obj);
+  } catch (err) {
+    console.error(err);
+  } finally {
+    await client.close();
+  }
+};
 
-info.set("brandon", {
-  data: {
-    accuracy: {
-      "2020-1-1": 0.54,
-      "2020-2-1": 0.55,
-      "2020-3-1": 0.66,
-      "2020-4-1": 0.69,
-    },
-    speed: {
-      "2020-1-1": 2.4,
-      "2020-2-1": 2.65,
-      "2020-3-1": 3.39,
-      "2020-4-1": 4.53,
-    },
-    quantity: {
-      "2020-1-1": 1,
-      "2020-2-1": 2,
-      "2020-3-1": 4,
-      "2020-4-1": 5,
-    },
-    performance: {
-      "2020-1-1": 0.77,
-      "2020-2-1": 0.74,
-      "2020-3-1": 0.8,
-      "2020-4-1": 0.89,
-    },
-  },
-});
+const getEntry = async () => {
+  try {
+    await client.connect();
+    const collection = client.db("EmoryHospital").collection("prelim_data");
+    // collection.find() group query
+  } catch (err) {
+    console.error(err);
+  } finally {
+    await client.close();
+  }
+};
 
-info.set("harish", {
-  data: {
-    accuracy: {
-      "2020-1-1": 0.54,
-      "2020-2-1": 0.55,
-      "2020-3-1": 0.66,
-      "2020-4-1": 0.69,
-    },
-    speed: {
-      "2020-1-1": 2.4,
-      "2020-2-1": 2.65,
-      "2020-3-1": 3.39,
-      "2020-4-1": 4.53,
-    },
-    quantity: {
-      "2020-1-1": 1,
-      "2020-2-1": 2,
-      "2020-3-1": 4,
-      "2020-4-1": 5,
-    },
-    performance: {
-      "2020-1-1": 0.77,
-      "2020-2-1": 0.74,
-      "2020-3-1": 0.8,
-      "2020-4-1": 0.89,
-    },
-  },
-});
-
-info.set("winnie", {
-  data: {
-    accuracy: {
-      "2020-1-1": 0.99,
-      "2020-2-1": 0.99,
-      "2020-3-1": 0.99,
-      "2020-4-1": 0.99,
-    },
-    speed: {
-      "2020-1-1": 5.4,
-      "2020-2-1": 6.65,
-      "2020-3-1": 8.39,
-      "2020-4-1": 9.53,
-    },
-    quantity: {
-      "2020-1-1": 10,
-      "2020-2-1": 20,
-      "2020-3-1": 40,
-      "2020-4-1": 50,
-    },
-    performance: {
-      "2020-1-1": 0.9,
-      "2020-2-1": 0.94,
-      "2020-3-1": 0.98,
-      "2020-4-1": 0.99,
-    },
-  },
-});
-
-function getUserInfo(username) {
-  return info.get(username);
-}
-
-// exporting the function getUserInfo
-// module.exports = getUserInfo
-
-// now exporting an object getUserInfo with key getUserInfo (str) and value the val of getUserInfo (fxn)
-module.exports = { getUserInfo };
+// now exporting objects with key getUserInfo (str) and value the val of getUserInfo (fxn)
+module.exports = { postUser, postEntry };
