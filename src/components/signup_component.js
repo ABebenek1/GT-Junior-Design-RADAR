@@ -5,8 +5,6 @@ import { Layout, Space } from "antd";
 import { Button, Checkbox, Form, Input } from "antd";
 import { Typography } from "antd";
 import { Radio } from "antd";
-import { withTheme } from "@emotion/react";
-import EmoryLogo from "../images/emory.png";
 import { Col, Row } from "antd";
 import Axios from "axios";
 const { Content } = Layout;
@@ -15,30 +13,28 @@ const { Title } = Typography;
 const contentStyle = {
   textAlign: "center",
   minHeight: 120,
-  // lineHeight: "120px",
-  // width: "100%",
   color: "white",
   backgroundColor: "#108ee9",
 
-  width:"100vw",
-  height:"100vh",
-  display:"flex",
-  justifyContent:"center",
-  alignItems:"center"
+  width: "100vw",
+  height: "100vh",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
 };
 
 const containerStyle = {
-  width:"900px",
-  height:"600px",
-  backgroundColor:"lightgray",
-  borderRadius:"50px"
-}
+  width: "900px",
+  height: "600px",
+  backgroundColor: "lightgray",
+  borderRadius: "50px",
+};
 
 const titleStyle = {
-  width:"100%",
-  marginBottom:"30px",
-  marginTop:"50px"
-}
+  width: "100%",
+  marginBottom: "30px",
+  marginTop: "50px",
+};
 
 export default function SignUp() {
   // const [isAdmin, setIsAdmin] = useState(null);
