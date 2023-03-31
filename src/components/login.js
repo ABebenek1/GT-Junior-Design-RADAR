@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import EmoryLogo from "../images/emory.png";
 import { state } from "../storeData";
@@ -67,27 +67,45 @@ const pad_down = {
 }
 
 export default function Login() {
+  const [signinError, setSignInError] = useState(null);
   // event handle when clicking submit button
   const navigate = useNavigate();
   const onFinish = (values) => {
     console.log("Success:", values);
     sessionStorage.setItem(values.username, JSON.stringify(values));
 
-    // redirect to sign-in
-    if (values) {
-      navigate("/resident_dashboard");
-    }
-  };
+    // check username and password from db
+    async function checkUserCred() {
+      try {
+        const res = await fetch(`http://localhost:8000/sign-in`, {
+          method: "POST",
+          body: JSON.stringify(values),
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+        });
 
-  //   const onFinishFailed = (errorInfo) => {
-  //     console.log("Failed:", errorInfo);
-  //   };
+        if (res.status == 401) {
+          // password incorrect
+          setSignInError("Password incorrect");
+        } else if (res.status == 400) {
+          // sth went wrong perhaps with server
+          setSignInError("Unknown error");
+        } else {
+          // status 200
+          // redirect to dashboard
+          navigate("/resident_dashboard");
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    checkUserCred();
+  };
 
   return (
     <div>
       <Layout>
         <Content style={contentStyle}>
-
           <div style={parentDiv}>
 
           <div style ={divStyle}>
