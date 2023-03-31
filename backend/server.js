@@ -16,16 +16,6 @@ app.listen(port, function () {
   console.log(`app listening on port ${port}!`);
 });
 
-// app.get("/user/:username", function (req, res) {
-//   // req is an object and params is an object and username is a string
-//   // req['params']['username']; which is the same thing as:
-//   const username = req.params.username;
-
-//   // database is an object. 'getUserInfo' is the key that returns value getUserInfo fxn w/ param username
-//   // res.send(database["getUserInfo"](username)); which is the same thing as:
-//   res.send(database.getUserInfo(username));
-// });
-
 app.use(bodyParser.json());
 app.post("/sign-up", async function (req, res) {
   console.log(req.body);
@@ -38,6 +28,7 @@ app.post("/sign-up", async function (req, res) {
   ) {
     res.status(400).send("one of the required fields is empty");
   } else {
+    console.log("server received!!!");
     try {
       await database.postUser(req.body);
       res.status(200).send("success");
@@ -75,3 +66,10 @@ app.post("/sign-in", async function (req, res) {
     }
   }
 });
+
+const checkUserAuth = (req, res, next) => {
+  req.username = "hardcoded";
+  next();
+};
+
+app.get("/prelim-data", checkUserAuth, (req, res) => {});
