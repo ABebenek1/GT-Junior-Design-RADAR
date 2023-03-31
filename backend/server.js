@@ -2,8 +2,13 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const database = require("./database");
+const jwt = require("jsonwebtoken");
+const fs = require("fs");
+const path = require("path");
 const app = express();
 const port = 8000;
+
+const secretKey = fs.readFileSync(path.resolve(__dirname, "./jwtRS256.key"));
 
 app.use(cors());
 
@@ -50,7 +55,16 @@ app.post("/sign-in", async function (req, res) {
   } else {
     try {
       await database.authenticateUser(req.body.username, req.body.password);
-      res.status(200).send("success");
+
+      // save token in a cookie
+      //https://gist.github.com/ygotthilf/baa58da5c3dd1f69fae9
+      const token = jwt.sign({ username: req.body.username }, secretKey, {
+        algorithm: "RS256",
+      });
+      res
+        .cookie("token", token, { httpOnly: true })
+        .status(200)
+        .send("success");
     } catch (err) {
       console.error(err);
       if (err.message === "Password incorrect") {
