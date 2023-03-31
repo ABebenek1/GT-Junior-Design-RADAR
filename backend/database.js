@@ -45,11 +45,12 @@ const hashPassword = async (password) => {
 
 // post user to the database
 const postUser = async ({
+  isAdmin,
   firstName,
   lastName,
   username,
   password,
-  isAdmin,
+  remember,
 }) => {
   try {
     await client.connect();
@@ -66,6 +67,7 @@ const postUser = async ({
   } catch (err) {
     console.error(err);
   } finally {
+    console.log("inserted user into DB!");
     await client.close();
   }
 };
