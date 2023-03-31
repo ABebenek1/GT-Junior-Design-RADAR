@@ -1,9 +1,10 @@
 const { MongoClient } = require("mongodb");
 
+const uri = 
+  "mongodb+srv://abebenek:mbFRw2gSG-Q6kb2@cluster0.ahumge0.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri)
+
 async function main() {
-  const uri =
-    "mongodb+srv://abebenek:mbFRw2gSG-Q6kb2@cluster0.ahumge0.mongodb.net/?retryWrites=true&w=majority";
-  const client = new MongoClient(uri);
   try {
     await client.connect();
 
@@ -29,7 +30,7 @@ async function main() {
   } catch (e) {
     console.error(e);
   } finally {
-    await client.close();
+    //await client.close();
   }
 }
 
@@ -88,10 +89,24 @@ async function deleteResident(client, residentUsername) {
     console.log("Could not find user " + residentUsername);
   }
 }
+
+async function getResidentInfo(client, residentUsername) {
+  const resident = await client
+    .db("RADAR_Project")
+    .collection("Residents")
+    .findOne({Username: residentUsername});
+  if(resident) {
+    console.log("Got info for " + resident.FirstName + " " + resident.LastName)
+  } else {
+    console.log("Could not find user " + resident.FirstName + " " + resident.LastName)
+  }
+  return resident
+}
 module.exports = {
   client,
   createUser,
   findResidentsByName,
   updateResidentInfo,
   deleteResident,
+  getResidentInfo
 };
