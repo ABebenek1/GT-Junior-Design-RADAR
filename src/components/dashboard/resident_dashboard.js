@@ -356,7 +356,7 @@ const Resident_dashboard = () => {
           </Row>
         </Content>
 
-        <div style={{ textAlign: "center" }}>
+        <div style={{ textAlign: "center", backgroundColor:"#108fe9"}}>
           <form>
             <input
               type={"file"}
@@ -374,9 +374,9 @@ const Resident_dashboard = () => {
           </form>
         </div>
 
-        <br />
+        {/* <br /> */}
 
-        <div id="result"></div>
+        <div id="result" style={{backgroundColor:"lightblue"}}></div>
 
         <div style={graphContainer}>
           {image === "BarImage" && (
