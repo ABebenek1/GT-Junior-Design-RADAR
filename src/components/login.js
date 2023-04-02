@@ -1,8 +1,5 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import EmoryLogo from "../images/emory.png";
-import { state } from "../storeData";
-import { history } from "../index";
 import { Layout, Space } from "antd";
 import { Button, Form, Input, Checkbox } from "antd";
 import { Typography } from "antd";
