@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./admin_dashboard.css";
 
@@ -8,14 +8,11 @@ import EmoryLogo from "../../images/emory.png";
 // ANTD UI
 import { Col, Row } from "antd";
 import { Layout } from "antd";
-import { Button } from "antd";
 import { DatePicker, message } from "antd";
 import { Typography } from "antd";
-import { List } from "antd";
+import { messgae, Popconfirm } from "antd";
 
 const { Title } = Typography;
-
-const { RangePicker } = DatePicker;
 
 // ANTD CSS - TO be migrated to a seperate CSS file
 const { Header, Content } = Layout;
@@ -26,13 +23,6 @@ const headerStyle = {
   paddingInline: 50,
   lineHeight: "64px",
   backgroundColor: "#7dbcea",
-};
-const contentStyle = {
-  textAlign: "center",
-  minHeight: 120,
-  lineHeight: "120px",
-  color: "black",
-  backgroundColor: "#108ee9",
 };
 
 // dummy data
@@ -66,6 +56,28 @@ const dummyDataList = [
 
 const Admin_dashboard = () => {
 
+  const UserElement = (props) => {
+    const {id, firstname, lastname, email, year} = props.user
+    return (
+      <tr id={id}>
+        <td>{id}</td>
+        <td>{lastname + ", " + firstname}</td>
+        <td>{email}</td>
+        <td>{year}</td>
+        <td>
+          <select id="ActionDropDown">
+            <option>Select an action</option>
+            <option value="delete">Delete</option>
+            <option value="comment">Comment</option>
+            <option value="edit">Edit</option>
+          </select>
+          {/* <button onClick={testing}>Confirm</button> */}
+        </td>
+
+      </tr>
+    )
+  }
+
   return (
     <>
       <Layout>
@@ -85,9 +97,13 @@ const Admin_dashboard = () => {
         <tr>
           <th>ID</th>
           <th>Last, First</th>
-          <th>Year</th>
           <th>Email</th>
+          <th>Year</th>
         </tr>
+
+        {dummyDataList.map((user) => {
+          return <UserElement user={user}></UserElement>
+        })}
 
       </table>
 
@@ -95,15 +111,6 @@ const Admin_dashboard = () => {
   );
 };
 
-const UserElement = (props) => {
-  return (
-    <tr>
-      <td>{props.id}</td>
-      <td>{props.firstname}</td>
-      <td>{props.lastname}</td>
-      <td>{props.email}</td>
-    </tr>
-  )
-}
+
 
 export default Admin_dashboard;
