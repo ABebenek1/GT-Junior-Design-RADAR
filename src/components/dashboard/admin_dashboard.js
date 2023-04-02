@@ -2,15 +2,10 @@ import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./admin_dashboard.css";
 
-// dummy graph image files to be removed
-import EmoryLogo from "../../images/emory.png";
-
 // ANTD UI
 import { Col, Row } from "antd";
 import { Layout } from "antd";
-import { DatePicker, message } from "antd";
 import { Typography } from "antd";
-import { messgae, Popconfirm } from "antd";
 
 const { Title } = Typography;
 
@@ -65,11 +60,11 @@ const Admin_dashboard = () => {
         <td>{email}</td>
         <td>{year}</td>
         <td>
-          <select id="ActionDropDown">
-            <option>Select an action</option>
+          <select id="ActionDropDown" onChange={ddaction}>
+            <option>Select an action for {lastname + ", " + firstname}</option>
             <option value="delete">Delete</option>
             <option value="comment">Comment</option>
-            <option value="edit">Edit</option>
+            <option value="view">View Profile</option>
           </select>
           {/* <button onClick={testing}>Confirm</button> */}
         </td>
@@ -78,13 +73,39 @@ const Admin_dashboard = () => {
     )
   }
 
+  function ddaction(e) {
+    let row = e.target.parentNode.parentNode
+    let rowdata = document.getElementById(row.id).querySelectorAll("td");
+    let name = rowdata[1].innerHTML;
+
+    let action = e.target.value;
+    if (action === "delete") {
+
+      let text = "Please confirm that you want delete user: " + name;
+
+      if (window.confirm(text) === true) {
+        row.remove();
+
+        for (let i = 0; i < dummyDataList.length; i++) {
+          if (dummyDataList[i].id === row.id) {
+            dummyDataList.splice(i, 1)
+          }
+
+        }
+
+      }
+    }
+
+    // console.log(dummyDataList);
+  }
+
   return (
     <>
       <Layout>
         <Header style={headerStyle}>
           <Row>
             <Link to="/sign-in">
-              <img src={EmoryLogo} width="60px" />
+              <button className="logoutButton">Logout</button>
             </Link>
             {/* Need to figure out a way to not hard code this span portion */}
             <Col span={8}></Col>
@@ -95,10 +116,11 @@ const Admin_dashboard = () => {
 
       <table style={{width:"100%", borderCollapse:"collapse"}}>
         <tr>
-          <th>ID</th>
+          <th style={{width:"10%"}}>ID</th>
           <th>Last, First</th>
           <th>Email</th>
-          <th>Year</th>
+          <th style={{width:"10%"}}>Year</th>
+          <th style={{width:"25%"}}>Action</th>
         </tr>
 
         {dummyDataList.map((user) => {
@@ -110,7 +132,5 @@ const Admin_dashboard = () => {
     </>
   );
 };
-
-
 
 export default Admin_dashboard;
