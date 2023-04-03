@@ -11,7 +11,7 @@ import img4 from "../../images/img4.png";
 // ANTD UI
 import { Layout, Col, Row } from "antd";
 import { Space, Table, Tag } from "antd";
-import { Button, Popover, message } from "antd";
+import { Button, Popconfirm, message } from "antd";
 import { Input } from "antd";
 import { Typography } from "antd";
 const { TextArea } = Input;
@@ -37,6 +37,7 @@ const Admin_dashboard = () => {
   const [showViewBox, setShowViewBox] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [img, setImg] = useState(null);
+  // const [renderPopConfirm, setRenderPopConfirm] = useState(false)
 
   const handleCommentSubmission = () => {
     messageApi.info(`Comment Submitted for ${targetCommentUser} `);
@@ -116,14 +117,25 @@ const Admin_dashboard = () => {
           >
             <a>Comment</a>
           </span>
-          <span
-            onClick={(e) => {
-              const thisid = record.id;
-              console.log(thisid);
-              setPeople(people.filter((people) => record.id !== people.id));
-            }}
-          >
-            <a style={{ color: "red" }}>Delete</a>
+          <span>
+            <Popconfirm
+              title="Delete"
+              description="Are you sure?"
+              onConfirm={() => {
+                const thisid = record.id;
+                console.log(thisid);
+                setPeople(people.filter((people) => record.id !== people.id));
+                message.success(
+                  `Deleted ${record.firstname} ${record.lastname}`
+                );
+              }}
+              okText="Yes"
+              cancelText="No"
+            >
+              <a style={{ color: "red" }} type="link">
+                Delete
+              </a>
+            </Popconfirm>
           </span>
         </Space>
       ),
@@ -132,56 +144,56 @@ const Admin_dashboard = () => {
 
   // console.log(people);
 
-  const UserElement = (props) => {
-    const { id, firstname, lastname, email, year } = props.user;
-    return (
-      <tr id={id}>
-        <td>{id}</td>
-        <td>{lastname + ", " + firstname}</td>
-        <td>{email}</td>
-        <td>{year}</td>
-        <td>
-          <select id="ActionDropDown" onChange={ddaction}>
-            <option>Select an action for {lastname + ", " + firstname}</option>
-            <option value="delete">Delete</option>
-            <option value="comment">Comment</option>
-            <option value="view">View Profile</option>
-          </select>
-          {/* <button onClick={testing}>Confirm</button> */}
-        </td>
-      </tr>
-    );
-  };
+  // const UserElement = (props) => {
+  //   const { id, firstname, lastname, email, year } = props.user;
+  //   return (
+  //     <tr id={id}>
+  //       <td>{id}</td>
+  //       <td>{lastname + ", " + firstname}</td>
+  //       <td>{email}</td>
+  //       <td>{year}</td>
+  //       <td>
+  //         <select id="ActionDropDown" onChange={ddaction}>
+  //           <option>Select an action for {lastname + ", " + firstname}</option>
+  //           <option value="delete">Delete</option>
+  //           <option value="comment">Comment</option>
+  //           <option value="view">View Profile</option>
+  //         </select>
+  //         {/* <button onClick={testing}>Confirm</button> */}
+  //       </td>
+  //     </tr>
+  //   );
+  // };
 
-  function ddaction(e) {
-    let row = e.target.parentNode.parentNode;
-    let rowdata = document.getElementById(row.id).querySelectorAll("td");
-    let name = rowdata[1].innerHTML;
+  // function ddaction(e) {
+  //   let row = e.target.parentNode.parentNode;
+  //   let rowdata = document.getElementById(row.id).querySelectorAll("td");
+  //   let name = rowdata[1].innerHTML;
 
-    let action = e.target.value;
-    if (action === "delete") {
-      let text = "Please confirm that you want delete user: " + name;
+  //   let action = e.target.value;
+  //   if (action === "delete") {
+  //     let text = "Please confirm that you want delete user: " + name;
 
-      if (window.confirm(text) === true) {
-        row.remove();
+  //     if (window.confirm(text) === true) {
+  //       row.remove();
 
-        for (let i = 0; i < dummies.length; i++) {
-          if (dummies[i].id === row.id) {
-            dummies.splice(i, 1);
-          }
-        }
-      }
-    } else if (action === "comment") {
-      let comment = window.prompt("Type out your comment for: " + name, "");
+  //       for (let i = 0; i < dummies.length; i++) {
+  //         if (dummies[i].id === row.id) {
+  //           dummies.splice(i, 1);
+  //         }
+  //       }
+  //     }
+  //   } else if (action === "comment") {
+  //     let comment = window.prompt("Type out your comment for: " + name, "");
 
-      if (comment != null && comment != "") {
-        window.alert("Your comment has been saved");
-      }
-    } else if (action == "view") {
-    }
+  //     if (comment != null && comment != "") {
+  //       window.alert("Your comment has been saved");
+  //     }
+  //   } else if (action == "view") {
+  //   }
 
-    // console.log(dummies);
-  }
+  //   // console.log(dummies);
+  // }
 
   return (
     <>
