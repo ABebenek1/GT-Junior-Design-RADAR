@@ -2,6 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./admin_dashboard.css";
 import { dummies } from "../../dummy_data_list";
+import img0 from "../../images/img0.png";
+import img1 from "../../images/img1.png";
+import img2 from "../../images/img2.png";
+import img3 from "../../images/img3.png";
+import img4 from "../../images/img4.png";
 
 // ANTD UI
 import { Layout, Col, Row } from "antd";
@@ -26,18 +31,24 @@ const headerStyle = {
 
 const Admin_dashboard = () => {
   const [people, setPeople] = useState(dummies);
-  const [targetUser, setTargetUser] = useState(null);
+  const [targetCommentUser, setTargetCommentUser] = useState(null);
+  const [targetViewUser, setTargetViewUser] = useState(null);
   const [showCommentBox, setShowCommentBox] = useState(false);
+  const [showViewBox, setShowViewBox] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const [img, setImg] = useState(null);
 
   const handleCommentSubmission = () => {
-    messageApi.info(`Comment Submitted for ${targetUser} `);
+    messageApi.info(`Comment Submitted for ${targetCommentUser} `);
     // setShowCommentBox(false);
     setTimeout(() => {
       setShowCommentBox(false);
     }, 1000);
   };
 
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
   const columns = [
     {
       title: "ID",
@@ -73,8 +84,34 @@ const Admin_dashboard = () => {
         <Space size="middle">
           <span
             onClick={(e) => {
+              console.log(record);
+              setShowViewBox(true);
+              setTargetViewUser(record.firstname + " " + record.lastname);
+              setTargetCommentUser(null); // side-effect
+              setShowCommentBox(false); // side-effect
+              // select random img to display
+              const num = getRandomInt(5);
+              if (num == 0) {
+                setImg(img0);
+              } else if (num == 1) {
+                setImg(img1);
+              } else if (num == 2) {
+                setImg(img2);
+              } else if (num == 3) {
+                setImg(img3);
+              } else {
+                setImg(img4);
+              }
+            }}
+          >
+            <a>View</a>
+          </span>
+          <span
+            onClick={(e) => {
               setShowCommentBox(true);
-              setTargetUser(record.firstname + " " + record.lastname);
+              setTargetCommentUser(record.firstname + " " + record.lastname);
+              setTargetViewUser(null); // side-effect
+              setShowViewBox(false); // side-effect
             }}
           >
             <a>Comment</a>
@@ -163,12 +200,20 @@ const Admin_dashboard = () => {
         <Row>
           {showCommentBox ? (
             <span style={{ width: "100%" }}>
-              <h2>Leave a Comment</h2>
+              <h2>Leave a Comment for {targetCommentUser}</h2>
               <TextArea placeholder="Leave a comment..." rows={4}></TextArea>
               {contextHolder}
               <Button type="link" onClick={handleCommentSubmission}>
                 Submit Comment
               </Button>
+            </span>
+          ) : null}
+        </Row>
+        <Row>
+          {showViewBox ? (
+            <span style={{ width: "100%", textAlign: "center" }}>
+              <h2>View {targetViewUser}'s Dashboard</h2>
+              <img src={img} width="30%" />
             </span>
           ) : null}
         </Row>
