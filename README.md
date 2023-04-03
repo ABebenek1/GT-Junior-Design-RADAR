@@ -11,6 +11,16 @@ This is the GitHub repository for Georgia Tech Spring 2023 junior design team 23
 * npm install
 * npm start
 
+## Version 0.4.0
+
+### Features
+* Admin Dashboard Backend mostly finished
+* Admin Dashboard Frontend mostly finished
+
+### Known Issues
+* Forgot Password Link is not functional
+* Need confirmation popup when deleting a resident
+* Data received from client needs to be stored in the database
 
 ## Version 0.3.0
 
