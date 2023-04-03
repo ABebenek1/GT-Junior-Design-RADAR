@@ -1,16 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./admin_dashboard.css";
+import { dummies } from "../../dummy_data_list";
+import img0 from "../../images/img0.png";
+import img1 from "../../images/img1.png";
+import img2 from "../../images/img2.png";
+import img3 from "../../images/img3.png";
+import img4 from "../../images/img4.png";
 
 // ANTD UI
-import { Col, Row } from "antd";
-import { Layout } from "antd";
+import { Layout, Col, Row } from "antd";
+import { Space, Table, Tag } from "antd";
+import { Button, Popover, message } from "antd";
+import { Input } from "antd";
 import { Typography } from "antd";
+const { TextArea } = Input;
+const { Header, Content } = Layout;
 
 const { Title } = Typography;
 
-// ANTD CSS - TO be migrated to a seperate CSS file
-const { Header, Content } = Layout;
+// // ANTD CSS - TO be migrated to a seperate CSS file
 const headerStyle = {
   textAlign: "center",
   color: "#fff",
@@ -20,39 +29,111 @@ const headerStyle = {
   backgroundColor: "#7dbcea",
 };
 
-// dummy data
-const dummyDataList = [
-  {id:"1",    firstname:"Reginald",   lastname:"Aguilar",     email:"dee_gulgowski87@yahoo.com",        year:"1"},
-  {id:"2",    firstname:"Dolores",    lastname:"Howard",      email:"saige_graham@hotmail.com",         year:"2"},
-  {id:"3",    firstname:"Kristi",     lastname:"Drake",       email:"nona82@gmail.com",                 year:"3"},
-  {id:"4",    firstname:"Yolanda",    lastname:"Tucker",      email:"angelina70@gmail.com",             year:"2"},
-  {id:"5",    firstname:"Marcus",     lastname:"Cunningham",  email:"kim57@hotmail.com",                year:"2"},
-  {id:"6",    firstname:"Benjamin",   lastname:"Ramirez",     email:"frances1@hotmail.com",             year:"2"},
-  {id:"7",    firstname:"Tara",       lastname:"Oliver",      email:"neva_parker21@yahoo.com",          year:"1"},
-  {id:"8",    firstname:"Melinda",    lastname:"Newton",      email:"velva_homenick65@hotmail.com",     year:"3"},
-  {id:"9",    firstname:"Blake",      lastname:"Myers",       email:"rebekah56@yahoo.com",              year:"3"},
-  {id:"10",   firstname:"Tabitha",    lastname:"Carlson",     email:"vicenta12@yahoo.com",              year:"3"},
-  {id:"11",   firstname:"Diane",      lastname:"Mann",        email:"rod_kutch46@yahoo.com",            year:"2"},
-  {id:"12",   firstname:"Tommie",     lastname:"Castro",      email:"casandra_boehm@gmail.com",         year:"3"},
-  {id:"13",   firstname:"Mike",       lastname:"Rhodes",      email:"trinity.gusikowski13@yahoo.com",   year:"2"},
-  {id:"14",   firstname:"Brittany",   lastname:"Harris",      email:"jonatan.schaefer43@gmail.com",     year:"2"},
-  {id:"15",   firstname:"Jackie",     lastname:"Barker",      email:"elijah_blanda@yahoo.com",          year:"1"},
-  {id:"16",   firstname:"Jo",         lastname:"Clayton",     email:"demarcus.reinger@yahoo.com",       year:"1"},
-  {id:"17",   firstname:"Annette",    lastname:"Daniel",      email:"anjali_jacobson57@hotmail.com",    year:"1"},
-  {id:"18",   firstname:"Kathleen",   lastname:"Sparks",      email:"leonora.lynch55@gmail.com",        year:"2"},
-  {id:"19",   firstname:"Damon",      lastname:"Moreno",      email:"trycia.williamson@hotmail.com",    year:"3"},
-  {id:"20",   firstname:"Irving",     lastname:"Dixon",       email:"bailee_macejkovic@gmail.com",      year:"1"},
-  {id:"21",   firstname:"Andrew",     lastname:"Doyle",       email:"neal85@yahoo.com",                 year:"3"},
-  {id:"22",   firstname:"Audrey",     lastname:"Curtis",      email:"isom_bailey@gmail.com",            year:"2"},
-  {id:"23",   firstname:"Randall",    lastname:"James",       email:"floyd_daniel@gmail.com",           year:"1"},
-  {id:"24",   firstname:"Terrence",   lastname:"Hampton",     email:"nasir31@gmail.com",                year:"2"},
-  {id:"25",   firstname:"Kelli",      lastname:"Manning",     email:"willy.hansen@hotmail.com",         year:"3"},
-]
-
 const Admin_dashboard = () => {
+  const [people, setPeople] = useState(dummies);
+  const [targetCommentUser, setTargetCommentUser] = useState(null);
+  const [targetViewUser, setTargetViewUser] = useState(null);
+  const [showCommentBox, setShowCommentBox] = useState(false);
+  const [showViewBox, setShowViewBox] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
+  const [img, setImg] = useState(null);
+
+  const handleCommentSubmission = () => {
+    messageApi.info(`Comment Submitted for ${targetCommentUser} `);
+    // setShowCommentBox(false);
+    setTimeout(() => {
+      setShowCommentBox(false);
+    }, 1000);
+  };
+
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+  const columns = [
+    {
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Firstname",
+      dataIndex: "firstname",
+      key: "firstname",
+    },
+    {
+      title: "Lastname",
+      dataIndex: "lastname",
+      key: "lastname",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Year",
+      dataIndex: "year",
+      key: "year",
+    },
+
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Space size="middle">
+          <span
+            onClick={(e) => {
+              console.log(record);
+              setShowViewBox(true);
+              setTargetViewUser(record.firstname + " " + record.lastname);
+              setTargetCommentUser(null); // side-effect
+              setShowCommentBox(false); // side-effect
+              // select random img to display
+              const num = getRandomInt(5);
+              if (num == 0) {
+                setImg(img0);
+              } else if (num == 1) {
+                setImg(img1);
+              } else if (num == 2) {
+                setImg(img2);
+              } else if (num == 3) {
+                setImg(img3);
+              } else {
+                setImg(img4);
+              }
+            }}
+          >
+            <a>View</a>
+          </span>
+          <span
+            onClick={(e) => {
+              setShowCommentBox(true);
+              setTargetCommentUser(record.firstname + " " + record.lastname);
+              setTargetViewUser(null); // side-effect
+              setShowViewBox(false); // side-effect
+            }}
+          >
+            <a>Comment</a>
+          </span>
+          <span
+            onClick={(e) => {
+              const thisid = record.id;
+              console.log(thisid);
+              setPeople(people.filter((people) => record.id !== people.id));
+            }}
+          >
+            <a style={{ color: "red" }}>Delete</a>
+          </span>
+        </Space>
+      ),
+    },
+  ];
+
+  // console.log(people);
 
   const UserElement = (props) => {
-    const {id, firstname, lastname, email, year} = props.user
+    const { id, firstname, lastname, email, year } = props.user;
     return (
       <tr id={id}>
         <td>{id}</td>
@@ -68,43 +149,38 @@ const Admin_dashboard = () => {
           </select>
           {/* <button onClick={testing}>Confirm</button> */}
         </td>
-
       </tr>
-    )
-  }
+    );
+  };
 
   function ddaction(e) {
-    let row = e.target.parentNode.parentNode
+    let row = e.target.parentNode.parentNode;
     let rowdata = document.getElementById(row.id).querySelectorAll("td");
     let name = rowdata[1].innerHTML;
 
     let action = e.target.value;
     if (action === "delete") {
-
       let text = "Please confirm that you want delete user: " + name;
 
       if (window.confirm(text) === true) {
         row.remove();
 
-        for (let i = 0; i < dummyDataList.length; i++) {
-          if (dummyDataList[i].id === row.id) {
-            dummyDataList.splice(i, 1)
+        for (let i = 0; i < dummies.length; i++) {
+          if (dummies[i].id === row.id) {
+            dummies.splice(i, 1);
           }
-
         }
-
       }
-    }
-
-    if (action === "comment") {
+    } else if (action === "comment") {
       let comment = window.prompt("Type out your comment for: " + name, "");
 
       if (comment != null && comment != "") {
         window.alert("Your comment has been saved");
       }
+    } else if (action == "view") {
     }
 
-    // console.log(dummyDataList);
+    // console.log(dummies);
   }
 
   return (
@@ -120,23 +196,43 @@ const Admin_dashboard = () => {
             <Title style={{ color: "white" }}>Admin Dashboard</Title>
           </Row>
         </Header>
+        <Table columns={columns} dataSource={people}></Table>
+        <Row>
+          {showCommentBox ? (
+            <span style={{ width: "100%" }}>
+              <h2>Leave a Comment for {targetCommentUser}</h2>
+              <TextArea placeholder="Leave a comment..." rows={4}></TextArea>
+              {contextHolder}
+              <Button type="link" onClick={handleCommentSubmission}>
+                Submit Comment
+              </Button>
+            </span>
+          ) : null}
+        </Row>
+        <Row>
+          {showViewBox ? (
+            <span style={{ width: "100%", textAlign: "center" }}>
+              <h2>View {targetViewUser}'s Dashboard</h2>
+              <img src={img} width="30%" />
+            </span>
+          ) : null}
+        </Row>
       </Layout>
 
-      <table style={{width:"100%", borderCollapse:"collapse"}}>
+      {/* Benson's below
+      <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <tr>
-          <th style={{width:"10%"}}>ID</th>
+          <th style={{ width: "10%" }}>ID</th>
           <th>Last, First</th>
           <th>Email</th>
-          <th style={{width:"10%"}}>Year</th>
-          <th style={{width:"25%"}}>Action</th>
+          <th style={{ width: "10%" }}>Year</th>
+          <th style={{ width: "25%" }}>Action</th>
         </tr>
 
-        {dummyDataList.map((user) => {
-          return <UserElement user={user}></UserElement>
+        {dummies.map((user) => {
+          return <UserElement user={user}></UserElement>;
         })}
-
-      </table>
-
+      </table> */}
     </>
   );
 };
