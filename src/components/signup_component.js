@@ -37,12 +37,6 @@ const titleStyle = {
 };
 
 export default function SignUp() {
-  // const [isAdmin, setIsAdmin] = useState(null);
-  // const [firstName, setFirstName] = useState(null);
-  // const [lastName, setLastName] = useState(null);
-  // const [username, setUsername] = useState(null);
-  // const [password, setPassword] = useState(null);
-
   const navigate = useNavigate();
   // maybe use axios in the future
   // https://www.makeuseof.com/react-form-data-mongodb-database-store/
