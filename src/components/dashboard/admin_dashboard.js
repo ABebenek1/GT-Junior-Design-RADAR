@@ -6,8 +6,10 @@ import { dummies } from "../../dummy_data_list";
 // ANTD UI
 import { Layout, Col, Row } from "antd";
 import { Space, Table, Tag } from "antd";
-import { Button, Popover } from "antd";
+import { Button, Popover, message, Popconfirm } from "antd";
+import { Input } from "antd";
 import { Typography } from "antd";
+const { TextArea } = Input;
 const { Header, Content } = Layout;
 
 const { Title } = Typography;
@@ -24,9 +26,18 @@ const headerStyle = {
 
 const Admin_dashboard = () => {
   const [people, setPeople] = useState(dummies);
-  // useEffect(() => {
-  //   setPeople(dummies);
-  // });
+  const [clicked, setClicked] = useState(false);
+
+  const clickContent = <TextArea rows={4}> </TextArea>; // text
+  const description = "Delete the task";
+
+  const hide = () => {
+    message.info(`Saved comment`);
+    setClicked(false);
+  };
+  const handleClickChange = () => {
+    setClicked(true);
+  };
 
   const columns = [
     {
@@ -70,7 +81,23 @@ const Admin_dashboard = () => {
           >
             <a>Delete</a>
           </span>
-          <a>Comment</a>
+          <span>
+            <Popover
+              placement="topLeft"
+              title={"Comment"}
+              content={
+                <div>
+                  {clickContent}
+                  <a onClick={hide}>Add Comment</a>
+                </div>
+              }
+              trigger="click"
+              open={clicked}
+              onOpenChange={handleClickChange}
+            >
+              <a>Comment</a>
+            </Popover>
+          </span>
         </Space>
       ),
     },
