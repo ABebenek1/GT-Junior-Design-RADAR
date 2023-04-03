@@ -32,25 +32,11 @@ const Admin_dashboard = () => {
 
   const handleCommentSubmission = () => {
     messageApi.info(`Comment Submitted for ${targetUser} `);
+    // setShowCommentBox(false);
+    setTimeout(() => {
+      setShowCommentBox(false);
+    }, 1000);
   };
-  // const [clicked, setClicked] = useState(false);
-
-  // const clickContent = <TextArea rows={4}> </TextArea>; // text
-  // const description = "Delete the task";
-
-  // const hide = () => {
-  //   message.info(`Saved comment`);
-  //   setClicked(false);
-  // };
-  // const handleClickChange = () => {
-  //   setClicked(true);
-  // };
-
-  // const [showComponent, setShowComponent] = useState(false);
-
-  // const onButtonClick = () => {
-  //   setShowComponent(true);
-  // };
 
   const columns = [
     {
@@ -100,42 +86,8 @@ const Admin_dashboard = () => {
               setPeople(people.filter((people) => record.id !== people.id));
             }}
           >
-            <a>Delete</a>
+            <a style={{ color: "red" }}>Delete</a>
           </span>
-
-          {/* <span>
-            <Input placeholder="Basic usage" />
-            <a>Text</a>
-          </span>
-          <span onClick={onButtonClick}>
-            <a>Comment</a>
-            {showComponent ? (
-              <div>
-                <Popover
-                  placement="bottom"
-                  title={"Comment"}
-                  content={"hello"}
-                  trigger="hover"
-                ></Popover>
-                hello
-              </div>
-            ) : null}
-            <Popover
-              placement="bottom"
-              title={"Comment"}
-              content={
-                <div>
-                  {clickContent}
-                  <a onClick={hide}>Add Comment</a>
-                </div>
-              }
-              trigger="click"
-              open={clicked}
-              onOpenChange={handleClickChange}
-            >
-              <a>Comment</a>
-            </Popover>
-          </span> */}
         </Space>
       ),
     },
@@ -210,19 +162,16 @@ const Admin_dashboard = () => {
         <Table columns={columns} dataSource={people}></Table>
         <Row>
           {showCommentBox ? (
-            <TextArea placeholder="Leave a comment..." rows={4}></TextArea>
+            <span style={{ width: "100%" }}>
+              <h2>Leave a Comment</h2>
+              <TextArea placeholder="Leave a comment..." rows={4}></TextArea>
+              {contextHolder}
+              <Button type="link" onClick={handleCommentSubmission}>
+                Submit Comment
+              </Button>
+            </span>
           ) : null}
         </Row>
-        <Row></Row>
-
-        {showCommentBox ? (
-          <div>
-            {contextHolder}
-            <Button type="link" onClick={handleCommentSubmission}>
-              Submit Comment
-            </Button>
-          </div>
-        ) : null}
       </Layout>
 
       {/* Benson's below
