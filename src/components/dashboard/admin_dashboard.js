@@ -96,6 +96,14 @@ const Admin_dashboard = () => {
       }
     }
 
+    if (action === "comment") {
+      let comment = window.prompt("Type out your comment for: " + name, "");
+
+      if (comment != null && comment != "") {
+        window.alert("Your comment has been saved");
+      }
+    }
+
     // console.log(dummyDataList);
   }
 
