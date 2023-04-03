@@ -6,7 +6,7 @@ import { dummies } from "../../dummy_data_list";
 // ANTD UI
 import { Layout, Col, Row } from "antd";
 import { Space, Table, Tag } from "antd";
-import { Button, Popover, message, Popconfirm } from "antd";
+import { Button, Popover, message } from "antd";
 import { Input } from "antd";
 import { Typography } from "antd";
 const { TextArea } = Input;
@@ -26,18 +26,31 @@ const headerStyle = {
 
 const Admin_dashboard = () => {
   const [people, setPeople] = useState(dummies);
-  const [clicked, setClicked] = useState(false);
+  const [targetUser, setTargetUser] = useState(null);
+  const [showCommentBox, setShowCommentBox] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
 
-  const clickContent = <TextArea rows={4}> </TextArea>; // text
-  const description = "Delete the task";
+  const handleCommentSubmission = () => {
+    messageApi.info(`Comment Submitted for ${targetUser} `);
+  };
+  // const [clicked, setClicked] = useState(false);
 
-  const hide = () => {
-    message.info(`Saved comment`);
-    setClicked(false);
-  };
-  const handleClickChange = () => {
-    setClicked(true);
-  };
+  // const clickContent = <TextArea rows={4}> </TextArea>; // text
+  // const description = "Delete the task";
+
+  // const hide = () => {
+  //   message.info(`Saved comment`);
+  //   setClicked(false);
+  // };
+  // const handleClickChange = () => {
+  //   setClicked(true);
+  // };
+
+  // const [showComponent, setShowComponent] = useState(false);
+
+  // const onButtonClick = () => {
+  //   setShowComponent(true);
+  // };
 
   const columns = [
     {
@@ -74,6 +87,14 @@ const Admin_dashboard = () => {
         <Space size="middle">
           <span
             onClick={(e) => {
+              setShowCommentBox(true);
+              setTargetUser(record.firstname + " " + record.lastname);
+            }}
+          >
+            <a>Comment</a>
+          </span>
+          <span
+            onClick={(e) => {
               const thisid = record.id;
               console.log(thisid);
               setPeople(people.filter((people) => record.id !== people.id));
@@ -81,9 +102,26 @@ const Admin_dashboard = () => {
           >
             <a>Delete</a>
           </span>
-          <span>
+
+          {/* <span>
+            <Input placeholder="Basic usage" />
+            <a>Text</a>
+          </span>
+          <span onClick={onButtonClick}>
+            <a>Comment</a>
+            {showComponent ? (
+              <div>
+                <Popover
+                  placement="bottom"
+                  title={"Comment"}
+                  content={"hello"}
+                  trigger="hover"
+                ></Popover>
+                hello
+              </div>
+            ) : null}
             <Popover
-              placement="topLeft"
+              placement="bottom"
               title={"Comment"}
               content={
                 <div>
@@ -97,7 +135,7 @@ const Admin_dashboard = () => {
             >
               <a>Comment</a>
             </Popover>
-          </span>
+          </span> */}
         </Space>
       ),
     },
@@ -169,8 +207,25 @@ const Admin_dashboard = () => {
             <Title style={{ color: "white" }}>Admin Dashboard</Title>
           </Row>
         </Header>
+        <Table columns={columns} dataSource={people}></Table>
+        <Row>
+          {showCommentBox ? (
+            <TextArea placeholder="Leave a comment..." rows={4}></TextArea>
+          ) : null}
+        </Row>
+        <Row></Row>
+
+        {showCommentBox ? (
+          <div>
+            {contextHolder}
+            <Button type="link" onClick={handleCommentSubmission}>
+              Submit Comment
+            </Button>
+          </div>
+        ) : null}
       </Layout>
-      <Table columns={columns} dataSource={people}></Table>;{/* Benson's */}
+
+      {/* Benson's below
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <tr>
           <th style={{ width: "10%" }}>ID</th>
@@ -183,7 +238,7 @@ const Admin_dashboard = () => {
         {dummies.map((user) => {
           return <UserElement user={user}></UserElement>;
         })}
-      </table>
+      </table> */}
     </>
   );
 };
