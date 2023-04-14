@@ -145,4 +145,12 @@ dist
 
 .DS_Store
 
-.csv
+*.csv
+
+*.rest
+
+*.key
+
+*.key.pub
+
+

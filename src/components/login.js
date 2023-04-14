@@ -33,7 +33,6 @@ const parentDiv = {
 const divStyle = {
   width: "95%",
   height: "400px",
-  // backgroundColor:"red"
 };
 
 const titleStyle = {
@@ -60,11 +59,8 @@ const pad_down = {
 };
 
 export default function Login() {
-  const [userRole, setUserRole] = useState(1);
-  console.log("refresh userRole as", userRole);
-  const onChangeUserRole = (e) => {
-    setUserRole(e.target.value);
-  };
+
+  const [signinError, setSignInError] = useState(null);
 
   // event handle when clicking submit button
   const navigate = useNavigate();
@@ -72,12 +68,33 @@ export default function Login() {
     console.log("Success:", values);
     sessionStorage.setItem(values.username, JSON.stringify(values));
 
-    // redirect to sign-in
-    if (values && userRole == 1) {
-      navigate("/resident_dashboard");
-    } else if (values && userRole == 2) {
-      navigate("/admin_dashboard");
+    // check username and password from db
+    async function checkUserCred() {
+      try {
+        const res = await fetch(`http://localhost:8000/sign-in`, {
+          method: "POST",
+          body: JSON.stringify(values),
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+        });
+
+        if (res.status == 401) {
+          // password incorrect
+          setSignInError("Password incorrect");
+        } else if (res.status == 400) {
+          // sth went wrong perhaps with server
+          setSignInError("Unknown error");
+        } else {
+          // status 200
+          // redirect to dashboard
+          navigate("/resident_dashboard");
+        }
+      } catch (e) {
+        console.error(e);
+      }
+
     }
+    checkUserCred();
   };
 
   return (
@@ -90,6 +107,9 @@ export default function Login() {
                 {" "}
                 <Title>Welcome to RADAR</Title>{" "}
               </div>
+              
+              {/* conditional rendering / null coalescing: AND short circuiting*/}
+              {signinError && <Row>{signinError}</Row>}
 
               <Row>
                 <Col flex={2}></Col>
@@ -102,18 +122,22 @@ export default function Login() {
                     onFinish={onFinish}
                     autoComplete="off"
                   >
-                    <Form.Item
-                      label="Username"
-                      name="username"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please input your username!",
-                        },
-                      ]}
-                    >
-                      <Input />
-                    </Form.Item>
+
+                    <div>
+                      <Form.Item
+                        label="Username"
+                        name="username"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please input your username!",
+                          },
+                        ]}
+                      >
+                        <Input />
+                      </Form.Item>
+                    </div>
+
                     <Form.Item
                       label="Password"
                       name="password"
@@ -126,19 +150,18 @@ export default function Login() {
                     >
                       <Input.Password />
                     </Form.Item>
-                    <Form.Item>
-                      <Radio.Group onChange={onChangeUserRole} value={userRole}>
-                        <Radio value={1}>Resident</Radio>
-                        <Radio value={2}>Admin</Radio>
-                      </Radio.Group>
-                    </Form.Item>
+                    
                     <Form.Item
                       name="remember"
                       valuePropName="checked"
                       style={containerStyle}
                     >
-                      <Checkbox>Remember me</Checkbox>
+                    
+                      <div style={checkboxStyle}>
+                        <Checkbox>Remember me</Checkbox>
+                      </div>
                     </Form.Item>
+
                     <Form.Item style={containerStyle}>
                       <Button type="primary" htmlType="submit">
                         Log in
