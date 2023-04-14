@@ -8,9 +8,24 @@ This is the GitHub repository for Georgia Tech Spring 2023 junior design team 23
 * npm version: 9.3.1
 
 ### To start this application:
-* npm install
-* npm start
+* git clone [project link]
+* cd into projet and do **npm install**
+* add ip address to mongoDB
+* start server in one terminal using **node server.js**
+* start application in another terminal using **npm start**  
 
+## Version 0.4.0
+
+### Features
+* Admin Dashboard Backend mostly finished
+* Admin Dashboard Frontend mostly finished
+
+### Bug Fixes
+* Server post requests aren't working
+
+### Known Issues
+* Forgot Password Link is not functional
+* Data received from client needs to be stored in the database
 
 ## Version 0.3.0
 
