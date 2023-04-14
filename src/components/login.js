@@ -59,7 +59,6 @@ const pad_down = {
 };
 
 export default function Login() {
-
   const [signinError, setSignInError] = useState(null);
 
   // event handle when clicking submit button
@@ -92,7 +91,6 @@ export default function Login() {
       } catch (e) {
         console.error(e);
       }
-
     }
     checkUserCred();
   };
@@ -107,10 +105,12 @@ export default function Login() {
                 {" "}
                 <Title>Welcome to RADAR</Title>{" "}
               </div>
-              
-              {/* conditional rendering / null coalescing: AND short circuiting*/}
-              {signinError && <Row>{signinError}</Row>}
-
+              <Row style={{ color: "red", paddingBottom: "5px" }}>
+                <Col flex={3}></Col>
+                {/* conditional rendering / null coalescing: AND short circuiting*/}
+                {signinError && <Row>{signinError}</Row>}
+                <Col flex={3}></Col>
+              </Row>
               <Row>
                 <Col flex={2}></Col>
                 <Col flex={3}>
@@ -122,7 +122,6 @@ export default function Login() {
                     onFinish={onFinish}
                     autoComplete="off"
                   >
-
                     <div>
                       <Form.Item
                         label="Username"
@@ -150,13 +149,12 @@ export default function Login() {
                     >
                       <Input.Password />
                     </Form.Item>
-                    
+
                     <Form.Item
                       name="remember"
                       valuePropName="checked"
                       style={containerStyle}
                     >
-                    
                       <div style={checkboxStyle}>
                         <Checkbox>Remember me</Checkbox>
                       </div>
