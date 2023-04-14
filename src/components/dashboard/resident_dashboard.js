@@ -206,7 +206,6 @@ const Resident_dashboard = () => {
         console.error(e);
       }
     }
-    console.log(data);
     fetchData(url);
   }, []);
 
@@ -282,6 +281,7 @@ const Resident_dashboard = () => {
     return stats_array;
   }
 
+  
   const handleOnSubmit = (e) => {
     e.preventDefault();
 
@@ -298,11 +298,21 @@ const Resident_dashboard = () => {
         document.getElementById(
           "result"
         ).innerHTML += `<div>Average: ${stats_array[2]}</div><br />`;
+
+      const pdf_content = [`Min: ${stats_array[0]}\n`, `Max: ${stats_array[1]}\n`, `Average: ${stats_array[2]}\n`]
+      const download_file = new Blob(pdf_content, {type: 'text/plain'})
+
+      const element = document.createElement("a")
+      element.href = URL.createObjectURL(download_file)
+      element.download = "RADAR_Statistics-" + Date.now() + ".txt";
+      document.body.appendChild(element)
+      element.click()
       };
 
       fileReader.readAsText(file);
     }
   };
+
 
   return (
     <>
@@ -356,7 +366,7 @@ const Resident_dashboard = () => {
           </Row>
         </Content>
 
-        <div style={{ textAlign: "center" }}>
+        <div style={{ textAlign: "center", backgroundColor:"#108fe9"}}>
           <form>
             <input
               type={"file"}
@@ -374,9 +384,9 @@ const Resident_dashboard = () => {
           </form>
         </div>
 
-        <br />
+        {/* <br /> */}
 
-        <div id="result"></div>
+        <div id="result" style={{backgroundColor:"lightblue"}}></div>
 
         <div style={graphContainer}>
           {image === "BarImage" && (

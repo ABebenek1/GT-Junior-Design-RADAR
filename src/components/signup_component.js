@@ -1,12 +1,15 @@
 import React, { Component, useState, useEffect } from "react";
 import { Link, redirect, useNavigate } from "react-router-dom";
 import { state, storedData } from "../storeData";
+
 import { Layout, Space } from "antd";
 import { Button, Checkbox, Form, Input } from "antd";
 import { Typography } from "antd";
 import { Radio } from "antd";
 import { Col, Row } from "antd";
+
 import Axios from "axios";
+
 const { Content } = Layout;
 const { Title } = Typography;
 

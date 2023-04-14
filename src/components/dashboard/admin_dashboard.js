@@ -1,39 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./admin_dashboard.css";
-
-// dummy graph image files to be removed
-import EmoryLogo from "../../images/emory.png";
-
-// Rechart UI
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  ScatterChart,
-  Scatter,
-  PieChart,
-  Pie,
-} from "recharts";
+import { dummies } from "../../dummy_data_list";
+import img0 from "../../images/img0.png";
+import img1 from "../../images/img1.png";
+import img2 from "../../images/img2.png";
+import img3 from "../../images/img3.png";
+import img4 from "../../images/img4.png";
 
 // ANTD UI
-import { Col, Row } from "antd";
-import { Layout } from "antd";
-import { Button } from "antd";
-import { DatePicker, message } from "antd";
+import { Layout, Col, Row } from "antd";
+import { Space, Table, Tag } from "antd";
+import { Button, Popconfirm, message } from "antd";
+import { Input } from "antd";
 import { Typography } from "antd";
+const { TextArea } = Input;
+const { Header, Content } = Layout;
 
 const { Title } = Typography;
 
-const { RangePicker } = DatePicker;
-
-// ANTD CSS - TO be migrated to a seperate CSS file
-const { Header, Content } = Layout;
+// // ANTD CSS - TO be migrated to a seperate CSS file
 const headerStyle = {
   textAlign: "center",
   color: "#fff",
@@ -42,108 +28,172 @@ const headerStyle = {
   lineHeight: "64px",
   backgroundColor: "#7dbcea",
 };
-const contentStyle = {
-  textAlign: "center",
-  minHeight: 120,
-  lineHeight: "120px",
-  color: "black",
-  backgroundColor: "#108ee9",
-};
-
-// rechart dummy data to be removed
-
-const barData = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
-
-const scatterData = [
-  { x: 100, y: 90, z: 90 },
-  { x: 45, y: 70, z: 20 },
-  { x: 80, y: 50, z: 20 },
-  { x: 120, y: 20, z: 20 },
-  { x: 170, y: 40, z: 30 },
-  { x: 140, y: 60, z: 60 },
-  { x: 150, y: 80, z: 70 },
-  { x: 65, y: 40, z: 20 },
-  { x: 110, y: 50, z: 50 },
-];
-
-const pieData = [
-  { name: "Group A", value: 400 },
-  { name: "Group B", value: 300 },
-  { name: "Group C", value: 300 },
-  { name: "Group D", value: 200 },
-  { name: "Group E", value: 278 },
-  { name: "Group F", value: 189 },
-];
 
 const Admin_dashboard = () => {
-  const [image, setImage] = useState("BarImage");
-  const [date, setDate] = useState(null);
+  const [people, setPeople] = useState(dummies);
+  const [targetCommentUser, setTargetCommentUser] = useState(null);
+  const [targetViewUser, setTargetViewUser] = useState(null);
+  const [showCommentBox, setShowCommentBox] = useState(false);
+  const [showViewBox, setShowViewBox] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
+  const [img, setImg] = useState(null);
+  // const [renderPopConfirm, setRenderPopConfirm] = useState(false)
 
-  const handleDateChange = (value) => {
-    message.info(
-      `Selected Date: ${value ? value.format("YYYY-MM-DD") : "None"}`
-    );
-    setDate(value);
+  const handleCommentSubmission = () => {
+    messageApi.info(`Comment Submitted for ${targetCommentUser} `);
+    // setShowCommentBox(false);
+    setTimeout(() => {
+      setShowCommentBox(false);
+    }, 1000);
   };
 
-  const displayOnChange = (event) => {
-    const valueSelectedByUser = parseInt(event.target.value);
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+  const columns = [
+    {
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Firstname",
+      dataIndex: "firstname",
+      key: "firstname",
+    },
+    {
+      title: "Lastname",
+      dataIndex: "lastname",
+      key: "lastname",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Year",
+      dataIndex: "year",
+      key: "year",
+    },
 
-    if (valueSelectedByUser === 1) {
-      setImage("BarImage");
-    }
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Space size="middle">
+          <span
+            onClick={(e) => {
+              console.log(record);
+              setShowViewBox(true);
+              setTargetViewUser(record.firstname + " " + record.lastname);
+              setTargetCommentUser(null); // side-effect
+              setShowCommentBox(false); // side-effect
+              // select random img to display
+              const num = getRandomInt(5);
+              if (num == 0) {
+                setImg(img0);
+              } else if (num == 1) {
+                setImg(img1);
+              } else if (num == 2) {
+                setImg(img2);
+              } else if (num == 3) {
+                setImg(img3);
+              } else {
+                setImg(img4);
+              }
+            }}
+          >
+            <a>View</a>
+          </span>
+          <span
+            onClick={(e) => {
+              setShowCommentBox(true);
+              setTargetCommentUser(record.firstname + " " + record.lastname);
+              setTargetViewUser(null); // side-effect
+              setShowViewBox(false); // side-effect
+            }}
+          >
+            <a>Comment</a>
+          </span>
+          <span>
+            <Popconfirm
+              title="Delete"
+              description="Are you sure?"
+              onConfirm={() => {
+                const thisid = record.id;
+                console.log(thisid);
+                setPeople(people.filter((people) => record.id !== people.id));
+                message.success(
+                  `Deleted ${record.firstname} ${record.lastname}`
+                );
+              }}
+              okText="Yes"
+              cancelText="No"
+            >
+              <a style={{ color: "red" }} type="link">
+                Delete
+              </a>
+            </Popconfirm>
+          </span>
+        </Space>
+      ),
+    },
+  ];
 
-    if (valueSelectedByUser === 2) {
-      setImage("PieImage");
-    }
+  // console.log(people);
 
-    if (valueSelectedByUser === 3) {
-      setImage("ScatterImage");
-    }
-  };
+  // const UserElement = (props) => {
+  //   const { id, firstname, lastname, email, year } = props.user;
+  //   return (
+  //     <tr id={id}>
+  //       <td>{id}</td>
+  //       <td>{lastname + ", " + firstname}</td>
+  //       <td>{email}</td>
+  //       <td>{year}</td>
+  //       <td>
+  //         <select id="ActionDropDown" onChange={ddaction}>
+  //           <option>Select an action for {lastname + ", " + firstname}</option>
+  //           <option value="delete">Delete</option>
+  //           <option value="comment">Comment</option>
+  //           <option value="view">View Profile</option>
+  //         </select>
+  //         {/* <button onClick={testing}>Confirm</button> */}
+  //       </td>
+  //     </tr>
+  //   );
+  // };
+
+  // function ddaction(e) {
+  //   let row = e.target.parentNode.parentNode;
+  //   let rowdata = document.getElementById(row.id).querySelectorAll("td");
+  //   let name = rowdata[1].innerHTML;
+
+  //   let action = e.target.value;
+  //   if (action === "delete") {
+  //     let text = "Please confirm that you want delete user: " + name;
+
+  //     if (window.confirm(text) === true) {
+  //       row.remove();
+
+  //       for (let i = 0; i < dummies.length; i++) {
+  //         if (dummies[i].id === row.id) {
+  //           dummies.splice(i, 1);
+  //         }
+  //       }
+  //     }
+  //   } else if (action === "comment") {
+  //     let comment = window.prompt("Type out your comment for: " + name, "");
+
+  //     if (comment != null && comment != "") {
+  //       window.alert("Your comment has been saved");
+  //     }
+  //   } else if (action == "view") {
+  //   }
+
+  //   // console.log(dummies);
+  // }
 
   return (
     <>
@@ -151,116 +201,50 @@ const Admin_dashboard = () => {
         <Header style={headerStyle}>
           <Row>
             <Link to="/sign-in">
-              <img src={EmoryLogo} width="60px" />
+              <button className="logoutButton">Logout</button>
             </Link>
             {/* Need to figure out a way to not hard code this span portion */}
             <Col span={8}></Col>
             <Title style={{ color: "white" }}>Admin Dashboard</Title>
           </Row>
         </Header>
-        <Content style={contentStyle}>
-          <Row>
-            <Col flex={3}>
-              <RangePicker onChange={handleDateChange} />
-            </Col>
-            <Col flex={2}>
-              <select
-                onChange={displayOnChange}
-                className="dropdown"
-                name="graphs"
-                id="graphs"
-              >
-                <option value="1">Bar Graph</option>
-                <option value="2">Pie Chart</option>
-                <option value="3">Scatter plot</option>
-              </select>
-            </Col>
-            <Col flex={2}>
-              <form>
-                  <input type={"file"} accept={".csv"} />
-                  <button>IMPORT CSV</button>
-              </form>
-            </Col>
-            <Col flex={2}></Col>
-          </Row>
-        </Content>
+        <Table columns={columns} dataSource={people}></Table>
+        <Row>
+          {showCommentBox ? (
+            <span style={{ width: "100%" }}>
+              <h2>Leave a Comment for {targetCommentUser}</h2>
+              <TextArea placeholder="Leave a comment..." rows={4}></TextArea>
+              {contextHolder}
+              <Button type="link" onClick={handleCommentSubmission}>
+                Submit Comment
+              </Button>
+            </span>
+          ) : null}
+        </Row>
+        <Row>
+          {showViewBox ? (
+            <span style={{ width: "100%", textAlign: "center" }}>
+              <h2>View {targetViewUser}'s Dashboard</h2>
+              <img src={img} width="30%" />
+            </span>
+          ) : null}
+        </Row>
       </Layout>
 
-      {image === "BarImage" && (
-        <div className="content">
-          <BarChart
-            width={1000}
-            height={600}
-            data={barData}
-            margin={{
-              top: 20,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="pv" stackId="a" fill="#8884d8" />
-            <Bar dataKey="amt" stackId="a" fill="#82ca9d" />
-            <Bar dataKey="uv" fill="#ffc658" />
-          </BarChart>
+      {/* Benson's below
+      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <tr>
+          <th style={{ width: "10%" }}>ID</th>
+          <th>Last, First</th>
+          <th>Email</th>
+          <th style={{ width: "10%" }}>Year</th>
+          <th style={{ width: "25%" }}>Action</th>
+        </tr>
 
-          {/* <img className="graph" src={BarImage} alt="picture" /> */}
-        </div>
-      )}
-
-      {image === "PieImage" && (
-        <div className="content">
-          <PieChart width={400} height={400}>
-            <Pie
-              dataKey="value"
-              isAnimationActive={false}
-              data={pieData}
-              cx="50%"
-              cy="50%"
-              outerRadius={80}
-              fill="#8884d8"
-              label
-            />
-            {/* <Pie
-              dataKey="value"
-              data={data02}
-              cx={500}
-              cy={200}
-              innerRadius={40}
-              outerRadius={80}
-              fill="#82ca9d"
-            /> */}
-            <Tooltip />
-          </PieChart>
-        </div>
-      )}
-      {image === "ScatterImage" && (
-        <div className="content">
-          <ScatterChart
-            width={1000}
-            height={600}
-            data={scatterData}
-            margin={{
-              top: 20,
-              right: 20,
-              bottom: 20,
-              left: 20,
-            }}
-          >
-            <CartesianGrid />
-            <XAxis type="number" dataKey="x" name="count" />
-            <YAxis type="number" dataKey="y" name="accuracy" unit="%" />
-            <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-            <Scatter name="A school" data={scatterData} fill="#8884d8" />
-          </ScatterChart>
-        </div>
-      )}
-      {/* </div> */}
+        {dummies.map((user) => {
+          return <UserElement user={user}></UserElement>;
+        })}
+      </table> */}
     </>
   );
 };
