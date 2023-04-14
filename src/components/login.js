@@ -60,6 +60,12 @@ const pad_down = {
 
 export default function Login() {
   const [signinError, setSignInError] = useState(null);
+  const [userRole, setUserRole] = useState(1);
+
+  // keep track of user type for sign-in redirect
+  const onChangeUserRole = (e) => {
+    setUserRole(e.target.value);
+  };
 
   // event handle when clicking submit button
   const navigate = useNavigate();
@@ -86,7 +92,11 @@ export default function Login() {
         } else {
           // status 200
           // redirect to dashboard
-          navigate("/resident_dashboard");
+          if (values && userRole == 1) {
+            navigate("/resident_dashboard");
+          } else if (values && userRole == 2) {
+            navigate("/admin_dashboard");
+          }
         }
       } catch (e) {
         console.error(e);
@@ -136,7 +146,6 @@ export default function Login() {
                         <Input />
                       </Form.Item>
                     </div>
-
                     <Form.Item
                       label="Password"
                       name="password"
@@ -148,6 +157,12 @@ export default function Login() {
                       ]}
                     >
                       <Input.Password />
+                    </Form.Item>
+                    <Form.Item>
+                      <Radio.Group onChange={onChangeUserRole} value={userRole}>
+                        <Radio value={1}>Resident</Radio>
+                        <Radio value={2}>Admin</Radio>
+                      </Radio.Group>
                     </Form.Item>
 
                     <Form.Item
