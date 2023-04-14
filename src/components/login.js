@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import EmoryLogo from "../images/emory.png";
-import { state } from "../storeData";
-import { history } from "../index";
-import { Layout, Space } from "antd";
-import { Button, Form, Input, Checkbox } from "antd";
+import { Layout } from "antd";
+import { Button, Form, Input, Checkbox, Radio } from "antd";
 import { Typography } from "antd";
 import { Col, Row } from "antd";
 const { Content } = Layout;
@@ -62,7 +59,9 @@ const pad_down = {
 };
 
 export default function Login() {
+
   const [signinError, setSignInError] = useState(null);
+
   // event handle when clicking submit button
   const navigate = useNavigate();
   const onFinish = (values) => {
@@ -93,6 +92,7 @@ export default function Login() {
       } catch (e) {
         console.error(e);
       }
+
     }
     checkUserCred();
   };
@@ -107,8 +107,10 @@ export default function Login() {
                 {" "}
                 <Title>Welcome to RADAR</Title>{" "}
               </div>
+              
               {/* conditional rendering / null coalescing: AND short circuiting*/}
               {signinError && <Row>{signinError}</Row>}
+
               <Row>
                 <Col flex={2}></Col>
                 <Col flex={3}>
@@ -120,6 +122,7 @@ export default function Login() {
                     onFinish={onFinish}
                     autoComplete="off"
                   >
+
                     <div>
                       <Form.Item
                         label="Username"
@@ -147,12 +150,13 @@ export default function Login() {
                     >
                       <Input.Password />
                     </Form.Item>
-
+                    
                     <Form.Item
                       name="remember"
                       valuePropName="checked"
                       style={containerStyle}
                     >
+                    
                       <div style={checkboxStyle}>
                         <Checkbox>Remember me</Checkbox>
                       </div>

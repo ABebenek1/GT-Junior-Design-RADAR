@@ -11,6 +11,33 @@ This is the GitHub repository for Georgia Tech Spring 2023 junior design team 23
 * npm install
 * npm start
 
+## Version 0.4.0
+
+### Features
+* Admin Dashboard Backend mostly finished
+* Admin Dashboard Frontend mostly finished
+
+### Bug Fixes
+* Server post requests aren't working
+
+### Known Issues
+* Forgot Password Link is not functional
+* Data received from client needs to be stored in the database
+
+## Version 0.3.0
+
+### Features
+* Resident Dashboard Backend mostly finished
+* Resident Dashboard Frontend mostly finished
+* User Database linked to dashboard backend
+* Admin Dashboard Backend started
+
+### Bug Fixes
+* Several pages updated to make them more responsive to changes
+
+### Known Issues
+* Data received very recently from client; need to parse it and make sense of it
+* Need to link finished backend elements to unfinished frontend elements
 
 ## Version 0.2.0
 
