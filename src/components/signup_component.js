@@ -1,6 +1,5 @@
 import React, { Component, useState, useEffect } from "react";
 import { Link, redirect, useNavigate } from "react-router-dom";
-import { state, storedData } from "../storeData";
 
 import { Layout, Space } from "antd";
 import { Button, Checkbox, Form, Input } from "antd";
