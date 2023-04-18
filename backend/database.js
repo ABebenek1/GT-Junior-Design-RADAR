@@ -72,10 +72,11 @@ const postUser = async ({
   }
 };
 
+// upload entry from .csv spreadsheet
 const postEntry = async (obj) => {
   try {
     await client.connect();
-    const collection = client.db("EmoryHospital").collection("prelim_data");
+    const collection = client.db("EmoryHospital2").collection("Residents");
     await collection.insertMany(obj);
   } catch (err) {
     console.error(err);
