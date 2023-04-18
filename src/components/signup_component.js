@@ -101,8 +101,8 @@ export default function SignUp() {
                     ]}
                   >
                     <Radio.Group value={"admin"}>
-                      <Radio value={false}>resident</Radio>
-                      <Radio value={true}>admin</Radio>
+                      <Radio value={false}>Resident</Radio>
+                      <Radio value={true}>Admin</Radio>
                     </Radio.Group>
                   </Form.Item>
 
