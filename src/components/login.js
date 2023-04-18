@@ -188,7 +188,7 @@ export default function Login() {
               <Row style={pad_down}>
                 <Col span={24}>
                   New User?
-                  <Link to="/sign-up" style={{ color: "yellow" }}>
+                  <Link to="/sign-up">
                     {" "}
                     Register{" "}
                   </Link>
@@ -196,7 +196,7 @@ export default function Login() {
               </Row>
               <Row>
                 <Col span={24}>
-                  <Link to="/sign-up" style={{ color: "yellow" }}>
+                  <Link to="/sign-up">
                     {" "}
                     Forget Password
                   </Link>
