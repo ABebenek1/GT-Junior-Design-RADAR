@@ -67,9 +67,9 @@ const graphContainer = {
 };
 
 const agreeDisagreeRate = {
-  width:"100%",
-  height:"100%",
-}
+  width: "100%",
+  height: "100%",
+};
 
 const titleStyle = {
   color: "white",
@@ -134,13 +134,13 @@ const pieData = [
 ];
 
 const agreeDisagreeData = [
-  {name: "Agree", value: 200},
-  {name: "Agree with Incidental Finding", value: 50},
-  {name: "Disagree", value: 20},
-  {name: "Disagree with Preliminary Report", value: 40}
-]
+  { name: "Agree", value: 200 },
+  { name: "Agree with Incidental Finding", value: 50 },
+  { name: "Disagree", value: 20 },
+  { name: "Disagree with Preliminary Report", value: 40 },
+];
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 const Resident_dashboard = () => {
   const [image, setImage] = useState("BarImage");
@@ -177,18 +177,14 @@ const Resident_dashboard = () => {
     const valueSelectedByUser = parseInt(event.target.value);
 
     if (valueSelectedByUser === 1) {
-      
     }
 
     if (valueSelectedByUser === 2) {
-      
     }
 
     if (valueSelectedByUser === 3) {
-      
     }
   };
-
 
   // Load in data from backend server
   // https://jontkoh2424.medium.com/connecting-react-to-express-server-48948b74d091
@@ -199,9 +195,14 @@ const Resident_dashboard = () => {
 
     async function fetchData() {
       try {
-        const response = await fetch(url); // resp is a blob, binary data
-        const json = await response.json(); // parse response as json
-        setData(json);
+        const res = await fetch(`http://localhost:8000/user-data`, {
+          method: "GET",
+          credentials: "same-origin",
+        });
+
+        // const response = await fetch(url); // resp is a blob, binary data
+        // const json = await response.json(); // parse response as json
+        // setData(json);
       } catch (e) {
         console.error(e);
       }
@@ -281,7 +282,6 @@ const Resident_dashboard = () => {
     return stats_array;
   }
 
-  
   const handleOnSubmit = (e) => {
     e.preventDefault();
 
@@ -299,20 +299,23 @@ const Resident_dashboard = () => {
           "result"
         ).innerHTML += `<div>Average: ${stats_array[2]}</div><br />`;
 
-      const pdf_content = [`Min: ${stats_array[0]}\n`, `Max: ${stats_array[1]}\n`, `Average: ${stats_array[2]}\n`]
-      const download_file = new Blob(pdf_content, {type: 'text/plain'})
+        const pdf_content = [
+          `Min: ${stats_array[0]}\n`,
+          `Max: ${stats_array[1]}\n`,
+          `Average: ${stats_array[2]}\n`,
+        ];
+        const download_file = new Blob(pdf_content, { type: "text/plain" });
 
-      const element = document.createElement("a")
-      element.href = URL.createObjectURL(download_file)
-      element.download = "RADAR_Statistics-" + Date.now() + ".txt";
-      document.body.appendChild(element)
-      element.click()
+        const element = document.createElement("a");
+        element.href = URL.createObjectURL(download_file);
+        element.download = "RADAR_Statistics-" + Date.now() + ".txt";
+        document.body.appendChild(element);
+        element.click();
       };
 
       fileReader.readAsText(file);
     }
   };
-
 
   return (
     <>
@@ -366,7 +369,7 @@ const Resident_dashboard = () => {
           </Row>
         </Content>
 
-        <div style={{ textAlign: "center", backgroundColor:"#108fe9"}}>
+        <div style={{ textAlign: "center", backgroundColor: "#108fe9" }}>
           <form>
             <input
               type={"file"}
@@ -386,7 +389,7 @@ const Resident_dashboard = () => {
 
         {/* <br /> */}
 
-        <div id="result" style={{backgroundColor:"lightblue"}}></div>
+        <div id="result" style={{ backgroundColor: "lightblue" }}></div>
 
         <div style={graphContainer}>
           {image === "BarImage" && (
@@ -456,38 +459,40 @@ const Resident_dashboard = () => {
           )}
           {/* </div> */}
         </div>
-      <div style={agreeDisagreeRate}
-      align = "center">
-        <select
-        onChange={displayCategories}
-        className="dropdown"
-        name="agreeDisagreeGraphs"
-        id="agreeDisagreeGraphs"
-        >
-          <option value="1">Category 1</option>
-          <option value="2">Category 2</option>
-          <option value="3">Category 3</option>
-        </select>
-        <PieChart width={800} height={400}>
-          <Pie
-            dataKey="value"
-            isAnimationActive={false}
-            data={agreeDisagreeData}
-            cx={120}
-            cy={200}
-            innerRadius={60}
-            outerRadius={80}
-            fill="#8884d8"
-            paddingAngle={5}
+        <div style={agreeDisagreeRate} align="center">
+          <select
+            onChange={displayCategories}
+            className="dropdown"
+            name="agreeDisagreeGraphs"
+            id="agreeDisagreeGraphs"
           >
-          {agreeDisagreeData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-          <Tooltip />
-        </PieChart>
-      </div>
-        </Layout>
+            <option value="1">Category 1</option>
+            <option value="2">Category 2</option>
+            <option value="3">Category 3</option>
+          </select>
+          <PieChart width={800} height={400}>
+            <Pie
+              dataKey="value"
+              isAnimationActive={false}
+              data={agreeDisagreeData}
+              cx={120}
+              cy={200}
+              innerRadius={60}
+              outerRadius={80}
+              fill="#8884d8"
+              paddingAngle={5}
+            >
+              {agreeDisagreeData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Pie>
+            <Tooltip />
+          </PieChart>
+        </div>
+      </Layout>
     </>
   );
 };
