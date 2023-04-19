@@ -82,7 +82,6 @@ export default function Login() {
           headers: { "Content-Type": "application/json" },
           credentials: "same-origin",
         });
-        const parsedRes = await res.json();
         if (res.status === 401) {
           // password incorrect
           setSignInError("Password incorrect");
@@ -90,6 +89,7 @@ export default function Login() {
           // sth went wrong perhaps with server
           setSignInError("Username not found");
         } else {
+          const parsedRes = await res.json();
           localStorage.setItem("token", parsedRes.token);
           // status 200
           // redirect to dashboard

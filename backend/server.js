@@ -105,10 +105,22 @@ app.post("/sign-in", async function (req, res) {
 
 //
 const checkUserAuth = (req, res, next) => {
-  console.log(req.cookies);
-  req.username = "hardcoded";
+  const token = req.get("Authentication");
+  // console.log(token);
+  const decoded_token = jwt.verify(token, publicKey);
+  console.log(decoded_token);
+  req.username = decoded_token.username;
   next();
 };
 
 // create an endpoint that queries user data
-app.get("/user-data", checkUserAuth, (req, res) => {});
+app.get("/user-data", checkUserAuth, async (req, res) => {
+  // res.send(req.username);
+  try {
+    const userData = await database.getUserData(req.username);
+    res.status(200).json(userData);
+  } catch (err) {
+    console.error(err);
+    res.status(404).send("user data notfound");
+  }
+});
