@@ -14,6 +14,7 @@ import { Space, Table, Tag } from "antd";
 import { Button, Popconfirm, message } from "antd";
 import { Input } from "antd";
 import { Typography } from "antd";
+const { Search } = Input;
 const { TextArea } = Input;
 const { Header, Content } = Layout;
 
@@ -27,6 +28,11 @@ const headerStyle = {
   paddingInline: 50,
   lineHeight: "64px",
   backgroundColor: "#7dbcea",
+};
+
+const tableStyle = {
+  width: "100vw",
+  height: "100vh",
 };
 
 const Admin_dashboard = () => {
@@ -109,7 +115,13 @@ const Admin_dashboard = () => {
           </span>
           <span
             onClick={(e) => {
-              setShowCommentBox(true);
+              // make text appear/disapper by click on it
+              if (showCommentBox == true) {
+                setShowCommentBox(false);
+              } else if (showCommentBox == false) {
+                setShowCommentBox(true);
+              }
+
               setTargetCommentUser(record.firstname + " " + record.lastname);
               setTargetViewUser(null); // side-effect
               setShowViewBox(false); // side-effect
@@ -142,59 +154,6 @@ const Admin_dashboard = () => {
     },
   ];
 
-  // console.log(people);
-
-  // const UserElement = (props) => {
-  //   const { id, firstname, lastname, email, year } = props.user;
-  //   return (
-  //     <tr id={id}>
-  //       <td>{id}</td>
-  //       <td>{lastname + ", " + firstname}</td>
-  //       <td>{email}</td>
-  //       <td>{year}</td>
-  //       <td>
-  //         <select id="ActionDropDown" onChange={ddaction}>
-  //           <option>Select an action for {lastname + ", " + firstname}</option>
-  //           <option value="delete">Delete</option>
-  //           <option value="comment">Comment</option>
-  //           <option value="view">View Profile</option>
-  //         </select>
-  //         {/* <button onClick={testing}>Confirm</button> */}
-  //       </td>
-  //     </tr>
-  //   );
-  // };
-
-  // function ddaction(e) {
-  //   let row = e.target.parentNode.parentNode;
-  //   let rowdata = document.getElementById(row.id).querySelectorAll("td");
-  //   let name = rowdata[1].innerHTML;
-
-  //   let action = e.target.value;
-  //   if (action === "delete") {
-  //     let text = "Please confirm that you want delete user: " + name;
-
-  //     if (window.confirm(text) === true) {
-  //       row.remove();
-
-  //       for (let i = 0; i < dummies.length; i++) {
-  //         if (dummies[i].id === row.id) {
-  //           dummies.splice(i, 1);
-  //         }
-  //       }
-  //     }
-  //   } else if (action === "comment") {
-  //     let comment = window.prompt("Type out your comment for: " + name, "");
-
-  //     if (comment != null && comment != "") {
-  //       window.alert("Your comment has been saved");
-  //     }
-  //   } else if (action == "view") {
-  //   }
-
-  //   // console.log(dummies);
-  // }
-
   return (
     <>
       <Layout>
@@ -205,10 +164,20 @@ const Admin_dashboard = () => {
             </Link>
             {/* Need to figure out a way to not hard code this span portion */}
             <Col span={8}></Col>
-            <Title style={{ color: "white" }}>Admin Dashboard</Title>
+            <Title style={{ color: "white", marginTop:"8px" }}>Admin Dashboard</Title>
           </Row>
         </Header>
+
+        <div>
+          <Search
+            placeholder="Enter name of resident"
+            // onSearch={onSearch}
+            enterButton
+          />
+        </div>
+
         <Table columns={columns} dataSource={people}></Table>
+
         <Row>
           {showCommentBox ? (
             <span style={{ width: "100%" }}>
@@ -221,6 +190,7 @@ const Admin_dashboard = () => {
             </span>
           ) : null}
         </Row>
+
         <Row>
           {showViewBox ? (
             <span style={{ width: "100%", textAlign: "center" }}>
@@ -230,21 +200,6 @@ const Admin_dashboard = () => {
           ) : null}
         </Row>
       </Layout>
-
-      {/* Benson's below
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
-        <tr>
-          <th style={{ width: "10%" }}>ID</th>
-          <th>Last, First</th>
-          <th>Email</th>
-          <th style={{ width: "10%" }}>Year</th>
-          <th style={{ width: "25%" }}>Action</th>
-        </tr>
-
-        {dummies.map((user) => {
-          return <UserElement user={user}></UserElement>;
-        })}
-      </table> */}
     </>
   );
 };
