@@ -2,9 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./resident_dashboard.css";
 
-// dummy graph image files to be removed
-import EmoryLogo from "../../images/emory.png";
-
 // Rechart UI
 import {
   BarChart,
@@ -38,6 +35,7 @@ const { RangePicker } = DatePicker;
 // ANTD CSS - TO be migrated to a seperate CSS file
 const { Header, Content } = Layout;
 
+// css styling
 const headerStyle = {
   textAlign: "center",
   color: "#fff",
@@ -48,11 +46,14 @@ const headerStyle = {
 };
 
 const contentStyle = {
+  width: "100%",
   textAlign: "center",
   minHeight: 120,
   lineHeight: "120px",
   color: "black",
-  backgroundColor: "#108ee9",
+  backgroundColor: "#108fe9",
+  display: "flex",
+  justifyContent: "space-around",
 };
 
 const layoutStyle = {
@@ -73,10 +74,10 @@ const agreeDisagreeRate = {
 
 const titleStyle = {
   color: "white",
+  marginTop: "8px",
 };
 
 // rechart dummy data to be removed
-
 const barData = [
   {
     name: "Page A",
@@ -122,6 +123,7 @@ const barData = [
   },
 ];
 
+// rechart dummy data to be removed
 var scatterData = new Array();
 
 const pieData = [
@@ -142,6 +144,7 @@ const agreeDisagreeData = [
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
+//resident dashboard component
 const Resident_dashboard = () => {
   const [image, setImage] = useState("BarImage");
   const [date, setDate] = useState(null);
@@ -150,6 +153,7 @@ const Resident_dashboard = () => {
   const [data, setData] = useState(null);
   const [metricsOption, setMetricsOption] = useState(null);
 
+  // for data selector
   const handleDateChange = (value) => {
     message.info(
       `Selected Date: ${value ? value.format("YYYY-MM-DD") : "None"}`
@@ -157,6 +161,7 @@ const Resident_dashboard = () => {
     setDate(value);
   };
 
+  // graph selector
   const displayOnChange = (event) => {
     const valueSelectedByUser = parseInt(event.target.value);
 
@@ -173,6 +178,7 @@ const Resident_dashboard = () => {
     }
   };
 
+  // for metric selector
   const displayCategories = (event) => {
     const valueSelectedByUser = parseInt(event.target.value);
 
@@ -321,6 +327,7 @@ const Resident_dashboard = () => {
   return (
     <>
       <Layout style={layoutStyle}>
+        {/* header */}
         <Header style={headerStyle}>
           <Row>
             <Link to="/sign-in">
@@ -334,41 +341,57 @@ const Resident_dashboard = () => {
 
         <Content style={contentStyle}>
           <Row>
-            <Col flex={3}>
-              <RangePicker onChange={handleDateChange} />
-            </Col>
-            <Col>
-              <Dropdown
-                menu={{
-                  items: extractDropDownOptions(data),
-                  onClick: ({ key }) => {
-                    setMetricsOption(key);
-                  },
-                }}
-              >
-                <Button>
-                  <Space>
-                    {metricsOption ?? "select metrics"}
-                    <DownOutlined />
-                  </Space>
-                </Button>
-              </Dropdown>
-            </Col>
-            <Col flex={2}>
-              <select
-                onChange={displayOnChange}
-                className="dropdown"
-                name="graphs"
-                id="graphs"
-              >
-                <option value="1">Bar Graph</option>
-                <option value="2">Pie Chart</option>
-                <option value="3">Scatter plot</option>
-              </select>
-            </Col>
+
+            <div>
+              {/* date selector */}
+              <Col flex={3}>
+                <RangePicker onChange={handleDateChange} />
+              </Col>
+            </div>
+
+            <div>
+              {/* metric selector */}
+              <Col style={{ marginLeft: "20px", marginRight: "20px" }}>
+                <Dropdown
+                  menu={{
+                    items: extractDropDownOptions(data),
+                    onClick: ({ key }) => {
+                      setMetricsOption(key);
+                    },
+                  }}
+                >
+                  <Button>
+                    <Space>
+                      {metricsOption ?? "select metrics"}
+                      <DownOutlined />
+                    </Space>
+                  </Button>
+                </Dropdown>
+              </Col>
+            </div>
+
+            <div>
+              {/* graph selector */}
+              <Col flex={2}>
+                <select
+                  onChange={displayOnChange}
+                  className="dropdown"
+                  name="graphs"
+                  id="graphs"
+                >
+                  <option value="1">Bar Graph</option>
+                  <option value="2">Pie Chart</option>
+                  <option value="3">Scatter plot</option>
+                </select>
+              </Col>
+            </div>
+
             <Col flex={2}></Col>
           </Row>
         </Content>
+
+
+        {/* csv stuff */}
 
         <div style={{ textAlign: "center", backgroundColor: "#108fe9" }}>
           <form>
@@ -388,10 +411,12 @@ const Resident_dashboard = () => {
           </form>
         </div>
 
-        {/* <br /> */}
+
+        {/* where the statisic are displayed */}
 
         <div id="result" style={{ backgroundColor: "lightblue" }}></div>
 
+        {/* where the graph is displayed */}
         <div style={graphContainer}>
           {image === "BarImage" && (
             <div className="content">
@@ -437,6 +462,7 @@ const Resident_dashboard = () => {
               </PieChart>
             </div>
           )}
+
           {image === "ScatterImage" && (
             <div className="content">
               <ScatterChart
@@ -458,41 +484,42 @@ const Resident_dashboard = () => {
               </ScatterChart>
             </div>
           )}
-          {/* </div> */}
+
         </div>
-        <div style={agreeDisagreeRate} align="center">
-          <select
-            onChange={displayCategories}
-            className="dropdown"
-            name="agreeDisagreeGraphs"
-            id="agreeDisagreeGraphs"
+
+        {/* the following should be delete if not in use */}
+        {/* <div style={agreeDisagreeRate}
+      align = "center">
+        <select
+        onChange={displayCategories}
+        className="dropdown"
+        name="agreeDisagreeGraphs"
+        id="agreeDisagreeGraphs"
+        >
+          <option value="1">Category 1</option>
+          <option value="2">Category 2</option>
+          <option value="3">Category 3</option>
+        </select>
+        <PieChart width={800} height={400}>
+          <Pie
+            dataKey="value"
+            isAnimationActive={false}
+            data={agreeDisagreeData}
+            cx={120}
+            cy={200}
+            innerRadius={60}
+            outerRadius={80}
+            fill="#8884d8"
+            paddingAngle={5}
           >
-            <option value="1">Category 1</option>
-            <option value="2">Category 2</option>
-            <option value="3">Category 3</option>
-          </select>
-          <PieChart width={800} height={400}>
-            <Pie
-              dataKey="value"
-              isAnimationActive={false}
-              data={agreeDisagreeData}
-              cx={120}
-              cy={200}
-              innerRadius={60}
-              outerRadius={80}
-              fill="#8884d8"
-              paddingAngle={5}
-            >
-              {agreeDisagreeData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
-              ))}
-            </Pie>
-            <Tooltip />
-          </PieChart>
-        </div>
+          {agreeDisagreeData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+          <Tooltip />
+        </PieChart>
+      </div> */}
+
       </Layout>
     </>
   );

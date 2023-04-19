@@ -3,11 +3,15 @@ table {
     border-collapse: collapse;
     width: 100%;
 }
+Table {
+    height: 86vh;
+}
 
 td, th {
     border: 1px solid #dddddd;
     text-align: center;
-    padding: 8px;
+    padding: 50px;
+
 }
 
 tr:hover {
