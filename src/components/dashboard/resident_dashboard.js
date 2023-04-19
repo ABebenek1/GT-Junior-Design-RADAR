@@ -197,12 +197,14 @@ const Resident_dashboard = () => {
       try {
         const res = await fetch(`http://localhost:8000/user-data`, {
           method: "GET",
+          headers: { Authentication: localStorage.getItem("token") },
           credentials: "same-origin",
         });
 
         // const response = await fetch(url); // resp is a blob, binary data
-        // const json = await response.json(); // parse response as json
+        const userData = await res.json(); // parse response as json
         // setData(json);
+        console.log(userData);
       } catch (e) {
         console.error(e);
       }

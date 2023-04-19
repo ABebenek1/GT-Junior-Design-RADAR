@@ -111,11 +111,14 @@ const postEntry = async (obj) => {
   }
 };
 
-const getEntry = async () => {
+const getUserData = async (username) => {
   try {
     await client.connect();
-    const collection = client.db("EmoryHospital").collection("prelim_data");
-    // collection.find() group query
+    const collection = client.db("EmoryHospital2").collection("Data");
+    const userData = await collection.find({ username }).toArray();
+    // .forEach((x) => console.log(x));
+    console.log(userData);
+    return userData;
   } catch (err) {
     console.error(err);
   } finally {
@@ -123,6 +126,10 @@ const getEntry = async () => {
   }
 };
 
-// now exporting objects with key getUserInfo (str) and value the val of getUserInfo (fxn)
-
-module.exports = { postUser, authenticateUser, authenticateUser2, postEntry };
+module.exports = {
+  postUser,
+  authenticateUser,
+  authenticateUser2,
+  postEntry,
+  getUserData,
+};
