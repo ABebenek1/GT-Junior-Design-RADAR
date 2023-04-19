@@ -15,8 +15,8 @@ content-type: application/json
 POST http://localhost:8000/sign-in http/1.1
 content-type: application/json
 
-{"username": "badapple123",
-  "password": "abc123"}
+{"username": "ckim",
+  "password": "crystal"}
   
 
 ###
@@ -40,4 +40,5 @@ content-type: application/json
 
 {"username": "winnie",
   "password": "winnie"}
+
 

@@ -201,9 +201,15 @@ const Resident_dashboard = () => {
 
     async function fetchData() {
       try {
-        const response = await fetch(url); // resp is a blob, binary data
-        const json = await response.json(); // parse response as json
-        setData(json);
+        const res = await fetch(`http://localhost:8000/user-data`, {
+          method: "GET",
+          headers: { Authentication: localStorage.getItem("token") },
+          credentials: "same-origin",
+        });
+
+        const userData = await res.json(); // parse response as json
+        console.log(userData);
+        setData(userData);
       } catch (e) {
         console.error(e);
       }
@@ -384,7 +390,9 @@ const Resident_dashboard = () => {
           </Row>
         </Content>
 
+
         {/* csv stuff */}
+
         <div style={{ textAlign: "center", backgroundColor: "#108fe9" }}>
           <form>
             <input
@@ -403,7 +411,9 @@ const Resident_dashboard = () => {
           </form>
         </div>
 
+
         {/* where the statisic are displayed */}
+
         <div id="result" style={{ backgroundColor: "lightblue" }}></div>
 
         {/* where the graph is displayed */}
@@ -509,6 +519,7 @@ const Resident_dashboard = () => {
           <Tooltip />
         </PieChart>
       </div> */}
+
       </Layout>
     </>
   );

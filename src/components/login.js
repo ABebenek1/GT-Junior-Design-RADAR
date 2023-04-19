@@ -82,19 +82,21 @@ export default function Login() {
           headers: { "Content-Type": "application/json" },
           credentials: "same-origin",
         });
-
-        if (res.status == 401) {
+        if (res.status === 401) {
           // password incorrect
           setSignInError("Password incorrect");
-        } else if (res.status == 400) {
+        } else if (res.status === 400) {
           // sth went wrong perhaps with server
-          setSignInError("Unknown error");
+          setSignInError("Username not found");
         } else {
+          const parsedRes = await res.json();
+          localStorage.setItem("token", parsedRes.token);
           // status 200
           // redirect to dashboard
-          if (values && userRole == 1) {
+          console.log(userRole);
+          if (userRole === 1) {
             navigate("/resident_dashboard");
-          } else if (values && userRole == 2) {
+          } else if (userRole === 2) {
             navigate("/admin_dashboard");
           }
         }
