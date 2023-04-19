@@ -201,10 +201,9 @@ const Resident_dashboard = () => {
           credentials: "same-origin",
         });
 
-        // const response = await fetch(url); // resp is a blob, binary data
         const userData = await res.json(); // parse response as json
-        // setData(json);
         console.log(userData);
+        setData(userData);
       } catch (e) {
         console.error(e);
       }
