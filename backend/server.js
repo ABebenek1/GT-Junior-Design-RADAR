@@ -77,27 +77,53 @@ app.post("/signin", async function (req, res) {
 
 // DO NOT DELETE - signin to EmoryHospital2
 app.post("/sign-in", async function (req, res) {
-  console.log(req.body);
-  if (req.body.username === null || req.body.password === null) {
+  console.log("cookie");
+  // console.log(req);
+  if (
+    req.body.username === null ||
+    req.body.password === null ||
+    req.body.userRole === null
+  ) {
     res.status(400).send("one of the required fields is empty");
   } else {
-    try {
-      await database.authenticateUser2(req.body.username, req.body.password);
-      // save token in a cookie
-      //https://gist.github.com/ygotthilf/baa58da5c3dd1f69fae9
-      const token = jwt.sign({ username: req.body.username }, secretKey, {
-        algorithm: "RS256",
-      });
-      res
-        .cookie("token", token, { httpOnly: true })
-        .status(200)
-        .json({ token: token });
-    } catch (err) {
-      console.error(err);
-      if (err.message === "Password incorrect") {
-        res.status(401).send(err.message);
-      } else {
-        res.status(400).send(err.message);
+    if (req.body.userRole === 1) {
+      try {
+        await database.authenticateUser2(req.body.username, req.body.password);
+        // save token in a cookie
+        //https://gist.github.com/ygotthilf/baa58da5c3dd1f69fae9
+        const token = jwt.sign({ username: req.body.username }, secretKey, {
+          algorithm: "RS256",
+        });
+        res
+          .cookie("token", token, { httpOnly: true })
+          .status(200)
+          .json({ token: token });
+      } catch (err) {
+        console.error(err);
+        if (err.message === "Password incorrect") {
+          res.status(401).send(err.message);
+        } else {
+          res.status(400).send(err.message);
+        }
+      }
+    } else if (req.body.userRole === 2) {
+      try {
+        console.log("query admin db");
+        await database.authenticateAdmin(req.body.username, req.body.password);
+        const token = jwt.sign({ username: req.body.username }, secretKey, {
+          algorithm: "RS256",
+        });
+        res
+          .cookie("token", token, { httpOnly: true })
+          .status(200)
+          .json({ token: token });
+      } catch (err) {
+        console.error(err);
+        if (err.message === "Password incorrect") {
+          res.status(401).send(err.message);
+        } else {
+          res.status(400).send(err.message);
+        }
       }
     }
   }
