@@ -209,7 +209,7 @@ const Resident_dashboard = () => {
 
         const userData = await res.json(); // parse response as json
         console.log(userData);
-        setData(userData);
+        // setData(userData);
       } catch (e) {
         console.error(e);
       }
