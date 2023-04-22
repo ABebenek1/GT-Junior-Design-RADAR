@@ -76,6 +76,7 @@ export default function Login() {
     // check username and password from db
     async function checkUserCred() {
       try {
+        console.log(values);
         const res = await fetch(`http://localhost:8000/sign-in`, {
           method: "POST",
           body: JSON.stringify(values),
@@ -92,7 +93,7 @@ export default function Login() {
           const parsedRes = await res.json();
           localStorage.setItem("token", parsedRes.token);
           // status 200
-          // redirect to dashboard
+          // redirect to user dashboard
           console.log(userRole);
           if (userRole === 1) {
             navigate("/resident_dashboard");
@@ -160,7 +161,16 @@ export default function Login() {
                     >
                       <Input.Password />
                     </Form.Item>
-                    <Form.Item>
+                    <Form.Item
+                      label="User role"
+                      name="userRole"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please choose a user role!",
+                        },
+                      ]}
+                    >
                       <Radio.Group onChange={onChangeUserRole} value={userRole}>
                         <Radio value={1}>Resident</Radio>
                         <Radio value={2}>Admin</Radio>
