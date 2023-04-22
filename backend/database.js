@@ -64,6 +64,28 @@ const authenticateUser2 = async (username, password) => {
   }
 };
 
+const authenticateAdmin = async (username, password) => {
+  try {
+    await client.connect();
+
+    const admin_collection = client.db("EmoryHospital2").collection("Admins");
+    const admin_user = await admin_collection.findOne({ username });
+
+    if (admin_user === null) throw new Error("User not found");
+
+    // Now
+    const db_pw = admin_user.password;
+    const match = db_pw === password;
+    console.log(`db_pw: ${db_pw} password: ${password}`);
+    if (!match) throw new Error("Password incorrect");
+  } catch (err) {
+    console.error(err);
+    throw err;
+  } finally {
+    await client.close();
+  }
+};
+
 const hashPassword = async (password) => {
   const saltRounds = 10;
   return await bcrypt.hash(password, saltRounds);
@@ -130,6 +152,7 @@ module.exports = {
   postUser,
   authenticateUser,
   authenticateUser2,
+  authenticateAdmin,
   postEntry,
   getUserData,
 };
