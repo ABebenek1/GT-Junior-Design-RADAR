@@ -1,6 +1,6 @@
 export const dummies = [
   {
-    id: "1",
+    username: "1",
     firstname: "Reginald",
     lastname: "Aguilar",
     email: "dee_gulgowski87@yahoo.com",
