@@ -316,7 +316,6 @@ const Resident_dashboard = () => {
     const removedElement = document.getElementById("result");
     removedElement.remove();
     console.log(data);
-  }
   };
 
   return (
@@ -344,26 +343,7 @@ const Resident_dashboard = () => {
               </Col>
             </div>
 
-            <div>
-              {/* metric selector */}
-              <Col style={{ marginLeft: "20px", marginRight: "20px" }}>
-                <Dropdown
-                  menu={{
-                    items: extractDropDownOptions(data),
-                    onClick: ({ key }) => {
-                      setMetricsOption(key);
-                    },
-                  }}
-                >
-                  <Button>
-                    <Space>
-                      {metricsOption ?? "select metrics"}
-                      <DownOutlined />
-                    </Space>
-                  </Button>
-                </Dropdown>
-              </Col>
-            </div>
+            
 
             <div>
               {/* graph selector */}
