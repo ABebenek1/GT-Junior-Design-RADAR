@@ -148,6 +148,22 @@ const getUserData = async (username) => {
   }
 };
 
+const getResidentData = async () => {
+  try {
+    await client.connect();
+    const collection = client.db("EmoryHospital2").collection("Residents");
+    const residentData = await collection.find({}).toArray();
+    
+    return residentData;
+  } catch (err) {
+    console.error(err);
+  } finally {
+    await client.close();
+  }
+};
+
+
+
 module.exports = {
   postUser,
   authenticateUser,
@@ -155,4 +171,5 @@ module.exports = {
   authenticateAdmin,
   postEntry,
   getUserData,
+  getResidentData,
 };
