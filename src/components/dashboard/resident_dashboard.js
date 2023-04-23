@@ -77,8 +77,10 @@ const titleStyle = {
   marginTop: "8px",
 };
 
-// bar chart global data
+
+// rechart dummy data to be removed
 var barData = new Array();
+
 
 // scatterplot global data
 var scatterData = new Array();
@@ -165,7 +167,8 @@ const Resident_dashboard = () => {
         });
 
         const userData = await res.json(); // parse response as json
-        console.log(userData);
+        //console.log(userData);
+        createBarData(userData);
         //setData(userData);
         createBarData(userData);
       } catch (e) {
@@ -313,6 +316,8 @@ const Resident_dashboard = () => {
   const handleClear = (e) => {
     const removedElement = document.getElementById("result");
     removedElement.remove();
+    console.log(data);
+  }
   };
 
   return (

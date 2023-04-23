@@ -35,18 +35,17 @@ const tableStyle = {
   height: "100vh",
 };
 
-const Admin_dashboard = () => {
-  const [people, setPeople] = useState(dummies);
-  const [targetCommentUser, setTargetCommentUser] = useState(null);
-  const [targetViewUser, setTargetViewUser] = useState(null);
-  const [showCommentBox, setShowCommentBox] = useState(false);
-  const [showViewBox, setShowViewBox] = useState(false);
-  const [messageApi, contextHolder] = message.useMessage();
-  const [img, setImg] = useState(null);
+const obj = [];
+const residentData = [];
 
-  //query all residentData from resident collection
+const Admin_dashboard = () => {
+  //query all resident data from resident collection
 
   useEffect(() => {
+    // hard-coded username to be apple
+    // TODO: not hard code the username
+    const url = "http://localhost:8000/user/apple";
+
     async function fetchResidentData() {
       try {
         const res = await fetch(`http://localhost:8000/resident-data`, {
@@ -56,13 +55,38 @@ const Admin_dashboard = () => {
         });
 
         const residentData = await res.json(); // parse response as json
-        console.log(residentData);
+
+        restructureData(residentData);
       } catch (e) {
         console.error(e);
       }
     }
-    fetchResidentData();
-  });
+    fetchResidentData(url);
+  }, []);
+
+  function restructureData(rData) {
+    // obj.push(residentData)
+      for (let i = 0; i < rData.length; i++) {
+
+        const resident = {
+          username: rData[i].username,
+          firstname: rData[i].firstname,
+          lastname: rData[i].lastname,
+          email: rData[i].email,
+          year: rData[i].year,
+        };
+
+        residentData.push(resident);
+      }
+  }
+
+  const [people, setPeople] = useState(residentData);
+  const [targetCommentUser, setTargetCommentUser] = useState(null);
+  const [targetViewUser, setTargetViewUser] = useState(null);
+  const [showCommentBox, setShowCommentBox] = useState(false);
+  const [showViewBox, setShowViewBox] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
+  const [img, setImg] = useState(null);
 
   const handleCommentSubmission = () => {
     messageApi.info(`Comment Submitted for ${targetCommentUser} `);
@@ -77,9 +101,9 @@ const Admin_dashboard = () => {
   }
   const columns = [
     {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
+      title: "Username",
+      dataIndex: "username",
+      key: "username",
       render: (text) => <a>{text}</a>,
     },
     {
