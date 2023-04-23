@@ -280,7 +280,6 @@ const Resident_dashboard = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-
     if (file) {
       fileReader.onload = function (event) {
         const text = event.target.result;
@@ -318,6 +317,7 @@ const Resident_dashboard = () => {
     removedElement.remove();
     console.log(data);
   }
+  };
 
   return (
     <>
