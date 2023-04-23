@@ -324,8 +324,8 @@ const Resident_dashboard = () => {
   };
 
   const handleClear = (e) => {
-    const removeElement = document.getElementById("result");
-    removeElement.remove();
+    const removedElement = document.getElementById("result");
+    removedElement.remove();
   };
 
   return (
@@ -415,7 +415,8 @@ const Resident_dashboard = () => {
             <button
               onClick={(e) => {
                 handleClear(e);
-              }}>
+              }}
+            >
               Clear Data
             </button>
           </form>
