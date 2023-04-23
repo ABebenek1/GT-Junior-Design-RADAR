@@ -209,7 +209,7 @@ const Resident_dashboard = () => {
 
         const userData = await res.json(); // parse response as json
         console.log(userData);
-        // setData(userData);
+        //setData(userData);
       } catch (e) {
         console.error(e);
       }
@@ -291,7 +291,6 @@ const Resident_dashboard = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-
     if (file) {
       fileReader.onload = function (event) {
         const text = event.target.result;
@@ -322,6 +321,11 @@ const Resident_dashboard = () => {
 
       fileReader.readAsText(file);
     }
+  };
+
+  const handleClear = (e) => {
+    const removeElement = document.getElementById("result");
+    removeElement.remove();
   };
 
   return (
@@ -407,6 +411,12 @@ const Resident_dashboard = () => {
               }}
             >
               Generate Data
+            </button>
+            <button
+              onClick={(e) => {
+                handleClear(e);
+              }}>
+              Clear Data
             </button>
           </form>
         </div>
