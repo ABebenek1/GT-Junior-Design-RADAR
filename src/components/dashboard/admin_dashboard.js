@@ -43,7 +43,26 @@ const Admin_dashboard = () => {
   const [showViewBox, setShowViewBox] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [img, setImg] = useState(null);
-  // const [renderPopConfirm, setRenderPopConfirm] = useState(false)
+
+  //query all residentData from resident collection
+
+  useEffect(() => {
+    async function fetchResidentData() {
+      try {
+        const res = await fetch(`http://localhost:8000/resident-data`, {
+          method: "GET",
+          headers: { Authentication: localStorage.getItem("token") },
+          credentials: "same-origin",
+        });
+
+        const residentData = await res.json(); // parse response as json
+        console.log(residentData);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    fetchResidentData();
+  });
 
   const handleCommentSubmission = () => {
     messageApi.info(`Comment Submitted for ${targetCommentUser} `);
@@ -164,7 +183,9 @@ const Admin_dashboard = () => {
             </Link>
             {/* Need to figure out a way to not hard code this span portion */}
             <Col span={8}></Col>
-            <Title style={{ color: "white", marginTop:"8px" }}>Admin Dashboard</Title>
+            <Title style={{ color: "white", marginTop: "8px" }}>
+              Admin Dashboard
+            </Title>
           </Row>
         </Header>
 

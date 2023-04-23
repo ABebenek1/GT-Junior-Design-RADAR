@@ -150,3 +150,17 @@ app.get("/user-data", checkUserAuth, async (req, res) => {
     res.status(404).send("user data notfound");
   }
 });
+
+app.get("/resident-data", checkUserAuth, async (req, res) => {
+  // res.send(req.username);
+  try {
+    // console.log("endpoint reached");
+    const userData = await database.getResidentData(req.username);
+    // console.log("resident data", userData);
+
+    res.status(200).json(userData);
+  } catch (err) {
+    console.error(err);
+    res.status(404).send("user data notfound");
+  }
+});
