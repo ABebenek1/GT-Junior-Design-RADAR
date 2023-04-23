@@ -324,6 +324,11 @@ const Resident_dashboard = () => {
     }
   };
 
+  const handleClear = (e) => {
+    const removedElement = document.getElementById("result");
+    removedElement.remove();
+  }
+
   return (
     <>
       <Layout style={layoutStyle}>
@@ -407,6 +412,13 @@ const Resident_dashboard = () => {
               }}
             >
               Generate Data
+            </button>
+            <button
+              onClick={(e) => {
+                handleClear(e);
+              }}
+            >
+              Clear Data
             </button>
           </form>
         </div>
