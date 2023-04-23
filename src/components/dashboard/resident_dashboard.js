@@ -77,12 +77,12 @@ const titleStyle = {
   marginTop: "8px",
 };
 
+
 // rechart dummy data to be removed
 var barData = new Array();
 
 
-
-// rechart dummy data to be removed
+// scatterplot global data
 var scatterData = new Array();
 
 const pieData = [
@@ -170,6 +170,7 @@ const Resident_dashboard = () => {
         //console.log(userData);
         createBarData(userData);
         //setData(userData);
+        createBarData(userData);
       } catch (e) {
         console.error(e);
       }
@@ -200,11 +201,11 @@ const Resident_dashboard = () => {
     }
     barData.push({name: "US", count: us_count},
                  {name: "MRI", count: mri_count},
-                 {name: "XR", count: xr_count}, 
+                 {name: "XR", count: xr_count},
                  {name :"CT", count: ct_count});
     console.log(barData);
   }
-  
+
 
   const extractDropDownOptions = (data) => {
     if (data === null) {
@@ -344,26 +345,6 @@ const Resident_dashboard = () => {
               </Col>
             </div>
 
-            <div>
-              {/* metric selector */}
-              <Col style={{ marginLeft: "20px", marginRight: "20px" }}>
-                <Dropdown
-                  menu={{
-                    items: extractDropDownOptions(data),
-                    onClick: ({ key }) => {
-                      setMetricsOption(key);
-                    },
-                  }}
-                >
-                  <Button>
-                    <Space>
-                      {metricsOption ?? "select metrics"}
-                      <DownOutlined />
-                    </Space>
-                  </Button>
-                </Dropdown>
-              </Col>
-            </div>
 
             <div>
               {/* graph selector */}
