@@ -209,7 +209,7 @@ const Resident_dashboard = () => {
 
         const userData = await res.json(); // parse response as json
         console.log(userData);
-        // setData(userData);
+        //setData(userData);
       } catch (e) {
         console.error(e);
       }
@@ -291,7 +291,6 @@ const Resident_dashboard = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-
     if (file) {
       fileReader.onload = function (event) {
         const text = event.target.result;
@@ -327,7 +326,7 @@ const Resident_dashboard = () => {
   const handleClear = (e) => {
     const removedElement = document.getElementById("result");
     removedElement.remove();
-  }
+  };
 
   return (
     <>
