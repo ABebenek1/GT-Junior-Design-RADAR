@@ -77,53 +77,10 @@ const titleStyle = {
   marginTop: "8px",
 };
 
-// rechart dummy data to be removed
-const barData = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
+// bar chart global data
+var barData = new Array();
 
-// rechart dummy data to be removed
+// scatterplot global data
 var scatterData = new Array();
 
 const pieData = [
@@ -210,12 +167,42 @@ const Resident_dashboard = () => {
         const userData = await res.json(); // parse response as json
         console.log(userData);
         //setData(userData);
+        createBarData(userData);
       } catch (e) {
         console.error(e);
       }
     }
     fetchData(url);
   }, []);
+
+  function createBarData(userData) {
+    let us_count = 0;
+    let mri_count = 0;
+    let xr_count = 0;
+    let ct_count = 0;
+    for (let i = 0; i < userData.length; i++) {
+      switch (userData[i].proc_id) {
+        case "US":
+          us_count++;
+          break;
+        case "MRI":
+          mri_count++;
+          break;
+        case "XR":
+          xr_count++;
+          break;
+        case "CT":
+          ct_count++;
+          break;
+      }
+    }
+    barData.push({name: "US", count: us_count},
+                 {name: "MRI", count: mri_count},
+                 {name: "XR", count: xr_count},
+                 {name :"CT", count: ct_count});
+    console.log(barData);
+  }
+
 
   const extractDropDownOptions = (data) => {
     if (data === null) {
@@ -353,26 +340,6 @@ const Resident_dashboard = () => {
               </Col>
             </div>
 
-            <div>
-              {/* metric selector */}
-              <Col style={{ marginLeft: "20px", marginRight: "20px" }}>
-                <Dropdown
-                  menu={{
-                    items: extractDropDownOptions(data),
-                    onClick: ({ key }) => {
-                      setMetricsOption(key);
-                    },
-                  }}
-                >
-                  <Button>
-                    <Space>
-                      {metricsOption ?? "select metrics"}
-                      <DownOutlined />
-                    </Space>
-                  </Button>
-                </Dropdown>
-              </Col>
-            </div>
 
             <div>
               {/* graph selector */}
@@ -447,9 +414,7 @@ const Resident_dashboard = () => {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="pv" stackId="a" fill="#8884d8" />
-                <Bar dataKey="amt" stackId="a" fill="#82ca9d" />
-                <Bar dataKey="uv" fill="#ffc658" />
+                <Bar dataKey="count" stackId="a" fill="#8884d8" />
               </BarChart>
 
               {/* <img className="graph" src={BarImage} alt="picture" /> */}
