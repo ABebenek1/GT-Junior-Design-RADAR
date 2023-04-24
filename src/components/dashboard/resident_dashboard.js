@@ -2,14 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./resident_dashboard.css";
 
-// dummy graph image files to be removed
-import EmoryLogo from "../../images/emory.png";
-
 // Rechart UI
 import {
   BarChart,
   Bar,
-  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -28,7 +24,9 @@ import { Layout } from "antd";
 import { Button } from "antd";
 import { DatePicker, message } from "antd";
 import { Typography } from "antd";
-import { Dropdown } from "antd";
+import { Dropdown, Space } from "antd";
+import { DownOutlined } from "@ant-design/icons";
+// import { get } from "mongoose";
 
 const { Title } = Typography;
 
@@ -37,6 +35,7 @@ const { RangePicker } = DatePicker;
 // ANTD CSS - TO be migrated to a seperate CSS file
 const { Header, Content } = Layout;
 
+// css styling
 const headerStyle = {
   textAlign: "center",
   color: "#fff",
@@ -47,11 +46,14 @@ const headerStyle = {
 };
 
 const contentStyle = {
+  width: "100%",
   textAlign: "center",
   minHeight: 120,
   lineHeight: "120px",
   color: "black",
-  backgroundColor: "#108ee9",
+  backgroundColor: "#108fe9",
+  display: "flex",
+  justifyContent: "space-around",
 };
 
 const layoutStyle = {
@@ -65,86 +67,35 @@ const graphContainer = {
   backgroundColor: "red",
 };
 
-const agreeDisagreeRate = {
-  width:"100%",
-  height:"100%",
-}
-
 const titleStyle = {
   color: "white",
+  marginLeft: "137px",
+  marginTop: "8px",
 };
 
+
 // rechart dummy data to be removed
+var barData = new Array();
 
-const barData = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
 
+// scatterplot global data
 var scatterData = new Array();
 
-const pieData = [
-  { name: "Group A", value: 400 },
-  { name: "Group B", value: 300 },
-  { name: "Group C", value: 300 },
-  { name: "Group D", value: 200 },
-  { name: "Group E", value: 278 },
-  { name: "Group F", value: 189 },
-];
+// frequency of dates for scatterplot
+var dateFreq = new Array();
 
-const agreeDisagreeData = [
-  {name: "Agree", value: 200},
-  {name: "Agree with Incidental Finding", value: 50},
-  {name: "Disagree", value: 20},
-  {name: "Disagree with Preliminary Report", value: 40}
-]
+var pieData = new Array(); 
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-
+//resident dashboard component
 const Resident_dashboard = () => {
   const [image, setImage] = useState("BarImage");
   const [date, setDate] = useState(null);
+  const [file, setFile] = useState();
+  const [array, setArray] = useState(null);
+  const [data, setData] = useState(null);
+  const [metricsOption, setMetricsOption] = useState(null);
 
+  // for data selector
   const handleDateChange = (value) => {
     message.info(
       `Selected Date: ${value ? value.format("YYYY-MM-DD") : "None"}`
@@ -152,6 +103,7 @@ const Resident_dashboard = () => {
     setDate(value);
   };
 
+  // graph selector
   const displayOnChange = (event) => {
     const valueSelectedByUser = parseInt(event.target.value);
 
@@ -168,8 +120,144 @@ const Resident_dashboard = () => {
     }
   };
 
-  const [file, setFile] = useState();
-  const [array, setArray] = useState([]);
+  // Load in data from backend server
+  // https://jontkoh2424.medium.com/connecting-react-to-express-server-48948b74d091
+  var userData = [];
+  let name = "";
+  useEffect(() => {
+    // hard-coded username to be apple
+    // TODO: not hard code the username
+    const url = "http://localhost:8000/user/apple";
+
+    async function fetchData() {
+      try {
+        const res = await fetch(`http://localhost:8000/user-data`, {
+          method: "GET",
+          headers: { Authentication: localStorage.getItem("token") },
+          credentials: "same-origin",
+        });
+
+        userData = await res.json(); // parse response as json
+        console.log(userData);
+        createBarData(userData);
+        getName(userData);
+        //setData(userData);
+
+        createPieData(userData);
+        
+
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    fetchData(url);
+
+    async function fetchResidentDate() {
+      if (scatterData.length != 0) {
+        return
+      }
+      let temp = await fetchData()
+      temp = [];
+      let residentDate = "";
+      dateFreq = [];
+      for (let i = 0; i < userData.length; i++) {
+        temp[i] = userData[i].exam_date.slice(0, 10)
+      }
+      for (let j = 0; j < userData.length; j++) {
+        if (residentDate.localeCompare(dateFreq[j]) == 0) {
+          dateFreq[j]++;
+        } else {
+          dateFreq[dateFreq.length] = 1
+        }
+      }
+      for (let i = 0; i < userData.length; i++) {
+        scatterData.push({x: temp[i], y: dateFreq[i]})
+      }
+      console.log(scatterData)
+      console.log(dateFreq)
+    }
+    fetchResidentDate()
+  }, []);
+
+  function createPieData(userData) {
+    let rpr1_count = 0;
+    let rpr2_count = 0; 
+    let rpr3_count = 0;
+    let rpr4_count = 0;
+    let rpr5_count = 0;
+
+    for (let i = 0; i < userData.length; i++) {
+      switch(userData[i].feedback_score) {
+        case "1":
+          rpr1_count++;
+          break;
+        case "2":
+          rpr2_count++;
+          break;
+        case "3":
+          rpr3_count++;
+          break;
+        case "4":
+          rpr4_count++;
+          break;
+        case "5":
+          rpr5_count++;
+    }
+  }
+
+  pieData = [{name:"RPR-1", value: rpr1_count},
+             {name: "RPR-2", value: rpr2_count},
+             {name: "RPR-3", value: rpr3_count},
+             {name: "RPR-4", value: rpr4_count},
+             {name: "RPR-5", value: rpr5_count},]
+}
+
+  function createBarData(userData) {
+    let us_count = 0;
+    let mri_count = 0;
+    let xr_count = 0;
+    let ct_count = 0;
+    for (let i = 0; i < userData.length; i++) {
+      switch (userData[i].proc_id) {
+        case "US":
+          us_count++;
+          break;
+        case "MRI":
+          mri_count++;
+          break;
+        case "XR":
+          xr_count++;
+          break;
+        case "CT":
+          ct_count++;
+          break;
+      }
+    }
+    barData = [{name: "US", count: us_count},
+                 {name: "MRI", count: mri_count},
+                 {name: "XR", count: xr_count},
+                 {name :"CT", count: ct_count}];
+    console.log(barData);
+  }
+
+  function getName(userData) {
+    const title = document.getElementById("title")
+    name = userData[0].firstname + " " + userData[0].lastname;
+    title.innerText = "Welcome" + " " + name + "!";
+  }
+
+  const extractDropDownOptions = (data) => {
+    if (data === null) {
+      return [];
+    }
+    // extract the metrics name from resp obj's data object
+    // Object.keys returns an array of string
+    const metricsNames = Object.keys(data.data);
+    console.log(metricsNames);
+    // metricsNames.map((entry) => {return {label: entry, key: entry }});
+    return metricsNames.map((entry) => ({ label: entry, key: entry }));
+  };
+  // console.log(processData(data));
 
   const fileReader = new FileReader();
 
@@ -232,8 +320,8 @@ const Resident_dashboard = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-
     if (file) {
+      scatterData = [];
       fileReader.onload = function (event) {
         const text = event.target.result;
         let stats_array = csvFileToArray(text);
@@ -246,48 +334,82 @@ const Resident_dashboard = () => {
         document.getElementById(
           "result"
         ).innerHTML += `<div>Average: ${stats_array[2]}</div><br />`;
+
+        const pdf_content = [
+          `Min: ${stats_array[0]}\n`,
+          `Max: ${stats_array[1]}\n`,
+          `Average: ${stats_array[2]}\n`,
+        ];
+        const download_file = new Blob(pdf_content, { type: "text/plain" });
+
+        const element = document.createElement("a");
+        element.href = URL.createObjectURL(download_file);
+        element.download = "RADAR_Statistics-" + Date.now() + ".txt";
+        document.body.appendChild(element);
+        element.click();
       };
 
       fileReader.readAsText(file);
     }
   };
 
+  const handleClear = (e) => {
+    const removedElement = document.getElementById("result");
+    removedElement.remove();
+    console.log(data);
+  };
+
   return (
     <>
       <Layout style={layoutStyle}>
+        {/* header */}
         <Header style={headerStyle}>
           <Row>
             <Link to="/sign-in">
               <button className="logout">Logout</button>
             </Link>
             {/* Need to figure out a way to not hard code this span portion */}
-            <Col span={8}></Col>
-            <Title style={titleStyle}>Resident Dashboard</Title>
+            <Col span={6}></Col>
+
+            <Title style={titleStyle} id="title"> </Title>
           </Row>
         </Header>
 
         <Content style={contentStyle}>
           <Row>
-            <Col flex={3}>
-              <RangePicker onChange={handleDateChange} />
-            </Col>
-            <Col flex={2}>
-              <select
-                onChange={displayOnChange}
-                className="dropdown"
-                name="graphs"
-                id="graphs"
-              >
-                <option value="1">Bar Graph</option>
-                <option value="2">Pie Chart</option>
-                <option value="3">Scatter plot</option>
-              </select>
-            </Col>
+
+            <div>
+              {/* date selector */}
+              <Col flex={3}>
+                <RangePicker onChange={handleDateChange} />
+              </Col>
+            </div>
+
+
+            <div>
+              {/* graph selector */}
+              <Col flex={2}>
+                <select
+                  onChange={displayOnChange}
+                  className="dropdown"
+                  name="graphs"
+                  id="graphs"
+                >
+                  <option value="1">Bar Graph</option>
+                  <option value="2">Pie Chart</option>
+                  <option value="3">Scatter plot</option>
+                </select>
+              </Col>
+            </div>
+
             <Col flex={2}></Col>
           </Row>
         </Content>
 
-        <div style={{ textAlign: "center" }}>
+
+        {/* csv stuff */}
+
+        <div style={{ textAlign: "center", backgroundColor: "#108fe9" }}>
           <form>
             <input
               type={"file"}
@@ -302,13 +424,22 @@ const Resident_dashboard = () => {
             >
               Generate Data
             </button>
+            <button
+              onClick={(e) => {
+                handleClear(e);
+              }}
+            >
+              Clear Data
+            </button>
           </form>
         </div>
 
-        <br />
 
-        <div id="result"></div>
+        {/* where the statisic are displayed */}
 
+        <div id="result" style={{ backgroundColor: "lightblue" }}></div>
+
+        {/* where the graph is displayed */}
         <div style={graphContainer}>
           {image === "BarImage" && (
             <div className="content">
@@ -326,11 +457,10 @@ const Resident_dashboard = () => {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
+                <Title text="Number of Readings per Scan Type"/>
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="pv" stackId="a" fill="#8884d8" />
-                <Bar dataKey="amt" stackId="a" fill="#82ca9d" />
-                <Bar dataKey="uv" fill="#ffc658" />
+                <Bar dataKey="count" stackId="a" fill="#8884d8" />
               </BarChart>
 
               {/* <img className="graph" src={BarImage} alt="picture" /> */}
@@ -346,23 +476,15 @@ const Resident_dashboard = () => {
                   data={pieData}
                   cx="50%"
                   cy="50%"
-                  outerRadius={80}
+                  outerRadius={180}
                   fill="#8884d8"
                   label
                 />
-                {/* <Pie
-              dataKey="value"
-              data={data02}
-              cx={500}
-              cy={200}
-              innerRadius={40}
-              outerRadius={80}
-              fill="#82ca9d"
-            /> */}
                 <Tooltip />
               </PieChart>
             </div>
           )}
+
           {image === "ScatterImage" && (
             <div className="content">
               <ScatterChart
@@ -377,40 +499,15 @@ const Resident_dashboard = () => {
                 }}
               >
                 <CartesianGrid />
-                <XAxis type="number" dataKey="x" name="Day" />
-                <YAxis type="number" dataKey="y" name="Score" unit="%" />
+                <XAxis type="category" dataKey="x" name="Date" />
+                <YAxis type="number" dataKey="y" name="Frequency" unit=" exams" />
                 <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-                <Scatter name="A school" data={scatterData} fill="#8884d8" />
+                <Scatter name="Exam Frequency" data={scatterData} fill="#8884d8" />
               </ScatterChart>
             </div>
           )}
-          {/* </div> */}
         </div>
-      )}
-      {/* </div> */}
-      </div>
-      <div style={agreeDisagreeRate}
-      align = "center">
-        <PieChart width={800} height={400}>
-          <Pie
-            dataKey="value"
-            isAnimationActive={false}
-            data={agreeDisagreeData}
-            cx={120}
-            cy={200}
-            innerRadius={60}
-            outerRadius={80}
-            fill="#8884d8"
-            paddingAngle={5}
-          >
-          {agreeDisagreeData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-          <Tooltip />
-        </PieChart>
-      </div>
-        </Layout>
+      </Layout>
     </>
   );
 };

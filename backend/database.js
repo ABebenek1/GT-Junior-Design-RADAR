@@ -1,243 +1,173 @@
-const info = new Map();
+const { MongoClient, ServerApiVersion } = require("mongodb");
+const bcrypt = require("bcrypt");
 
-info.set("apple", {
-  data: {
-    accuracy: {
-      "2020-1-1": 0.54,
-      "2020-2-1": 0.55,
-      "2020-3-1": 0.66,
-      "2020-4-1": 0.69,
-    },
-    speed: {
-      "2020-1-1": 2.4,
-      "2020-2-1": 2.65,
-      "2020-3-1": 3.39,
-      "2020-4-1": 4.53,
-    },
-    quantity: {
-      "2020-1-1": 1,
-      "2020-2-1": 2,
-      "2020-3-1": 4,
-      "2020-4-1": 5,
-    },
-    performance: {
-      "2020-1-1": 0.77,
-      "2020-2-1": 0.74,
-      "2020-3-1": 0.8,
-      "2020-4-1": 0.89,
-    },
-  },
+const uri =
+  "mongodb+srv://winniewjeng:apple@cluster0.bpf4vis.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverApi: ServerApiVersion.v1,
 });
 
-info.set("banana", {
-  data: {
-    accuracy: {
-      "2020-1-1": 0.54,
-      "2020-2-1": 0.55,
-      "2020-3-1": 0.66,
-      "2020-4-1": 0.69,
-    },
-    speed: {
-      "2020-1-1": 2.4,
-      "2020-2-1": 2.65,
-      "2020-3-1": 3.39,
-      "2020-4-1": 4.53,
-    },
-    quantity: {
-      "2020-1-1": 1,
-      "2020-2-1": 2,
-      "2020-3-1": 4,
-      "2020-4-1": 5,
-    },
-    performance: {
-      "2020-1-1": 0.77,
-      "2020-2-1": 0.74,
-      "2020-3-1": 0.8,
-      "2020-4-1": 0.89,
-    },
-  },
-});
+const getUser = async (username) => {
+  try {
+    await client.connect();
+    const collection = client.db("EmoryHospital").collection("users_data");
+    return await collection.findOne({ username }); // returns null if no entry found
+  } catch (err) {
+    console.error(err);
+  } finally {
+    await client.close();
+  }
+};
 
-info.set("hanssen", {
-  data: {
-    accuracy: {
-      "2020-1-1": 0.54,
-      "2020-2-1": 0.55,
-      "2020-3-1": 0.66,
-      "2020-4-1": 0.69,
-    },
-    speed: {
-      "2020-1-1": 2.4,
-      "2020-2-1": 2.65,
-      "2020-3-1": 3.39,
-      "2020-4-1": 4.53,
-    },
-    quantity: {
-      "2020-1-1": 1,
-      "2020-2-1": 2,
-      "2020-3-1": 4,
-      "2020-4-1": 5,
-    },
-    performance: {
-      "2020-1-1": 0.77,
-      "2020-2-1": 0.74,
-      "2020-3-1": 0.8,
-      "2020-4-1": 0.89,
-    },
-  },
-});
+const authenticateUser = async (username, password) => {
+  try {
+    await client.connect();
+    const collection = client.db("EmoryHospital").collection("users_data");
+    const user = await collection.findOne({ username });
+    if (user == null) throw new Error("User not found");
+    // Before
+    const db_pw = user.password;
+    const match = await bcrypt.compare(password, db_pw);
+    if (!match) throw new Error("Password incorrect");
+  } catch (err) {
+    console.error(err);
+    throw err;
+  } finally {
+    await client.close();
+  }
+};
 
-info.set("benson", {
-  data: {
-    accuracy: {
-      "2020-1-1": 0.54,
-      "2020-2-1": 0.55,
-      "2020-3-1": 0.66,
-      "2020-4-1": 0.69,
-    },
-    speed: {
-      "2020-1-1": 2.4,
-      "2020-2-1": 2.65,
-      "2020-3-1": 3.39,
-      "2020-4-1": 4.53,
-    },
-    quantity: {
-      "2020-1-1": 1,
-      "2020-2-1": 2,
-      "2020-3-1": 4,
-      "2020-4-1": 5,
-    },
-    performance: {
-      "2020-1-1": 0.77,
-      "2020-2-1": 0.74,
-      "2020-3-1": 0.8,
-      "2020-4-1": 0.89,
-    },
-  },
-});
+// DO NOT DELETE - authenticate EmoryHospital2 user at signin
+const authenticateUser2 = async (username, password) => {
+  try {
+    await client.connect();
 
-info.set("alex", {
-  data: {
-    accuracy: {
-      "2020-1-1": 0.54,
-      "2020-2-1": 0.55,
-      "2020-3-1": 0.66,
-      "2020-4-1": 0.69,
-    },
-    speed: {
-      "2020-1-1": 2.4,
-      "2020-2-1": 2.65,
-      "2020-3-1": 3.39,
-      "2020-4-1": 4.53,
-    },
-    quantity: {
-      "2020-1-1": 1,
-      "2020-2-1": 2,
-      "2020-3-1": 4,
-      "2020-4-1": 5,
-    },
-    performance: {
-      "2020-1-1": 0.77,
-      "2020-2-1": 0.74,
-      "2020-3-1": 0.8,
-      "2020-4-1": 0.89,
-    },
-  },
-});
+    const residents_collection = client
+      .db("EmoryHospital2")
+      .collection("Residents");
+    const resident_user = await residents_collection.findOne({ username });
 
-info.set("brandon", {
-  data: {
-    accuracy: {
-      "2020-1-1": 0.54,
-      "2020-2-1": 0.55,
-      "2020-3-1": 0.66,
-      "2020-4-1": 0.69,
-    },
-    speed: {
-      "2020-1-1": 2.4,
-      "2020-2-1": 2.65,
-      "2020-3-1": 3.39,
-      "2020-4-1": 4.53,
-    },
-    quantity: {
-      "2020-1-1": 1,
-      "2020-2-1": 2,
-      "2020-3-1": 4,
-      "2020-4-1": 5,
-    },
-    performance: {
-      "2020-1-1": 0.77,
-      "2020-2-1": 0.74,
-      "2020-3-1": 0.8,
-      "2020-4-1": 0.89,
-    },
-  },
-});
+    if (resident_user === null) throw new Error("User not found");
 
-info.set("harish", {
-  data: {
-    accuracy: {
-      "2020-1-1": 0.54,
-      "2020-2-1": 0.55,
-      "2020-3-1": 0.66,
-      "2020-4-1": 0.69,
-    },
-    speed: {
-      "2020-1-1": 2.4,
-      "2020-2-1": 2.65,
-      "2020-3-1": 3.39,
-      "2020-4-1": 4.53,
-    },
-    quantity: {
-      "2020-1-1": 1,
-      "2020-2-1": 2,
-      "2020-3-1": 4,
-      "2020-4-1": 5,
-    },
-    performance: {
-      "2020-1-1": 0.77,
-      "2020-2-1": 0.74,
-      "2020-3-1": 0.8,
-      "2020-4-1": 0.89,
-    },
-  },
-});
+    // Now
+    const db_pw = resident_user.password;
+    const match = db_pw === password;
+    console.log(`db_pw: ${db_pw} password: ${password}`);
+    if (!match) throw new Error("Password incorrect");
+  } catch (err) {
+    console.error(err);
+    throw err;
+  } finally {
+    await client.close();
+  }
+};
 
-info.set("winnie", {
-  data: {
-    accuracy: {
-      "2020-1-1": 0.99,
-      "2020-2-1": 0.99,
-      "2020-3-1": 0.99,
-      "2020-4-1": 0.99,
-    },
-    speed: {
-      "2020-1-1": 5.4,
-      "2020-2-1": 6.65,
-      "2020-3-1": 8.39,
-      "2020-4-1": 9.53,
-    },
-    quantity: {
-      "2020-1-1": 10,
-      "2020-2-1": 20,
-      "2020-3-1": 40,
-      "2020-4-1": 50,
-    },
-    performance: {
-      "2020-1-1": 0.9,
-      "2020-2-1": 0.94,
-      "2020-3-1": 0.98,
-      "2020-4-1": 0.99,
-    },
-  },
-});
+const authenticateAdmin = async (username, password) => {
+  try {
+    await client.connect();
 
-function getUserInfo(username) {
-  return info.get(username);
-}
+    const admin_collection = client.db("EmoryHospital2").collection("Admins");
+    const admin_user = await admin_collection.findOne({ username });
 
-// exporting the function getUserInfo
-// module.exports = getUserInfo
+    if (admin_user === null) throw new Error("User not found");
 
-// now exporting an object getUserInfo with key getUserInfo (str) and value the val of getUserInfo (fxn)
-module.exports = { getUserInfo };
+    // Now
+    const db_pw = admin_user.password;
+    const match = db_pw === password;
+    console.log(`db_pw: ${db_pw} password: ${password}`);
+    if (!match) throw new Error("Password incorrect");
+  } catch (err) {
+    console.error(err);
+    throw err;
+  } finally {
+    await client.close();
+  }
+};
+
+const hashPassword = async (password) => {
+  const saltRounds = 10;
+  return await bcrypt.hash(password, saltRounds);
+};
+
+// post user to the database
+const postUser = async ({
+  isAdmin,
+  firstName,
+  lastName,
+  username,
+  password,
+  remember,
+}) => {
+  try {
+    await client.connect();
+    const collection = client.db("EmoryHospital").collection("users_data");
+    // hash the password
+    const hashedPassword = await hashPassword(password);
+    await collection.insertOne({
+      username,
+      password: hashedPassword,
+      isAdmin,
+      firstName,
+      lastName,
+    });
+  } catch (err) {
+    console.error(err);
+  } finally {
+    console.log("inserted user into DB!");
+    await client.close();
+  }
+};
+
+// upload entry from .csv spreadsheet
+const postEntry = async (obj) => {
+  try {
+    await client.connect();
+    const collection = client.db("EmoryHospital2").collection("Residents");
+    await collection.insertMany(obj);
+  } catch (err) {
+    console.error(err);
+  } finally {
+    await client.close();
+  }
+};
+
+const getUserData = async (username) => {
+  try {
+    await client.connect();
+    const collection = client.db("EmoryHospital2").collection("Data");
+    const userData = await collection.find({ username }).toArray();
+    // .forEach((x) => console.log(x));
+    console.log(userData);
+    return userData;
+  } catch (err) {
+    console.error(err);
+  } finally {
+    await client.close();
+  }
+};
+
+const getResidentData = async () => {
+  try {
+    await client.connect();
+    const collection = client.db("EmoryHospital2").collection("Residents");
+    const residentData = await collection.find({}).toArray();
+
+    return residentData;
+  } catch (err) {
+    console.error(err);
+  } finally {
+    await client.close();
+  }
+};
+
+module.exports = {
+  postUser,
+  authenticateUser,
+  authenticateUser2,
+  authenticateAdmin,
+  postEntry,
+  getUserData,
+  getResidentData,
+};
