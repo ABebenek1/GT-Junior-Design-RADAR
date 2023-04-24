@@ -88,14 +88,7 @@ var scatterData = new Array();
 // frequency of dates for scatterplot
 var dateFreq = new Array();
 
-const pieData = [
-  { name: "Group A", value: 400 },
-  { name: "Group B", value: 300 },
-  { name: "Group C", value: 300 },
-  { name: "Group D", value: 200 },
-  { name: "Group E", value: 278 },
-  { name: "Group F", value: 189 },
-];
+var pieData = new Array(); 
 
 const agreeDisagreeData = [
   { name: "Agree", value: 200 },
@@ -171,10 +164,11 @@ const Resident_dashboard = () => {
         });
 
         userData = await res.json(); // parse response as json
-        //console.log(userData);
+        console.log(userData);
         createBarData(userData);
         //setData(userData);
-        createBarData(userData);
+        createPieData(userData);
+        
       } catch (e) {
         console.error(e);
       }
@@ -207,6 +201,39 @@ const Resident_dashboard = () => {
     }
     fetchResidentDate()
   }, []);
+
+  function createPieData(userData) {
+    let rpr1_count = 0;
+    let rpr2_count = 0; 
+    let rpr3_count = 0;
+    let rpr4_count = 0;
+    let rpr5_count = 0;
+
+    for (let i = 0; i < userData.length; i++) {
+      switch(userData[i].feedback_score) {
+        case "1":
+          rpr1_count++;
+          break;
+        case "2":
+          rpr2_count++;
+          break;
+        case "3":
+          rpr3_count++;
+          break;
+        case "4":
+          rpr4_count++;
+          break;
+        case "5":
+          rpr5_count++;
+    }
+  }
+
+  pieData = [{name:"RPR-1", value: rpr1_count},
+             {name: "RPR-2", value: rpr2_count},
+             {name: "RPR-3", value: rpr3_count},
+             {name: "RPR-4", value: rpr4_count},
+             {name: "RPR-5", value: rpr5_count},]
+}
 
   function createBarData(userData) {
     let us_count = 0;
@@ -446,6 +473,7 @@ const Resident_dashboard = () => {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
+                <Title text="Number of Readings per Scan Type"/>
                 <Tooltip />
                 <Legend />
                 <Bar dataKey="count" stackId="a" fill="#8884d8" />
@@ -464,7 +492,7 @@ const Resident_dashboard = () => {
                   data={pieData}
                   cx="50%"
                   cy="50%"
-                  outerRadius={80}
+                  outerRadius={180}
                   fill="#8884d8"
                   label
                 />
