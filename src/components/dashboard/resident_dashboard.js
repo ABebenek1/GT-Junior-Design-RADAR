@@ -6,7 +6,6 @@ import "./resident_dashboard.css";
 import {
   BarChart,
   Bar,
-  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -67,11 +66,6 @@ const graphContainer = {
   backgroundColor: "red",
 };
 
-const agreeDisagreeRate = {
-  width: "100%",
-  height: "100%",
-};
-
 const titleStyle = {
   color: "white",
   marginLeft: "137px",
@@ -97,15 +91,6 @@ const pieData = [
   { name: "Group E", value: 278 },
   { name: "Group F", value: 189 },
 ];
-
-const agreeDisagreeData = [
-  { name: "Agree", value: 200 },
-  { name: "Agree with Incidental Finding", value: 50 },
-  { name: "Disagree", value: 20 },
-  { name: "Disagree with Preliminary Report", value: 40 },
-];
-
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 //resident dashboard component
 const Resident_dashboard = () => {
@@ -138,20 +123,6 @@ const Resident_dashboard = () => {
 
     if (valueSelectedByUser === 3) {
       setImage("ScatterImage");
-    }
-  };
-
-  // for metric selector
-  const displayCategories = (event) => {
-    const valueSelectedByUser = parseInt(event.target.value);
-
-    if (valueSelectedByUser === 1) {
-    }
-
-    if (valueSelectedByUser === 2) {
-    }
-
-    if (valueSelectedByUser === 3) {
     }
   };
 
@@ -495,42 +466,7 @@ const Resident_dashboard = () => {
               </ScatterChart>
             </div>
           )}
-
         </div>
-
-        {/* the following should be delete if not in use */}
-        {/* <div style={agreeDisagreeRate}
-      align = "center">
-        <select
-        onChange={displayCategories}
-        className="dropdown"
-        name="agreeDisagreeGraphs"
-        id="agreeDisagreeGraphs"
-        >
-          <option value="1">Category 1</option>
-          <option value="2">Category 2</option>
-          <option value="3">Category 3</option>
-        </select>
-        <PieChart width={800} height={400}>
-          <Pie
-            dataKey="value"
-            isAnimationActive={false}
-            data={agreeDisagreeData}
-            cx={120}
-            cy={200}
-            innerRadius={60}
-            outerRadius={80}
-            fill="#8884d8"
-            paddingAngle={5}
-          >
-          {agreeDisagreeData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-          <Tooltip />
-        </PieChart>
-      </div> */}
-
       </Layout>
     </>
   );
