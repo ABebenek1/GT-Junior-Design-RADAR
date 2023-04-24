@@ -35,6 +35,13 @@ const tableStyle = {
   height: "100vh",
 };
 
+const titleStyle = {
+  color: "white",
+  marginLeft: "137px",
+  marginTop: "8px",
+};
+
+const obj = [];
 let residentData = [];
 
 const Admin_dashboard = () => {
@@ -217,7 +224,7 @@ const Admin_dashboard = () => {
             </Link>
             {/* Need to figure out a way to not hard code this span portion */}
             <Col span={8}></Col>
-            <Title style={{ color: "white", marginTop: "8px" }}>
+            <Title style={titleStyle}>
               Admin Dashboard
             </Title>
           </Row>

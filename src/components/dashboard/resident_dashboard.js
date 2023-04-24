@@ -74,6 +74,7 @@ const agreeDisagreeRate = {
 
 const titleStyle = {
   color: "white",
+  marginLeft: "137px",
   marginTop: "8px",
 };
 
