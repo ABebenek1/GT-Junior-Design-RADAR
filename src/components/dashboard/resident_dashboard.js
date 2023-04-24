@@ -26,6 +26,7 @@ import { DatePicker, message } from "antd";
 import { Typography } from "antd";
 import { Dropdown, Space } from "antd";
 import { DownOutlined } from "@ant-design/icons";
+// import { get } from "mongoose";
 
 const { Title } = Typography;
 
@@ -129,6 +130,7 @@ const Resident_dashboard = () => {
   // Load in data from backend server
   // https://jontkoh2424.medium.com/connecting-react-to-express-server-48948b74d091
   var userData = [];
+  let name = "";
   useEffect(() => {
     // hard-coded username to be apple
     // TODO: not hard code the username
@@ -145,8 +147,9 @@ const Resident_dashboard = () => {
         userData = await res.json(); // parse response as json
         //console.log(userData);
         createBarData(userData);
+        getName(userData);
         //setData(userData);
-        createBarData(userData);
+        // createBarData(userData);
       } catch (e) {
         console.error(e);
       }
@@ -206,6 +209,12 @@ const Resident_dashboard = () => {
                  {name: "XR", count: xr_count},
                  {name :"CT", count: ct_count}];
     console.log(barData);
+  }
+
+  function getName(userData) {
+    const title = document.getElementById("title")
+    name = userData[0].firstname + " " + userData[0].lastname;
+    title.innerText = "Welcome" + " " + name + "!";
   }
 
   const extractDropDownOptions = (data) => {
@@ -331,8 +340,9 @@ const Resident_dashboard = () => {
               <button className="logout">Logout</button>
             </Link>
             {/* Need to figure out a way to not hard code this span portion */}
-            <Col span={8}></Col>
-            <Title style={titleStyle}>Resident Dashboard</Title>
+            <Col span={6}></Col>
+
+            <Title style={titleStyle} id="title"> </Title>
           </Row>
         </Header>
 
