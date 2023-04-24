@@ -43,7 +43,6 @@ const Admin_dashboard = () => {
   useEffect(() => {
     // hard-coded username to be apple
     // TODO: not hard code the username
-    const url = "http://localhost:8000/user/apple";
 
     async function fetchResidentData() {
       try {
@@ -60,43 +59,64 @@ const Admin_dashboard = () => {
         console.error(e);
       }
     }
-    fetchResidentData(url);
+    fetchResidentData();
   }, []);
 
+  
+
   function restructureData(rData) {
+    let temp = [];
 
-      let temp = [];
+    for (let i = 0; i < rData.length; i++) {
+      const resident = {
+        username: rData[i].username,
+        firstname: rData[i].firstname,
+        lastname: rData[i].lastname,
+        email: rData[i].email,
+        year: rData[i].year,
+      };
 
-      for (let i = 0; i < rData.length; i++) {
+      temp.push(resident);
+    }
 
-        const resident = {
-          username: rData[i].username,
-          firstname: rData[i].firstname,
-          lastname: rData[i].lastname,
-          email: rData[i].email,
-          year: rData[i].year,
-        };
-
-        temp.push(resident);
-      }
-
-      residentData = temp;
-      console.log("temp:", temp)
+    residentData = temp;
   }
 
-  console.log(residentData);
-
   const [people, setPeople] = useState(residentData);
+
+  let displayData;
+
+  function onSearch(e) {
+    let input = e.target.value;
+
+    displayData = [];
+
+    if (input !== "") {
+      for (let i = 0; i < residentData.length; i++) {
+        if (
+          input.toLowerCase() === residentData[i].firstname.toLowerCase() ||
+          input.toLowerCase() === residentData[i].firstname.toLowerCase() ||
+          input.toLowerCase() === residentData[i].username.toLowerCase() ||
+          input.toLowerCase() === residentData[i].email.toLowerCase() ||
+          input.toLowerCase() === residentData[i].year.toLowerCase()
+        ) {
+          displayData.push(residentData[i]);
+        }
+      }
+      setPeople(displayData);
+    }
+
+    if (input === "") {
+      setPeople(residentData);
+    }
+  }
+
   const [targetCommentUser, setTargetCommentUser] = useState(null);
   const [targetViewUser, setTargetViewUser] = useState(null);
   const [showCommentBox, setShowCommentBox] = useState(false);
   const [showViewBox, setShowViewBox] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [img, setImg] = useState(null);
-
-  function onSearch() {
-    
-  }
 
   const handleCommentSubmission = () => {
     messageApi.info(`Comment Submitted for ${targetCommentUser} `);
@@ -187,9 +207,9 @@ const Admin_dashboard = () => {
               title="Delete"
               description="Are you sure?"
               onConfirm={() => {
-                const thisid = record.id;
+                const thisid = record.username;
                 console.log(thisid);
-                setPeople(people.filter((people) => record.id !== people.id));
+                setPeople(people.filter((people) => record.username !== people.username));
                 message.success(
                   `Deleted ${record.firstname} ${record.lastname}`
                 );
@@ -224,11 +244,10 @@ const Admin_dashboard = () => {
         </Header>
 
         <div>
-          <Search
+          <Input
             id="searchBar"
             placeholder="Enter name of resident"
-            onSearch={onSearch}
-            enterButton
+            onChange={onSearch}
           />
         </div>
 
