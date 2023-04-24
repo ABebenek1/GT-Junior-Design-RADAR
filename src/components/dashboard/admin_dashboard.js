@@ -42,7 +42,7 @@ const titleStyle = {
 };
 
 const obj = [];
-const residentData = [];
+let residentData = [];
 
 const Admin_dashboard = () => {
   //query all resident data from resident collection
@@ -71,7 +71,9 @@ const Admin_dashboard = () => {
   }, []);
 
   function restructureData(rData) {
-    // obj.push(residentData)
+
+      let temp = [];
+
       for (let i = 0; i < rData.length; i++) {
 
         const resident = {
@@ -82,9 +84,14 @@ const Admin_dashboard = () => {
           year: rData[i].year,
         };
 
-        residentData.push(resident);
+        temp.push(resident);
       }
+
+      residentData = temp;
+      console.log("temp:", temp)
   }
+
+  console.log(residentData);
 
   const [people, setPeople] = useState(residentData);
   const [targetCommentUser, setTargetCommentUser] = useState(null);
@@ -93,6 +100,10 @@ const Admin_dashboard = () => {
   const [showViewBox, setShowViewBox] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [img, setImg] = useState(null);
+
+  function onSearch() {
+    
+  }
 
   const handleCommentSubmission = () => {
     messageApi.info(`Comment Submitted for ${targetCommentUser} `);
@@ -113,12 +124,12 @@ const Admin_dashboard = () => {
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Firstname",
+      title: "First Name",
       dataIndex: "firstname",
       key: "firstname",
     },
     {
-      title: "Lastname",
+      title: "Last Name",
       dataIndex: "lastname",
       key: "lastname",
     },
@@ -221,8 +232,9 @@ const Admin_dashboard = () => {
 
         <div>
           <Search
+            id="searchBar"
             placeholder="Enter name of resident"
-            // onSearch={onSearch}
+            onSearch={onSearch}
             enterButton
           />
         </div>
