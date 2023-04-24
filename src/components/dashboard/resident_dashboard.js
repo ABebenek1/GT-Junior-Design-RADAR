@@ -464,7 +464,7 @@ const Resident_dashboard = () => {
 
          {image === "PieImage" && (
             <div className="content">
-              <PieChart width={400} height={400}>
+              <PieChart width={500} height={400}>
                 <Pie
                   dataKey="value"
                   nameKey="name"
@@ -472,11 +472,17 @@ const Resident_dashboard = () => {
                   data={pieData}
                   cx="50%"
                   cy="50%"
-                  outerRadius={80}
+                  outerRadius={150}
                   fill="#8884d8"
                   label
-                />
+                >
+                  <Cell fill="#3356c7" />
+                  <Cell fill="#2b733a" />
+                  <Cell fill="#8a2828" />
+                  <Cell fill="#603181" />
+                </Pie>
                 <Tooltip />
+                <Legend layout="vertical" verticalAlign="middle" align="right" />
               </PieChart>
             </div>
           )}
