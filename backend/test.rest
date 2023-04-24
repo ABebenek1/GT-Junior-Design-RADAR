@@ -1,0 +1,44 @@
+//create http request
+post http://localhost:8000/sign-up http/1.1
+content-type: application/json
+
+{
+  "firstName": "sample",
+  "lastName": "apple",
+  "username": "badapple123",
+  "password": "abc123",
+  "isAdmin": false
+}
+
+###
+
+POST http://localhost:8000/sign-in http/1.1
+content-type: application/json
+
+{"username": "ckim",
+  "password": "crystal"}
+  
+
+###
+POST http://localhost:8000/sign-in http/1.1
+content-type: application/json
+
+{"username": "rottenapple123",
+  "password": "abc123"}
+
+
+###
+POST http://localhost:8000/sign-in http/1.1
+content-type: application/json
+
+{"username": "badapple123",
+  "password": "ccc"}
+
+###
+POST http://localhost:8000/sign-in http/1.1
+content-type: application/json
+
+{"username": "winnie",
+  "password": "winnie"}
+
+
