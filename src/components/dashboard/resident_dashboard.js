@@ -85,6 +85,9 @@ var barData = new Array();
 // scatterplot global data
 var scatterData = new Array();
 
+// frequency of dates for scatterplot
+var dateFreq = new Array();
+
 const pieData = [
   { name: "Group A", value: 400 },
   { name: "Group B", value: 300 },
@@ -153,6 +156,7 @@ const Resident_dashboard = () => {
 
   // Load in data from backend server
   // https://jontkoh2424.medium.com/connecting-react-to-express-server-48948b74d091
+  var userData = [];
   useEffect(() => {
     // hard-coded username to be apple
     // TODO: not hard code the username
@@ -166,7 +170,7 @@ const Resident_dashboard = () => {
           credentials: "same-origin",
         });
 
-        const userData = await res.json(); // parse response as json
+        userData = await res.json(); // parse response as json
         //console.log(userData);
         createBarData(userData);
         //setData(userData);
@@ -176,6 +180,32 @@ const Resident_dashboard = () => {
       }
     }
     fetchData(url);
+
+    async function fetchResidentDate() {
+      if (scatterData.length != 0) {
+        return
+      }
+      let temp = await fetchData()
+      temp = [];
+      let residentDate = "";
+      dateFreq = [];
+      for (let i = 0; i < userData.length; i++) {
+        temp[i] = userData[i].exam_date.slice(0, 10)
+      }
+      for (let j = 0; j < userData.length; j++) {
+        if (residentDate.localeCompare(dateFreq[j]) == 0) {
+          dateFreq[j]++;
+        } else {
+          dateFreq[dateFreq.length] = 1
+        }
+      }
+      for (let i = 0; i < userData.length; i++) {
+        scatterData.push({x: temp[i], y: dateFreq[i]})
+      }
+      console.log(scatterData)
+      console.log(dateFreq)
+    }
+    fetchResidentDate()
   }, []);
 
   function createBarData(userData) {
@@ -205,7 +235,6 @@ const Resident_dashboard = () => {
                  {name :"CT", count: ct_count});
     console.log(barData);
   }
-
 
   const extractDropDownOptions = (data) => {
     if (data === null) {
@@ -282,6 +311,7 @@ const Resident_dashboard = () => {
   const handleOnSubmit = (e) => {
     e.preventDefault();
     if (file) {
+      scatterData = [];
       fileReader.onload = function (event) {
         const text = event.target.result;
         let stats_array = csvFileToArray(text);
@@ -318,7 +348,6 @@ const Resident_dashboard = () => {
     removedElement.remove();
     console.log(data);
   }
-  };
 
   return (
     <>
@@ -458,10 +487,10 @@ const Resident_dashboard = () => {
                 }}
               >
                 <CartesianGrid />
-                <XAxis type="number" dataKey="x" name="Day" />
-                <YAxis type="number" dataKey="y" name="Score" unit="%" />
+                <XAxis type="category" dataKey="x" name="Date" />
+                <YAxis type="number" dataKey="y" name="Frequency" unit=" exams" />
                 <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-                <Scatter name="A school" data={scatterData} fill="#8884d8" />
+                <Scatter name="Exam Frequency" data={scatterData} fill="#8884d8" />
               </ScatterChart>
             </div>
           )}
