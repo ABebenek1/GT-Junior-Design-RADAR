@@ -6,6 +6,7 @@ import "./resident_dashboard.css";
 import {
   BarChart,
   Bar,
+  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -26,7 +27,6 @@ import { DatePicker, message } from "antd";
 import { Typography } from "antd";
 import { Dropdown, Space } from "antd";
 import { DownOutlined } from "@ant-design/icons";
-// import { get } from "mongoose";
 
 const { Title } = Typography;
 
@@ -67,6 +67,11 @@ const graphContainer = {
   backgroundColor: "red",
 };
 
+const agreeDisagreeRate = {
+  width: "100%",
+  height: "100%",
+};
+
 const titleStyle = {
   color: "white",
   marginLeft: "137px",
@@ -84,7 +89,17 @@ var scatterData = new Array();
 // frequency of dates for scatterplot
 var dateFreq = new Array();
 
-var pieData = new Array(); 
+// pie chart global data
+var pieData = new Array();
+
+const agreeDisagreeData = [
+  { name: "Agree", value: 200 },
+  { name: "Agree with Incidental Finding", value: 50 },
+  { name: "Disagree", value: 20 },
+  { name: "Disagree with Preliminary Report", value: 40 },
+];
+
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 //resident dashboard component
 const Resident_dashboard = () => {
@@ -120,10 +135,23 @@ const Resident_dashboard = () => {
     }
   };
 
+  // for metric selector
+  const displayCategories = (event) => {
+    const valueSelectedByUser = parseInt(event.target.value);
+
+    if (valueSelectedByUser === 1) {
+    }
+
+    if (valueSelectedByUser === 2) {
+    }
+
+    if (valueSelectedByUser === 3) {
+    }
+  };
+
   // Load in data from backend server
   // https://jontkoh2424.medium.com/connecting-react-to-express-server-48948b74d091
   var userData = [];
-  let name = "";
   useEffect(() => {
     // hard-coded username to be apple
     // TODO: not hard code the username
@@ -138,14 +166,10 @@ const Resident_dashboard = () => {
         });
 
         userData = await res.json(); // parse response as json
-        console.log(userData);
+        //console.log(userData);
         createBarData(userData);
-        getName(userData);
-        //setData(userData);
-
+        setData(userData);
         createPieData(userData);
-        
-
       } catch (e) {
         console.error(e);
       }
@@ -179,39 +203,6 @@ const Resident_dashboard = () => {
     fetchResidentDate()
   }, []);
 
-  function createPieData(userData) {
-    let rpr1_count = 0;
-    let rpr2_count = 0; 
-    let rpr3_count = 0;
-    let rpr4_count = 0;
-    let rpr5_count = 0;
-
-    for (let i = 0; i < userData.length; i++) {
-      switch(userData[i].feedback_score) {
-        case "1":
-          rpr1_count++;
-          break;
-        case "2":
-          rpr2_count++;
-          break;
-        case "3":
-          rpr3_count++;
-          break;
-        case "4":
-          rpr4_count++;
-          break;
-        case "5":
-          rpr5_count++;
-    }
-  }
-
-  pieData = [{name:"RPR-1", value: rpr1_count},
-             {name: "RPR-2", value: rpr2_count},
-             {name: "RPR-3", value: rpr3_count},
-             {name: "RPR-4", value: rpr4_count},
-             {name: "RPR-5", value: rpr5_count},]
-}
-
   function createBarData(userData) {
     let us_count = 0;
     let mri_count = 0;
@@ -240,10 +231,32 @@ const Resident_dashboard = () => {
     console.log(barData);
   }
 
-  function getName(userData) {
-    const title = document.getElementById("title")
-    name = userData[0].firstname + " " + userData[0].lastname;
-    title.innerText = "Welcome" + " " + name + "!";
+  function createPieData(userData) {
+    let rpr1 = 0;
+    let rpr2 = 0;
+    let rpr3 = 0;
+    let rpr4 = 0;
+    for (let i = 0; i < userData.length; i++) {
+      if (userData[i].feedback_provided === "No") {
+        continue;
+      }
+      switch (userData[i].feedback_score) {
+        case "1":
+          rpr1++;
+          break;
+        case "2":
+          rpr2++;
+          break;
+        case "3":
+          rpr3++;
+          break;
+        case "4":
+          rpr4++;
+          break;
+      }
+    }
+    pieData = [{"name": "RPR1", "value": rpr1}, {"name": "RPR2", "value": rpr2}, {"name": "RPR3", "value": rpr3}, {"name": "RPR4", "value": rpr4}];
+    console.log(pieData);
   }
 
   const extractDropDownOptions = (data) => {
@@ -369,9 +382,8 @@ const Resident_dashboard = () => {
               <button className="logout">Logout</button>
             </Link>
             {/* Need to figure out a way to not hard code this span portion */}
-            <Col span={6}></Col>
-
-            <Title style={titleStyle} id="title"> </Title>
+            <Col span={8}></Col>
+            <Title style={titleStyle}>Resident Dashboard</Title>
           </Row>
         </Header>
 
@@ -457,7 +469,6 @@ const Resident_dashboard = () => {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
-                <Title text="Number of Readings per Scan Type"/>
                 <Tooltip />
                 <Legend />
                 <Bar dataKey="count" stackId="a" fill="#8884d8" />
@@ -472,11 +483,12 @@ const Resident_dashboard = () => {
               <PieChart width={400} height={400}>
                 <Pie
                   dataKey="value"
+                  nameKey="name"
                   isAnimationActive={false}
                   data={pieData}
                   cx="50%"
                   cy="50%"
-                  outerRadius={180}
+                  outerRadius={80}
                   fill="#8884d8"
                   label
                 />
@@ -506,7 +518,42 @@ const Resident_dashboard = () => {
               </ScatterChart>
             </div>
           )}
+
         </div>
+
+        {/* the following should be delete if not in use */}
+        {/* <div style={agreeDisagreeRate}
+      align = "center">
+        <select
+        onChange={displayCategories}
+        className="dropdown"
+        name="agreeDisagreeGraphs"
+        id="agreeDisagreeGraphs"
+        >
+          <option value="1">Category 1</option>
+          <option value="2">Category 2</option>
+          <option value="3">Category 3</option>
+        </select>
+        <PieChart width={800} height={400}>
+          <Pie
+            dataKey="value"
+            isAnimationActive={false}
+            data={agreeDisagreeData}
+            cx={120}
+            cy={200}
+            innerRadius={60}
+            outerRadius={80}
+            fill="#8884d8"
+            paddingAngle={5}
+          >
+          {agreeDisagreeData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+          <Tooltip />
+        </PieChart>
+      </div> */}
+
       </Layout>
     </>
   );
