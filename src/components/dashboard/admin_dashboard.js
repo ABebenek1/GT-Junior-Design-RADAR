@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./admin_dashboard.css";
-import { dummies } from "../../dummy_data_list";
 import img0 from "../../images/img0.png";
 import img1 from "../../images/img1.png";
 import img2 from "../../images/img2.png";
