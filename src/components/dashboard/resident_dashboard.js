@@ -229,10 +229,10 @@ const Resident_dashboard = () => {
           break;
       }
     }
-    barData.push({name: "US", count: us_count},
+    barData = [{name: "US", count: us_count},
                  {name: "MRI", count: mri_count},
                  {name: "XR", count: xr_count},
-                 {name :"CT", count: ct_count});
+                 {name :"CT", count: ct_count}];
     console.log(barData);
   }
 
@@ -347,7 +347,7 @@ const Resident_dashboard = () => {
     const removedElement = document.getElementById("result");
     removedElement.remove();
     console.log(data);
-  }
+  };
 
   return (
     <>
