@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./admin_dashboard.css";
-import { dummies } from "../../dummy_data_list";
 import img0 from "../../images/img0.png";
 import img1 from "../../images/img1.png";
 import img2 from "../../images/img2.png";
@@ -35,8 +34,19 @@ const tableStyle = {
   height: "100vh",
 };
 
+const titleStyle = {
+  color: "white",
+  marginLeft: "137px",
+  marginTop: "8px",
+};
+
+const layoutStyle = {
+  width: "100vw",
+  height: "100vh",
+};
+
 const obj = [];
-const residentData = [];
+let residentData = [];
 
 const Admin_dashboard = () => {
   //query all resident data from resident collection
@@ -44,7 +54,6 @@ const Admin_dashboard = () => {
   useEffect(() => {
     // hard-coded username to be apple
     // TODO: not hard code the username
-    const url = "http://localhost:8000/user/apple";
 
     async function fetchResidentData() {
       try {
@@ -61,26 +70,58 @@ const Admin_dashboard = () => {
         console.error(e);
       }
     }
-    fetchResidentData(url);
+    fetchResidentData();
   }, []);
 
+  
+
   function restructureData(rData) {
-    // obj.push(residentData)
-      for (let i = 0; i < rData.length; i++) {
+    let temp = [];
 
-        const resident = {
-          username: rData[i].username,
-          firstname: rData[i].firstname,
-          lastname: rData[i].lastname,
-          email: rData[i].email,
-          year: rData[i].year,
-        };
+    for (let i = 0; i < rData.length; i++) {
+      const resident = {
+        username: rData[i].username,
+        firstname: rData[i].firstname,
+        lastname: rData[i].lastname,
+        email: rData[i].email,
+        year: rData[i].year,
+      };
 
-        residentData.push(resident);
-      }
+      temp.push(resident);
+    }
+
+    residentData = temp;
   }
 
   const [people, setPeople] = useState(residentData);
+
+  let displayData;
+
+  function onSearch(e) {
+    let input = e.target.value;
+
+    displayData = [];
+
+    if (input !== "") {
+      for (let i = 0; i < residentData.length; i++) {
+        if (
+          input.toLowerCase() === residentData[i].firstname.toLowerCase() ||
+          input.toLowerCase() === residentData[i].firstname.toLowerCase() ||
+          input.toLowerCase() === residentData[i].username.toLowerCase() ||
+          input.toLowerCase() === residentData[i].email.toLowerCase() ||
+          input.toLowerCase() === residentData[i].year.toLowerCase()
+        ) {
+          displayData.push(residentData[i]);
+        }
+      }
+      setPeople(displayData);
+    }
+
+    if (input === "") {
+      setPeople(residentData);
+    }
+  }
+
   const [targetCommentUser, setTargetCommentUser] = useState(null);
   const [targetViewUser, setTargetViewUser] = useState(null);
   const [showCommentBox, setShowCommentBox] = useState(false);
@@ -107,12 +148,12 @@ const Admin_dashboard = () => {
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Firstname",
+      title: "First Name",
       dataIndex: "firstname",
       key: "firstname",
     },
     {
-      title: "Lastname",
+      title: "Last Name",
       dataIndex: "lastname",
       key: "lastname",
     },
@@ -177,9 +218,9 @@ const Admin_dashboard = () => {
               title="Delete"
               description="Are you sure?"
               onConfirm={() => {
-                const thisid = record.id;
+                const thisid = record.username;
                 console.log(thisid);
-                setPeople(people.filter((people) => record.id !== people.id));
+                setPeople(people.filter((people) => record.username !== people.username));
                 message.success(
                   `Deleted ${record.firstname} ${record.lastname}`
                 );
@@ -199,7 +240,7 @@ const Admin_dashboard = () => {
 
   return (
     <>
-      <Layout>
+      <Layout style={layoutStyle}>
         <Header style={headerStyle}>
           <Row>
             <Link to="/sign-in">
@@ -207,17 +248,17 @@ const Admin_dashboard = () => {
             </Link>
             {/* Need to figure out a way to not hard code this span portion */}
             <Col span={8}></Col>
-            <Title style={{ color: "white", marginTop: "8px" }}>
+            <Title style={titleStyle} id="title">
               Admin Dashboard
             </Title>
           </Row>
         </Header>
 
         <div>
-          <Search
+          <Input
+            id="searchBar"
             placeholder="Enter name of resident"
-            // onSearch={onSearch}
-            enterButton
+            onChange={onSearch}
           />
         </div>
 

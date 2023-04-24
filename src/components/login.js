@@ -133,6 +133,9 @@ export default function Login() {
                       remember: true,
                     }}
                     onFinish={onFinish}
+                    labelCol={{ span: 6 }}
+                    wrapperCol={{ span: 16 }}
+                    style={{ maxWidth: 600 }}
                     autoComplete="off"
                   >
                     <div>
@@ -164,6 +167,9 @@ export default function Login() {
                     <Form.Item
                       label="User role"
                       name="userRole"
+                      labelCol={{ span: 6 }}
+                      wrapperCol={{ span: 14 }}
+                      style={{ maxWidth: 600 }}
                       rules={[
                         {
                           required: true,
