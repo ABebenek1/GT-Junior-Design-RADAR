@@ -84,6 +84,7 @@ var scatterData = new Array();
 // frequency of dates for scatterplot
 var dateFreq = new Array();
 
+//global pie chart data
 var pieData = new Array(); 
 
 //resident dashboard component
@@ -142,7 +143,6 @@ const Resident_dashboard = () => {
         createBarData(userData);
         getName(userData);
         //setData(userData);
-
         createPieData(userData);
         
 
@@ -179,39 +179,6 @@ const Resident_dashboard = () => {
     fetchResidentDate()
   }, []);
 
-  function createPieData(userData) {
-    let rpr1_count = 0;
-    let rpr2_count = 0; 
-    let rpr3_count = 0;
-    let rpr4_count = 0;
-    let rpr5_count = 0;
-
-    for (let i = 0; i < userData.length; i++) {
-      switch(userData[i].feedback_score) {
-        case "1":
-          rpr1_count++;
-          break;
-        case "2":
-          rpr2_count++;
-          break;
-        case "3":
-          rpr3_count++;
-          break;
-        case "4":
-          rpr4_count++;
-          break;
-        case "5":
-          rpr5_count++;
-    }
-  }
-
-  pieData = [{name:"RPR-1", value: rpr1_count},
-             {name: "RPR-2", value: rpr2_count},
-             {name: "RPR-3", value: rpr3_count},
-             {name: "RPR-4", value: rpr4_count},
-             {name: "RPR-5", value: rpr5_count},]
-}
-
   function createBarData(userData) {
     let us_count = 0;
     let mri_count = 0;
@@ -238,6 +205,34 @@ const Resident_dashboard = () => {
                  {name: "XR", count: xr_count},
                  {name :"CT", count: ct_count}];
     console.log(barData);
+  }
+  
+  function createPieData(userData) {
+    let rpr1 = 0;
+    let rpr2 = 0;
+    let rpr3 = 0;
+    let rpr4 = 0;
+    for (let i = 0; i < userData.length; i++) {
+      if (userData[i].feedback_provided === "No") {
+        continue;
+      }
+      switch (userData[i].feedback_score) {
+        case "1":
+          rpr1++;
+          break;
+        case "2":
+          rpr2++;
+          break;
+        case "3":
+          rpr3++;
+          break;
+        case "4":
+          rpr4++;
+          break;
+      }
+    }
+    pieData = [{"name": "RPR1", "value": rpr1}, {"name": "RPR2", "value": rpr2}, {"name": "RPR3", "value": rpr3}, {"name": "RPR4", "value": rpr4}];
+    console.log(pieData);
   }
 
   function getName(userData) {
@@ -467,16 +462,17 @@ const Resident_dashboard = () => {
             </div>
           )}
 
-          {image === "PieImage" && (
+         {image === "PieImage" && (
             <div className="content">
               <PieChart width={400} height={400}>
                 <Pie
                   dataKey="value"
+                  nameKey="name"
                   isAnimationActive={false}
                   data={pieData}
                   cx="50%"
                   cy="50%"
-                  outerRadius={180}
+                  outerRadius={80}
                   fill="#8884d8"
                   label
                 />
