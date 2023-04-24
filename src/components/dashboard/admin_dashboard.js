@@ -40,6 +40,11 @@ const titleStyle = {
   marginTop: "8px",
 };
 
+const layoutStyle = {
+  width: "100vw",
+  height: "100vh",
+};
+
 const obj = [];
 let residentData = [];
 
@@ -215,7 +220,7 @@ const Admin_dashboard = () => {
 
   return (
     <>
-      <Layout>
+      <Layout style={layoutStyle}>
         <Header style={headerStyle}>
           <Row>
             <Link to="/sign-in">
@@ -223,7 +228,7 @@ const Admin_dashboard = () => {
             </Link>
             {/* Need to figure out a way to not hard code this span portion */}
             <Col span={8}></Col>
-            <Title style={titleStyle}>
+            <Title style={titleStyle} id="title">
               Admin Dashboard
             </Title>
           </Row>
