@@ -91,7 +91,7 @@ Install latest version of Node.js and NPM at the following link: https://nodejs.
 
 ## Run Instructions
 1. Open two command prompts
-2. In the first command prompt change directory (cd) into the project directory. You can do this one layer at a time or all at once (ie. cd Documents\Code\…\GT-Junior-Design-RADAR).
+2. In the first command prompt change directory (cd) into the project directory. You can do this one layer at a time or all at once (ie. cd Documents\…\GT-Junior-Design-RADAR).
 3. In the first command prompt, run the following command: npm install
     * This command downloads the dependency required by the application
 4. In the second command prompt change directory into the backend folder of the project directory.
