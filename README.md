@@ -68,3 +68,39 @@ This is the GitHub repository for Georgia Tech Spring 2023 junior design team 23
 * Requires routing to dashboard
 * Login/registration page requires update to fit client expectations
 * Unknown hosting location
+
+# Install Guide
+
+## Pre-requisites
+* Have an intermediate understanding of javascript and react
+* Know how to run commands from your computer's command prompt
+
+## Dependent Libraries
+* Node.js
+* Express.js
+* Rechart.js
+* Ant design
+
+## Download Instructions
+Install latest version of Node.js and NPM at the following link: https://nodejs.org/en/download 
+
+## Installation of Actual App
+1. Open a command prompt
+2. Run the following command: git clone https://github.com/ABebenek1/GT-Junior-Design-RADAR.git
+    * This will craete a project directory
+
+## Run Instructions
+1. Open two command prompts
+2. In the first command prompt change directory (cd) into the project directory. You can do this one layer at a time or all at once (ie. cd Documents\Code\…\GT-Junior-Design-RADAR).
+3. In the first command prompt, run the following command: npm install
+    * This command downloads the dependency required by the application
+4. In the second command prompt change directory into the backend folder of the project directory.
+5. In the second command prompt, run the following command: npm install
+    * This command downloads the dependency required by the server
+6. In the second command prompt, run the following command: node server.js
+    * This starts up the server for the database
+7. In the first command prompt, run the following command: npm start
+    * This boots up the application
+    
+## Troubleshooting
+Once logged into the application as an admin you may not see all the resident data in the admin dashboard. If this happens logout then log back in with the admin credentials and the data should appear.
