@@ -3,68 +3,77 @@ This is the GitHub repository for Georgia Tech Spring 2023 junior design team 23
 
 # Release Notes
 
-### Requirements to run the application:
-* Node.js version: 18.14.0
-* npm version: 9.3.1
+## Version 1.0
 
-### To start this application:
-* git clone [project link]
-* cd into projet and do **npm install**
-* add ip address to mongoDB
-* start server in one terminal using **node server.js**
-* start application in another terminal using **npm start**  
-
-## Version 0.4.0
+Welcome to version 1.0 of the Radiology Analytical DAshboard for Residents (RADAR)! In our first release of the webpage, we have created a dashboard for you, the residents of Emory Hospital’s radiology department, to help you track your performance in the radiology residency. 
 
 ### Features
-* Admin Dashboard Backend mostly finished
-* Admin Dashboard Frontend mostly finished
 
-### Bug Fixes
-* Server post requests aren't working
-
-### Known Issues
-* Forgot Password Link is not functional
-* Data received from client needs to be stored in the database
-
-## Version 0.3.0
-
-### Features
-* Resident Dashboard Backend mostly finished
-* Resident Dashboard Frontend mostly finished
-* User Database linked to dashboard backend
-* Admin Dashboard Backend started
-
-### Bug Fixes
-* Several pages updated to make them more responsive to changes
-
-### Known Issues
-* Data received very recently from client; need to parse it and make sense of it
-* Need to link finished backend elements to unfinished frontend elements
-
-## Version 0.2.0
-
-### Features
+* Administrator and resident dashboard
+  * The separate dashboard allows users with different roles to perform functionalities appropriate to their respective roles
+  
 * Resident Dashboard
-* Admin Dashboard
-* Display graph
-* added graph types
+  * Bar graph
+    * Gives us a view on the cardinality count on the number of imagining diagnostic tests that they have performed across the four categories: US, MRI, CT, X-Ray
+  * Pie chart
+    * Resident users may view RPR feedback as given by the advisors
+  * Scatter chart
+    * Resident users can obtain a view of the number of scans across certain dates
+  * Upload scans per date excel sheet
+    * Resident users can view the number of scans on each day from an inputted CSV file
+
+* Administrator Dashboard
+  * Resident search bar
+    * Administrators can search for residents based on username/first name/last name
+  * Viewing resident statistics
+    * By clicking view next to a resident's name, administrators can view that resident's statistics
+  * Leaving a comment
+    * By clicking comment, administrators can leave a comment to that specific resident
+  * Delete resident
+    * An administrator can delete a resident by selecting the delete button
 
 ### Bug Fixes
-* Fixed: requires routing to dashboard
+* Frontend sign up is connected with backend database so that sign-in is only achieveable through valid credentials in the database
+* Resident information is queried from the backend to frontend for graphical display, previously was hardcoded images
 
-### Known Issues
-* Database not integrated
-* Lack of required data from client
-* Nodejs network issues
+### Bugs
+* Date range selection is not implemented in the backend
+* Signing up as a new user doesn't guarantee the users information will be stored in the database
+* View/Comment/Delete functions on admin dashboard are not linked to resident dashboard and will not show up on the resident dashboard
+* The first time logging in as an administrator does not display any data, after logging out and logging back in the data is then displayed
 
-## Version 0.1.0
+# Install Guide
 
-### Features
-* User/Admin Login Page
-* User/Admin Registration Page
+## Pre-requisites
+* Have an intermediate understanding of javascript and react
+* Know how to run commands from your computer's command prompt
 
-### Known Issues
-* Requires routing to dashboard
-* Login/registration page requires update to fit client expectations
-* Unknown hosting location
+## Dependent Libraries
+* Node.js
+* Express.js
+* Rechart.js
+* Ant design
+
+## Download Instructions
+Install latest version of Node.js and NPM at the following link: https://nodejs.org/en/download 
+
+## Installation of Actual App
+1. Open a command prompt
+2. Run the following command: git clone https://github.com/ABebenek1/GT-Junior-Design-RADAR.git
+    * This will craete a project directory
+
+## Run Instructions
+1. Open two command prompts
+2. In the first command prompt change directory (cd) into the project directory. You can do this one layer at a time or all at once (ie. cd Documents\…\GT-Junior-Design-RADAR).
+3. In the first command prompt, run the following command: npm install
+    * This command downloads the dependency required by the application
+4. In the second command prompt change directory into the backend folder of the project directory.
+5. In the second command prompt, run the following command: npm install
+    * This command downloads the dependency required by the server
+6. In the second command prompt, run the following command: node server.js
+    * This starts up the server for the database
+7. In the first command prompt, run the following command: npm start
+    * This boots up the application
+    
+## Troubleshooting
+Once logged into the application as an admin you may not see all the resident data in the admin dashboard. If this happens logout then log back in with the admin credentials and the data should appear.
