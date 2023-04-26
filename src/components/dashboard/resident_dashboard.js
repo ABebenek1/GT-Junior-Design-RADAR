@@ -16,6 +16,7 @@ import {
   Scatter,
   PieChart,
   Pie,
+  Cell,
 } from "recharts";
 
 // ANTD UI
@@ -73,10 +74,8 @@ const titleStyle = {
   marginTop: "8px",
 };
 
-
 // rechart dummy data to be removed
 var barData = new Array();
-
 
 // scatterplot global data
 var scatterData = new Array();
@@ -85,7 +84,7 @@ var scatterData = new Array();
 var dateFreq = new Array();
 
 //global pie chart data
-var pieData = new Array(); 
+var pieData = new Array();
 
 //resident dashboard component
 const Resident_dashboard = () => {
@@ -144,8 +143,6 @@ const Resident_dashboard = () => {
         getName(userData);
         //setData(userData);
         createPieData(userData);
-        
-
       } catch (e) {
         console.error(e);
       }
@@ -154,29 +151,29 @@ const Resident_dashboard = () => {
 
     async function fetchResidentDate() {
       if (scatterData.length != 0) {
-        return
+        return;
       }
-      let temp = await fetchData()
+      let temp = await fetchData();
       temp = [];
       let residentDate = "";
       dateFreq = [];
       for (let i = 0; i < userData.length; i++) {
-        temp[i] = userData[i].exam_date.slice(0, 10)
+        temp[i] = userData[i].exam_date.slice(0, 10);
       }
       for (let j = 0; j < userData.length; j++) {
         if (residentDate.localeCompare(dateFreq[j]) == 0) {
           dateFreq[j]++;
         } else {
-          dateFreq[dateFreq.length] = 1
+          dateFreq[dateFreq.length] = 1;
         }
       }
       for (let i = 0; i < userData.length; i++) {
-        scatterData.push({x: temp[i], y: dateFreq[i]})
+        scatterData.push({ x: temp[i], y: dateFreq[i] });
       }
-      console.log(scatterData)
-      console.log(dateFreq)
+      console.log(scatterData);
+      console.log(dateFreq);
     }
-    fetchResidentDate()
+    fetchResidentDate();
   }, []);
 
   function createBarData(userData) {
@@ -200,13 +197,15 @@ const Resident_dashboard = () => {
           break;
       }
     }
-    barData = [{name: "US", count: us_count},
-                 {name: "MRI", count: mri_count},
-                 {name: "XR", count: xr_count},
-                 {name :"CT", count: ct_count}];
+    barData = [
+      { name: "US", count: us_count },
+      { name: "MRI", count: mri_count },
+      { name: "XR", count: xr_count },
+      { name: "CT", count: ct_count },
+    ];
     console.log(barData);
   }
-  
+
   function createPieData(userData) {
     let rpr1 = 0;
     let rpr2 = 0;
@@ -231,12 +230,17 @@ const Resident_dashboard = () => {
           break;
       }
     }
-    pieData = [{"name": "RPR1", "value": rpr1}, {"name": "RPR2", "value": rpr2}, {"name": "RPR3", "value": rpr3}, {"name": "RPR4", "value": rpr4}];
+    pieData = [
+      { name: "RPR1", value: rpr1 },
+      { name: "RPR2", value: rpr2 },
+      { name: "RPR3", value: rpr3 },
+      { name: "RPR4", value: rpr4 },
+    ];
     console.log(pieData);
   }
 
   function getName(userData) {
-    const title = document.getElementById("title")
+    const title = document.getElementById("title");
     name = userData[0].firstname + " " + userData[0].lastname;
     title.innerText = "Welcome" + " " + name + "!";
   }
@@ -366,20 +370,20 @@ const Resident_dashboard = () => {
             {/* Need to figure out a way to not hard code this span portion */}
             <Col span={6}></Col>
 
-            <Title style={titleStyle} id="title"> </Title>
+            <Title style={titleStyle} id="title">
+              {" "}
+            </Title>
           </Row>
         </Header>
 
         <Content style={contentStyle}>
           <Row>
-
             <div>
               {/* date selector */}
               <Col flex={3}>
                 <RangePicker onChange={handleDateChange} />
               </Col>
             </div>
-
 
             <div>
               {/* graph selector */}
@@ -400,7 +404,6 @@ const Resident_dashboard = () => {
             <Col flex={2}></Col>
           </Row>
         </Content>
-
 
         {/* csv stuff */}
 
@@ -429,7 +432,6 @@ const Resident_dashboard = () => {
           </form>
         </div>
 
-
         {/* where the statisic are displayed */}
 
         <div id="result" style={{ backgroundColor: "lightblue" }}></div>
@@ -452,7 +454,7 @@ const Resident_dashboard = () => {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
-                <Title text="Number of Readings per Scan Type"/>
+                <Title text="Number of Readings per Scan Type" />
                 <Tooltip />
                 <Legend />
                 <Bar dataKey="count" stackId="a" fill="#8884d8" />
@@ -462,7 +464,7 @@ const Resident_dashboard = () => {
             </div>
           )}
 
-         {image === "PieImage" && (
+          {image === "PieImage" && (
             <div className="content">
               <PieChart width={500} height={400}>
                 <Pie
@@ -482,7 +484,11 @@ const Resident_dashboard = () => {
                   <Cell fill="#603181" />
                 </Pie>
                 <Tooltip />
-                <Legend layout="vertical" verticalAlign="middle" align="right" />
+                <Legend
+                  layout="vertical"
+                  verticalAlign="middle"
+                  align="right"
+                />
               </PieChart>
             </div>
           )}
@@ -502,9 +508,18 @@ const Resident_dashboard = () => {
               >
                 <CartesianGrid />
                 <XAxis type="category" dataKey="x" name="Date" />
-                <YAxis type="number" dataKey="y" name="Frequency" unit=" exams" />
+                <YAxis
+                  type="number"
+                  dataKey="y"
+                  name="Frequency"
+                  unit=" exams"
+                />
                 <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-                <Scatter name="Exam Frequency" data={scatterData} fill="#8884d8" />
+                <Scatter
+                  name="Exam Frequency"
+                  data={scatterData}
+                  fill="#8884d8"
+                />
               </ScatterChart>
             </div>
           )}
