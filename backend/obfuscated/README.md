@@ -1,0 +1,1 @@
+These public/private keys are supposed to be used for creating asymmetrical encryptoin and ought not to be uploaded to Github. But for the purpose of demonstration they're included in our current project development.
