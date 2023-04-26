@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./admin_dashboard.css";
-import img0 from "../../images/img0.png";
-import img1 from "../../images/img1.png";
-import img2 from "../../images/img2.png";
-import img3 from "../../images/img3.png";
-import img4 from "../../images/img4.png";
+// import img0 from "../../images/img0.png";
+// import img1 from "../../images/img1.png";
+// import img2 from "../../images/img2.png";
+// import img3 from "../../images/img3.png";
+// import img4 from "../../images/img4.png";
 
 // ANTD UI
 import { Layout, Col, Row } from "antd";
@@ -72,8 +72,6 @@ const Admin_dashboard = () => {
     }
     fetchResidentData();
   }, []);
-
-  
 
   function restructureData(rData) {
     let temp = [];
@@ -182,17 +180,17 @@ const Admin_dashboard = () => {
               setShowCommentBox(false); // side-effect
               // select random img to display
               const num = getRandomInt(5);
-              if (num == 0) {
-                setImg(img0);
-              } else if (num == 1) {
-                setImg(img1);
-              } else if (num == 2) {
-                setImg(img2);
-              } else if (num == 3) {
-                setImg(img3);
-              } else {
-                setImg(img4);
-              }
+              //   if (num == 0) {
+              //     setImg(img0);
+              //   } else if (num == 1) {
+              //     setImg(img1);
+              //   } else if (num == 2) {
+              //     setImg(img2);
+              //   } else if (num == 3) {
+              //     setImg(img3);
+              //   } else {
+              //     setImg(img4);
+              //   }
             }}
           >
             <a>View</a>
@@ -220,7 +218,9 @@ const Admin_dashboard = () => {
               onConfirm={() => {
                 const thisid = record.username;
                 console.log(thisid);
-                setPeople(people.filter((people) => record.username !== people.username));
+                setPeople(
+                  people.filter((people) => record.username !== people.username)
+                );
                 message.success(
                   `Deleted ${record.firstname} ${record.lastname}`
                 );
