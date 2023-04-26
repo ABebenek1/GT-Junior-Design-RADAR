@@ -121,10 +121,11 @@ const postUser = async ({
 };
 
 // upload entry from .csv spreadsheet
-const postEntry = async (obj) => {
+const postEntry = async (db, cluster, obj) => {
   try {
     await client.connect();
-    const collection = client.db("EmoryHospital2").collection("Residents");
+    // const collection = client.db("EmoryHospital2").collection("Residents");
+    const collection = client.db(db).collection(cluster);
     await collection.insertMany(obj);
   } catch (err) {
     console.error(err);
@@ -161,6 +162,75 @@ const getResidentData = async () => {
     await client.close();
   }
 };
+
+// Migrated functions Alex created from an outdated file here below. DO NOT DELETE.
+
+// async function createUser(client, newUser, userType) {
+//   const result = await client
+//     .db("RADAR_Project")
+//     .collection(userType + "s")
+//     .insertOne(newUser);
+//   console.log(
+//     `New listing created with the following id: ${result.insertedID}`
+//   );
+// }
+
+// async function findResidentsByName(client, nameOfResident) {
+//   firstLast = nameOfResident.split(" ");
+//   firstName = firstLast[0];
+//   lastName = firstLast[1];
+//   const results = await client
+//     .db("RADAR_Project")
+//     .collection("Residents")
+//     .find({ FirstName: firstName, LastName: lastName });
+
+//   const resultsArray = await results.toArray();
+
+//   if (resultsArray.length > 0) {
+//     console.log(`Found resident(s) with the name '${nameOfResident}':`);
+//     console.log(resultsArray);
+//   } else {
+//     console.log(`No residents found with the name '${nameOfResident}'`);
+//   }
+// }
+
+// async function updateResidentInfo(client, residentUsername, update) {
+//   const result = await client
+//     .db("RADAR_Project")
+//     .collection("Residents")
+//     .updateOne({ Username: residentUsername }, { $set: update });
+
+//   if (result.matchedCount > 0) {
+//     console.log("Updated the user information for " + residentUsername);
+//   } else {
+//     console.log("Unable to find user " + residentUsername);
+//   }
+// }
+
+// async function deleteResident(client, residentUsername) {
+//   const result = await client
+//     .db("RADAR_Project")
+//     .collection("Residents")
+//     .deleteOne({ Username: residentUsername });
+//   if (result.deletedCount > 0) {
+//     console.log("Database entry for " + residentUsername + " was deleted");
+//   } else {
+//     console.log("Could not find user " + residentUsername);
+//   }
+// }
+
+// async function getResidentInfo(client, residentUsername) {
+//   const resident = await client
+//     .db("RADAR_Project")
+//     .collection("Residents")
+//     .findOne({Username: residentUsername});
+//   if(resident) {
+//     console.log("Got info for " + resident.FirstName + " " + resident.LastName)
+//   } else {
+//     console.log("Could not find user " + resident.FirstName + " " + resident.LastName)
+//   }
+//   return resident
+// }
 
 module.exports = {
   postUser,
