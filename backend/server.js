@@ -9,10 +9,12 @@ const cookieParser = require("cookie-parser");
 const app = express();
 const port = 8000;
 
-const secretKey = fs.readFileSync(path.resolve(__dirname, "./jwtRS256.key"));
+const secretKey = fs.readFileSync(
+  path.resolve(__dirname, "./obfuscated/jwtRS256.key")
+);
 
 const publicKey = fs.readFileSync(
-  path.resolve(__dirname, "./jwtRS256.key.pub")
+  path.resolve(__dirname, "./obfuscated/jwtRS256.key.pub")
 );
 
 app.use(cors());
