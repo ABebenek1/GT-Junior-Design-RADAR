@@ -433,15 +433,14 @@ const Resident_dashboard = () => {
                   align="right"
                 />
               </PieChart>
-            </div>
+            </Row>
           )}
 
-          {image === "ScatterImage" && (
-            <div className="content">
+          {displayOption === 3 && (
+            <Row className="content">
               <ScatterChart
                 width={1000}
                 height={600}
-                data={scatterData}
                 margin={{
                   top: 20,
                   right: 20,
@@ -450,23 +449,37 @@ const Resident_dashboard = () => {
                 }}
               >
                 <CartesianGrid />
-                <XAxis type="category" dataKey="x" name="Date" />
+                <XAxis
+                  type="category"
+                  dataKey="exam_date"
+                  name="Date"
+                  tickFormatter={(unixTime) =>
+                    new Date(unixTime).toDateString()
+                  }
+                />
                 <YAxis
                   type="number"
-                  dataKey="y"
-                  name="Frequency"
-                  unit=" exams"
+                  dataKey="feedback_score"
+                  name="feedback_score"
                 />
-                <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+                <Tooltip
+                  cursor={{ strokeDasharray: "3 3" }}
+                  formatter={(value, name, props) => {
+                    if (name === "Date") {
+                      return new Date(value).toDateString();
+                    }
+                    return value;
+                  }}
+                />
                 <Scatter
                   name="Exam Frequency"
                   data={scatterData}
                   fill="#8884d8"
                 />
               </ScatterChart>
-            </div>
+            </Row>
           )}
-        </div>
+        </Row>
       </Layout>
     </>
   );
