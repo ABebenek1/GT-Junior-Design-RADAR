@@ -116,32 +116,36 @@ const Resident_dashboard = () => {
     setDate(value);
   };
 
-  // graph selector
-  const displayOnChange = (event) => {
-    const valueSelectedByUser = parseInt(event.target.value);
-
-    if (valueSelectedByUser === 1) {
-      setImage("BarImage");
-    }
-
-    if (valueSelectedByUser === 2) {
-      setImage("PieImage");
-    }
-
-    if (valueSelectedByUser === 3) {
-      setImage("ScatterImage");
-    }
+  // dropdown menu for selecting the graph to be displayed
+  const onClickDropdown = (event) => {
+    // console.log(event);
+    setDisplayOtion(parseInt(event.key));
+    setDisplayOptionText(event.key);
   };
+
+  // items selection for the dropdown menu
+  const items = [
+    {
+      key: "1 Counts per Scan",
+      label: "Counts per Scan",
+      icon: <BarChartOutlined />,
+    },
+    {
+      key: "2 Agree/Disagree Rate",
+      label: "Agree/Disagree Rate",
+      icon: <PieChartOutlined />,
+    },
+    {
+      key: "3 Feedback Score Over Time",
+      label: "Feedback Score Over Time",
+      icon: <DotChartOutlined />,
+    },
+  ];
 
   // Load in data from backend server
   // https://jontkoh2424.medium.com/connecting-react-to-express-server-48948b74d091
-  var userData = [];
-  let name = "";
+  var userData = []; // what a dumbass line
   useEffect(() => {
-    // hard-coded username to be apple
-    // TODO: not hard code the username
-    const url = "http://localhost:8000/user/apple";
-
     async function fetchData() {
       try {
         const res = await fetch(`http://localhost:8000/user-data`, {
@@ -378,48 +382,49 @@ const Resident_dashboard = () => {
         <Header style={headerStyle}>
           <Row>
             <Link to="/sign-in">
-              <button className="logout">Logout</button>
+              <Button className="logout">
+                <ArrowLeftOutlined />
+                Logout
+              </Button>
             </Link>
             {/* Need to figure out a way to not hard code this span portion */}
-            <Col span={6}></Col>
+            <Col span={5}></Col>
 
             <Title style={titleStyle} id="title">
-              {" "}
+              Welcome {name}!
             </Title>
           </Row>
         </Header>
 
         <Content style={contentStyle}>
           <Row>
-            <div>
-              {/* date selector */}
-              <Col flex={3}>
-                <RangePicker onChange={handleDateChange} />
-              </Col>
-            </div>
-
-            <div>
-              {/* graph selector */}
-              <Col flex={2}>
-                <select
-                  onChange={displayOnChange}
-                  className="dropdown"
-                  name="graphs"
-                  id="graphs"
-                >
-                  <option value="1">Bar Graph</option>
-                  <option value="2">Pie Chart</option>
-                  <option value="3">Scatter plot</option>
-                </select>
-              </Col>
-            </div>
-
-            <Col flex={2}></Col>
+            {/* date selector */}
+            <Col flex={3}>
+              {/* <RangePicker onChange={handleDateChange} /> */}
+            </Col>
+            <Col flex={3} style={{ margin: 14 }}></Col>
+            <Col flex={2}>
+              <Dropdown
+                menu={{
+                  items,
+                  onClick: onClickDropdown,
+                  selectable: true,
+                  defaultSelectedKeys: ["1"],
+                }}
+              >
+                <Typography.Link>
+                  <Button style={{ backgroundColor: "white" }}>
+                    {displayOptionText.replace(/[0-9]/g, "")}
+                    <DownOutlined />
+                  </Button>
+                </Typography.Link>
+              </Dropdown>
+            </Col>
           </Row>
         </Content>
 
         {/* csv stuff */}
-
+        {/* 
         <div style={{ textAlign: "center", backgroundColor: "#108fe9" }}>
           <form>
             <input
