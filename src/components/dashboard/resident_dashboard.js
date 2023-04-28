@@ -222,18 +222,17 @@ const Resident_dashboard = () => {
       return obj;
     });
 
-    setArray(array);
     const mapped_array = array.map((d) => Array.from(Object.values(d)));
 
     for (let i = 0; i < mapped_array.length; i++) {
       if (!(typeof mapped_array[i][1] == "undefined")) {
-        scatterData.push({
+        scatterDa.push({
           x: parseInt(mapped_array[i][0]),
           y: parseInt(mapped_array[i][1]),
         });
       }
     }
-    console.log(scatterData);
+    // console.log(scatterData);
     let statistics_values = [];
     for (let i = 0; i < mapped_array.length; i++) {
       if (!(typeof mapped_array[i][1] == "undefined")) {
@@ -265,7 +264,7 @@ const Resident_dashboard = () => {
   const handleOnSubmit = (e) => {
     e.preventDefault();
     if (file) {
-      scatterData = [];
+      scatterDa = [];
       fileReader.onload = function (event) {
         const text = event.target.result;
         let stats_array = csvFileToArray(text);
@@ -300,8 +299,9 @@ const Resident_dashboard = () => {
   const handleClear = (e) => {
     const removedElement = document.getElementById("result");
     removedElement.remove();
-    console.log(data);
+    // console.log(data);
   };
+  console.log(pieData);
 
   return (
     <>
@@ -376,25 +376,24 @@ const Resident_dashboard = () => {
               Clear Data
             </button>
           </form>
-        </div>
+        </div> */}
 
-        {/* where the statisic are displayed */}
-
-        <div id="result" style={{ backgroundColor: "lightblue" }}></div>
+        {/* where the statisic are displayed
+        <div id="result" style={{ backgroundColor: "black" }}></div> */}
 
         {/* where the graph is displayed */}
-        <div style={graphContainer}>
-          {image === "BarImage" && (
-            <div className="content">
+        <Row style={graphContainer}>
+          {displayOption === 1 && (
+            <Row className="content">
               <BarChart
                 width={1000}
                 height={600}
                 data={barData}
                 margin={{
                   top: 20,
-                  right: 30,
+                  right: 20,
                   left: 20,
-                  bottom: 5,
+                  bottom: 20,
                 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
@@ -403,15 +402,13 @@ const Resident_dashboard = () => {
                 <Title text="Number of Readings per Scan Type" />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="count" stackId="a" fill="#8884d8" />
+                <Bar dataKey="value" stackId="a" fill="#8884d8" />
               </BarChart>
-
-              {/* <img className="graph" src={BarImage} alt="picture" /> */}
-            </div>
+            </Row>
           )}
 
-          {image === "PieImage" && (
-            <div className="content">
+          {displayOption === 2 && (
+            <Row className="content">
               <PieChart width={500} height={400}>
                 <Pie
                   dataKey="value"
