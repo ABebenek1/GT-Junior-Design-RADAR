@@ -20,14 +20,26 @@ import {
 } from "recharts";
 
 // ANTD UI
-import { Col, Row } from "antd";
-import { Layout } from "antd";
-import { Button } from "antd";
-import { DatePicker, message } from "antd";
-import { Typography } from "antd";
-import { Dropdown, Space } from "antd";
-import { DownOutlined } from "@ant-design/icons";
-// import { get } from "mongoose";
+import {
+  Col,
+  Row,
+  Layout,
+  Button,
+  DatePicker,
+  message,
+  Typography,
+  Dropdown,
+  Space,
+} from "antd";
+
+import {
+  DownOutlined,
+  UserOutlined,
+  DotChartOutlined,
+  BarChartOutlined,
+  PieChartOutlined,
+  ArrowLeftOutlined,
+} from "@ant-design/icons";
 
 const { Title } = Typography;
 
@@ -74,26 +86,27 @@ const titleStyle = {
   marginTop: "8px",
 };
 
-// rechart dummy data to be removed
-var barData = new Array();
+// // rechart dummy data to be removed
+// var barDa = new Array();
 
 // scatterplot global data
-var scatterData = new Array();
+var scatterDa = new Array();
 
-// frequency of dates for scatterplot
-var dateFreq = new Array();
-
-//global pie chart data
-var pieData = new Array();
+// // frequency of dates for scatterplot
+// var dateFreq = new Array();
 
 //resident dashboard component
 const Resident_dashboard = () => {
-  const [image, setImage] = useState("BarImage");
   const [date, setDate] = useState(null);
-  const [file, setFile] = useState();
-  const [array, setArray] = useState(null);
+  const [file, setFile] = useState(null);
   const [data, setData] = useState(null);
-  const [metricsOption, setMetricsOption] = useState(null);
+  const [name, setName] = useState(null);
+  const [displayOption, setDisplayOtion] = useState(1);
+  const [displayOptionText, setDisplayOptionText] =
+    useState("1 Counts per Scan");
+  const [scatterData, setScatterData] = useState(null);
+  const [pieData, setPieData] = useState(null);
+  const [barData, setBarData] = useState(null);
 
   // for data selector
   const handleDateChange = (value) => {
